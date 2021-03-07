@@ -12,7 +12,8 @@
 
 ## Bibliografía
 
-https://www.arkadium.com/games/blackjack/
+[Juego flash](https://www.arkadium.com/games/blackjack/)
+[racket/gui](https://docs.racket-lang.org/gui/)
 
 
 ## Link documento plan de actividades: 
