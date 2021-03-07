@@ -6,3 +6,4 @@
 *.scm#*
 .#*.scm
 *.bak
+.vscode
