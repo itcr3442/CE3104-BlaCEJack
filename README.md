@@ -118,7 +118,7 @@ Ejemplo de uso:
 ```scheme
 > (define game ...) (score (croupier game))
 10
-> (score (croupier (put-card game 'croupier (7 pikes))))
+> (score (croupier (put-card game 'croupier (11 pikes))))
 21
 ```
 
