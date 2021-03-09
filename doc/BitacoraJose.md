@@ -20,6 +20,8 @@ Le propuse al compañero la idea de utilizar una estructura de interfaz gráfica
 
 ## 9 de marzo:
 
+Implementé varias de las funciones relacionadas al estado de juego y creación de cartas. También completé La implementación del quicksort. Queda pendiente documentar estas funciones de manera completa. 
+
 ## 10 de marzo:
 
 ## 11 de marzo:
