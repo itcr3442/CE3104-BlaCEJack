@@ -12,37 +12,25 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (score player)#t)
-(define (name player)#t)
-(define (active? player)#t)
-(define (players game)#t)
-(define (croupier game)#t)
+;game = (players, croupier,taken-cards)
+;players  = (("Foo" #t 0) ("Bar" #t 0) ("Baz" #t 0))
+;player = ("nombre" #t 0)
+;croupier = '(croupier #t 0 ())
+
+
+
+
 (define (game-finished? game)#t)
 (define (take-card game)#t)
 (define (put-card game player card)#t)
-(define (new-game player-names)#t)
-(define (next-turn game last-player)#t)
 (define (hang game player)#t)
+(define (next-turn game last-player)#t)
 
 
-
-;------------------quicksort related------------;
-
-
-;olista inicia en '(()()())
-;(define (qs-classify ilist predicate pivot olista)
-;    (define(first-element){car ilist})
-;    (define(add-minor x){list (cons x (car olista)) (cadr olista) (caddr olista)})
-;    (define(add-equal x){list (car olista) (cons x (cadr olista)) (caddr olista)})
-;    (define(add-major x){list (car olista) (cadr olista) (cons x(caddr olista))})
-;     {cond 
-;        [{null? ilist} olista]
-;        [{equal? pivot (first-element)}{qs-classify (cdr ilist) predicate pivot (add-equal (first-element))}]
-;        [{predicate pivot (first-element)}{qs-classify (cdr ilist) predicate pivot (add-major (first-element))}]
-;        [else {qs-classify (cdr ilist) predicate pivot (add-minor (first-element))}]
-;    })
 
 ;-------------------implemented functions
+
+;------------------quicksort related start------------;
 (define (qs-minor ilist predicate pivot olist)
     {cond
         [{null? ilist} olist]
@@ -76,10 +64,20 @@ Ejemplos de uso:
             }]
         [else {append (quicksort (minor-list) predicate) (equal-list) (quicksort (major-list) predicate)}]
     })
+;------------------quicksort related end------------;
 
 
+(define (create-card value symbol)
+    {cond
+        [{< value 11}{list value symbol}]
+        [else 
+            {cond
+                [{= value 11}{list 'jack symbol}]
+                [{= value 12}{list 'queen symbol}]
+                [else {list 'king symbol}]
+            }]
+    })
 
-(define (create-card value symbol){list value symbol})
 (define (card-value card){car card})
 (define (card-symbol card){cadr card})
 
@@ -88,7 +86,7 @@ Ejemplos de uso:
         [{= code 0} 'hearts]
         [{= code 1} 'clovers]
         [{= code 2} 'diamonds]
-        [else 'spades]
+        [else 'pikes]
     })
 
 (define (random-card)
@@ -99,3 +97,40 @@ Ejemplos de uso:
         [{= 1 (card-value card)}{create-card 11 (card-symbol card)}]
         [else card]
     })
+
+(define (create-player name){list name #t '()})
+
+(define (held-cards player){cadddr player})
+
+(define (score-aux cards score-sum)
+    (define (first-card){caar cards})
+    (define (remaining-cards){cdr cards})
+    {cond
+        [{null? cards}score-sum]
+        [{integer? (first-card)}{score-aux (remaining-cards) (+ (first-card) score-sum)}]
+        [{equal? (first-card) 'jack}{score-aux (remaining-cards) (+ 10 score-sum)}]
+        [{equal? (first-card) 'queen}{score-aux (remaining-cards) (+ 10 score-sum)}]
+        [{equal? (first-card) 'king}{score-aux (remaining-cards) (+ 10 score-sum)}]
+})
+
+(define (score player){score-aux (held-cards player) 0})
+
+(define (name player){car player})
+
+(define (active? player){cadr player})
+
+(define (players game){car game})
+
+(define (croupier game){cadr game})
+
+(define (new-game-aux player-names player-list)
+    {cond
+        [{null? player-names}player-list]
+        [else {new-game-aux 
+                (cdr player-names)
+                (cons (create-player (car player-names)) player-list)
+        }]
+    })
+
+(define (new-game player-names)
+    {list (new-game-aux player-names '()) (create-player 'croupier) '()})
