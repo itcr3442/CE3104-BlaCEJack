@@ -27,10 +27,58 @@ Ejemplos de uso:
 
 
 ;------------------quicksort related------------;
-(define (qs-classify ilist predicate)#t)
-(define (quicksort list predicate)#t)
+
+
+;olista inicia en '(()()())
+;(define (qs-classify ilist predicate pivot olista)
+;    (define(first-element){car ilist})
+;    (define(add-minor x){list (cons x (car olista)) (cadr olista) (caddr olista)})
+;    (define(add-equal x){list (car olista) (cons x (cadr olista)) (caddr olista)})
+;    (define(add-major x){list (car olista) (cadr olista) (cons x(caddr olista))})
+;     {cond 
+;        [{null? ilist} olista]
+;        [{equal? pivot (first-element)}{qs-classify (cdr ilist) predicate pivot (add-equal (first-element))}]
+;        [{predicate pivot (first-element)}{qs-classify (cdr ilist) predicate pivot (add-major (first-element))}]
+;        [else {qs-classify (cdr ilist) predicate pivot (add-minor (first-element))}]
+;    })
 
 ;-------------------implemented functions
+(define (qs-minor ilist predicate pivot olist)
+    {cond
+        [{null? ilist} olist]
+        [{and (not (predicate pivot (car ilist))) (not (= pivot (car ilist)))}{qs-minor (cdr ilist) predicate pivot (cons (car ilist) olist)}]
+        [else {qs-minor (cdr ilist) predicate pivot olist}]
+    })
+(define (qs-major ilist predicate pivot olist)
+    {cond
+        [{null? ilist} olist]
+        [{predicate pivot (car ilist)}{qs-major (cdr ilist) predicate pivot (cons (car ilist) olist)}]
+        [else {qs-major (cdr ilist) predicate pivot olist}]
+    })
+(define (qs-equal ilist pivot olist)
+    {cond
+        [{null? ilist} olist]
+        [{= pivot (car ilist)} {qs-equal (cdr ilist) pivot (cons (car ilist) olist)}]
+        [else {qs-equal (cdr ilist) pivot olist}]
+    })
+
+(define (quicksort ilist predicate)
+    (define (pivot){car ilist})
+    (define (equal-list){qs-equal ilist (pivot) '()})
+    (define (major-list){qs-major ilist predicate (pivot) '()})
+    (define (minor-list){qs-minor ilist predicate (pivot) '()})
+    {cond
+        [{null? ilist}'()]
+        [{null? (minor-list)}
+            {cond
+                [{null? (major-list)}{equal-list}]
+                [else {append (equal-list) (quicksort (major-list) predicate)}]
+            }]
+        [else {append (quicksort (minor-list) predicate) (equal-list) (quicksort (major-list) predicate)}]
+    })
+
+
+
 (define (create-card value symbol){list value symbol})
 (define (card-value card){car card})
 (define (card-symbol card){cadr card})
