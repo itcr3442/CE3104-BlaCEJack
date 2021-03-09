@@ -17,7 +17,7 @@ Ejemplos de uso:
 ;player = ("nombre" #t 0)
 ;croupier = '(croupier #t 0 ())
 
-
+(define game(new-game (list "Foo" "Bar" "Baz")))
 
 
 (define (game-finished? game)#t)
@@ -100,7 +100,7 @@ Ejemplos de uso:
 
 (define (create-player name){list name #t '()})
 
-(define (held-cards player){cadddr player})
+(define (held-cards player){caddr player})
 
 (define (score-aux cards score-sum)
     (define (first-card){caar cards})
