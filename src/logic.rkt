@@ -13,21 +13,23 @@ Ejemplos de uso:
 ;---notes 
 
 ;game = (players, croupier,taken-cards)
-;players  = (("Foo" (playing? lost? hanged?) (cards)) ("Bar" #t ()) ("Baz" #t ()))
-;player = ("nombre" (playing lost hanged) 0)
-;croupier = '(croupier (playing? lost? hanged?) ())
-
-
-
+;players  = (("Foo" 'flag (cards)) ("Bar" 'flag ()) ("Baz" 'flag ()))
+;player = ("nombre" 'flag 0)
+;croupier = '(croupier 'flag ())
 
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-
-
 (define (put-card game player card)#t)
 
+
+
+
+
 (define (next-turn game last-player)#t)
+
+
+
 
 ;-------------------implemented functions
 (define (list-get list position)
@@ -151,6 +153,8 @@ Ejemplos de uso:
 
 (define (players game){car game})
 
+(define (player-count game){length (players game)})
+
 (define (croupier game){cadr game})
 
 (define (set-lost player)
@@ -193,27 +197,29 @@ Ejemplos de uso:
 
 (define (score player){score-aux (held-cards player) 0})
 
-
-
 ;----------------- player related functions END
 
 ;----------------- game state change functions START
 
 (define (hang game player)
     {cond
-        [{> player (length (players game))}{game}]
-        [{= player (length (players game))}
+        [{eq? player 'croupier}
             {list 
                 (players game)
                 (set-hanged (croupier game))
                 (taken-cards game)
             }]
-        [else
-            {list
-                (update-player set-hanged (players game) player '())
-                (croupier game)
-                (taken-cards game)
-        }]
+        [{number? player}
+            {cond
+                [{> player (player-count game)}{raise "invalid player number"}]
+                [else
+                    {list
+                        (update-player set-hanged (players game) player '())
+                        (croupier game)
+                        (taken-cards game)
+                    }]
+            }]
+        [else {raise "invalid player identifier"}]
     })
 ;------------------- game state change functions END
 
@@ -229,8 +235,6 @@ Ejemplos de uso:
 
 (define (new-game player-names)
     {list (new-game-aux player-names '()) (create-player 'croupier) '()})
-
-
 
 (define (game-finished?-aux players)
     {cond
