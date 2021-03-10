@@ -17,6 +17,9 @@ Ejemplos de uso:
 ;player = ("nombre" (playing lost hanged) 0)
 ;croupier = '(croupier (playing? lost? hanged?) ())
 
+
+
+
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
@@ -115,43 +118,35 @@ Ejemplos de uso:
 
 ;--------------player related functions START
 
-(define (create-player name){list name '(#t #f #f) '()})
+(define (create-player name){list name 'active '()})
 
 (define (name player){car player})
 
-(define (player-flags player){cadr player})
+(define (player-state player){cadr player})
 
 (define (held-cards player){caddr player})
 
-(define (active? player){car (player-flags player)})
+(define (active? player){eq? 'active (player-state player)})
 
-(define (lost? player){cadr (player-flags player)})
+(define (lost? player){eq? 'lost (player-state player)})
 
-(define (hanged? player){caddr (player-flags player)})
+(define (hanged? player){eq? 'hanged (player-state player)})
 
 (define (players game){car game})
 
 (define (croupier game){cadr game})
 
-; recibe un player como la tripleta
-(define (set-unactive player)
-    {list 
-        (name player) 
-        (list #f (lost? player) (hanged? player)) 
-        (held-cards player)
-    })
-
 (define (set-lost player)
     {list 
         (name player) 
-        (list (active? player) #t (hanged? player)) 
+        'lost 
         (held-cards player)
     })
 
 (define (set-hanged player)
     {list 
         (name player) 
-        (list (active? player) (lost? player) #t) 
+        'hanged 
         (held-cards player)
     })
 
@@ -193,12 +188,12 @@ Ejemplos de uso:
         [{= player (length (players game))}
             {list 
                 (players game)
-                (set-unactive (croupier game))
+                (set-hanged (croupier game))
                 (taken-cards game)
             }]
         [else
             {list
-                (update-player set-unactive (players game) player '())
+                (update-player set-hanged (players game) player '())
                 (croupier game)
                 (taken-cards game)
         }]
