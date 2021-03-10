@@ -23,7 +23,7 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (take-card game)#t)
+
 
 (define (put-card game player card)#t)
 
@@ -115,6 +115,23 @@ Ejemplos de uso:
             (else (in-list? elemento (cdr lista)))
         }]
     })
+
+(define (add-taken-card game card)
+    {list
+        (players game)
+        (croupier game)
+        (cons card (taken-cards game))
+    })
+
+(define (take-card-aux game card)
+    {cond 
+        [{in-list? card (taken-cards game)}{take-card-aux game (random-card)}]
+        [else {cons card (add-taken-card game card)}]
+    })
+
+(define (take-card game)
+    {take-card-aux game (random-card)})
+
 
 ;--------------player related functions START
 
@@ -226,3 +243,4 @@ Ejemplos de uso:
     {and (game-finished?-aux (players game)) (active? (croupier game))})
 
 (define game(new-game (list "Foo" "Bar" "Baz")))
+(take-card game)
