@@ -8,4 +8,4 @@
 *.bak
 .vscode
 *.pdf
-*.test.rkt
+*_test.rkt

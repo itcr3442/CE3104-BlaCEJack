@@ -20,10 +20,27 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (put-card game player card)#t)
-
-
-
+(define (put-card game player card)
+    (define(hand-card player){accept-card player card})
+    {cond
+        [{eq? player 'croupier}
+            {list 
+                (players game)
+                (hand-card (croupier game))
+                (taken-cards game)
+            }]
+        [{number? player}
+            {cond
+                [{> player (player-count game)}{raise "invalid player number"}]
+                [else
+                    {list
+                        (update-player hand-card (players game) player '())
+                        (croupier game)
+                        (taken-cards game)
+                    }]
+            }]
+        [else {raise "invalid player identifier"}]
+    })
 
 
 (define (next-turn game last-player)#t)
@@ -85,6 +102,7 @@ Ejemplos de uso:
                 [else {list 'king symbol}]
             }]
     })
+
 
 (define (card-value card){car card})
 
@@ -156,6 +174,13 @@ Ejemplos de uso:
 (define (player-count game){length (players game)})
 
 (define (croupier game){cadr game})
+
+(define (accept-card player card)
+    {list
+        (name player)
+        (player-state player)
+        (cons card (held-cards player))
+    })
 
 (define (set-lost player)
     {list 
@@ -247,4 +272,8 @@ Ejemplos de uso:
     {and (game-finished?-aux (players game)) (active? (croupier game))})
 
 (define game(new-game (list "Foo" "Bar" "Baz")))
-(take-card game)
+
+
+; testing-lines
+[put-card game 'croupier {car (take-card game)}]
+(score (croupier (put-card game 'croupier '(11 pikes))))
