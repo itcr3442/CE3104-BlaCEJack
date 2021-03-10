@@ -9,3 +9,16 @@
   prototipos de funciones y otros artefactos requeridos por la
   especificación.
 - Se acuerdan diseños a gran escala de lógica e interfaz.
+
+# 8 de marzo
+
+- Se escribe una revisión inicial de la lista de funciones a
+  implementar junto a sus descripciones.
+
+# 9 de marzo
+
+- Se discute entre el equipo de trabajo el caso de que un
+  jugador y el croupier pierdan en la misma partida,
+  concluyendo que la lista de funciones actuales no considera
+  esto apropiadamente. Se decide representar con símbolos
+  ternarios el estado de actividad de un jugador.
