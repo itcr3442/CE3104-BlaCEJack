@@ -9,27 +9,30 @@ Ejemplos de uso:
     - codigo ->  resultado
 |#
 
+
+;---notes 
+
+;game = (players, croupier,taken-cards)
+;players  = (("Foo" (playing? lost? hanged?) (cards)) ("Bar" #t ()) ("Baz" #t ()))
+;player = ("nombre" (playing lost hanged) 0)
+;croupier = '(croupier (playing? lost? hanged?) ())
+
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-;game = (players, croupier,taken-cards)
-;players  = (("Foo" #t 0) ("Bar" #t 0) ("Baz" #t 0))
-;player = ("nombre" #t 0)
-;croupier = '(croupier #t 0 ())
-
-(define game(new-game (list "Foo" "Bar" "Baz")))
-
-
-(define (game-finished? game)#t)
 (define (take-card game)#t)
+
 (define (put-card game player card)#t)
-(define (hang game player)#t)
+
 (define (next-turn game last-player)#t)
 
-
-
 ;-------------------implemented functions
-
+(define (list-get list position)
+    {cond
+        [{null? list}{raise "list index out of bounds"}]
+        [{= 0 position} {car list}]
+        [else {list-get (cdr list) (- position 1)}]
+    })
 ;------------------quicksort related start------------;
 (define (qs-minor ilist predicate pivot olist)
     {cond
@@ -79,6 +82,7 @@ Ejemplos de uso:
     })
 
 (define (card-value card){car card})
+
 (define (card-symbol card){cadr card})
 
 (define (code-symbol code)
@@ -98,9 +102,71 @@ Ejemplos de uso:
         [else card]
     })
 
-(define (create-player name){list name #t '()})
+(define (taken-cards game){caddr game})
+
+( define(in-list? elemento lista)
+    {cond
+        [{null? lista} #f]
+        [else {cond
+            ((equal? elemento (car lista)) #t)
+            (else (in-list? elemento (cdr lista)))
+        }]
+    })
+
+;--------------player related functions START
+
+(define (create-player name){list name '(#t #f #f) '()})
+
+(define (name player){car player})
+
+(define (player-flags player){cadr player})
 
 (define (held-cards player){caddr player})
+
+(define (active? player){car (player-flags player)})
+
+(define (lost? player){cadr (player-flags player)})
+
+(define (hanged? player){caddr (player-flags player)})
+
+(define (players game){car game})
+
+(define (croupier game){cadr game})
+
+; recibe un player como la tripleta
+(define (set-unactive player)
+    {list 
+        (name player) 
+        (list #f (lost? player) (hanged? player)) 
+        (held-cards player)
+    })
+
+(define (set-lost player)
+    {list 
+        (name player) 
+        (list (active? player) #t (hanged? player)) 
+        (held-cards player)
+    })
+
+(define (set-hanged player)
+    {list 
+        (name player) 
+        (list (active? player) (lost? player) #t) 
+        (held-cards player)
+    })
+
+
+; esto aplica una modificacion cualquier a un player
+; index valores de 0 a 2 
+; updated inicializado en '()
+; devuleve toda la listya de players 
+(define (update-player predicate players index updated)
+    {cond
+        [{null? players}{reverse updated}]
+        [{= 0 index}{update-player predicate (cdr players) -1 (cons (predicate (car players)) updated)}]
+        [else {update-player predicate (cdr players) (- index 1) (cons (car players) updated)}]
+    })
+
 
 (define (score-aux cards score-sum)
     (define (first-card){caar cards})
@@ -111,17 +177,34 @@ Ejemplos de uso:
         [{equal? (first-card) 'jack}{score-aux (remaining-cards) (+ 10 score-sum)}]
         [{equal? (first-card) 'queen}{score-aux (remaining-cards) (+ 10 score-sum)}]
         [{equal? (first-card) 'king}{score-aux (remaining-cards) (+ 10 score-sum)}]
-})
+    })
 
 (define (score player){score-aux (held-cards player) 0})
 
-(define (name player){car player})
 
-(define (active? player){cadr player})
 
-(define (players game){car game})
+;----------------- player related functions END
 
-(define (croupier game){cadr game})
+;----------------- game state change functions START
+
+(define (hang game player)
+    {cond
+        [{> player (length (players game))}{game}]
+        [{= player (length (players game))}
+            {list 
+                (players game)
+                (set-unactive (croupier game))
+                (taken-cards game)
+            }]
+        [else
+            {list
+                (update-player set-unactive (players game) player '())
+                (croupier game)
+                (taken-cards game)
+        }]
+    })
+;------------------- game state change functions END
+
 
 (define (new-game-aux player-names player-list)
     {cond
@@ -134,3 +217,17 @@ Ejemplos de uso:
 
 (define (new-game player-names)
     {list (new-game-aux player-names '()) (create-player 'croupier) '()})
+
+
+
+(define (game-finished?-aux players)
+    {cond
+        [{null? players} #f]
+        [{active? (car players)}{game-finished?-aux (cdr players)}]
+        [else #t]
+    })
+
+(define (game-finished? game)
+    {and (game-finished?-aux (players game)) (active? (croupier game))})
+
+(define game(new-game (list "Foo" "Bar" "Baz")))

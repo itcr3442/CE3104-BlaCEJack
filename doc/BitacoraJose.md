@@ -20,7 +20,15 @@ Le propuse al compañero la idea de utilizar una estructura de interfaz gráfica
 
 ## 9 de marzo:
 
-Implementé varias de las funciones relacionadas al estado de juego y creación de cartas. También completé La implementación del quicksort. Queda pendiente documentar estas funciones de manera completa. 
+Implementé varias de las funciones relacionadas al estado de juego y creación de cartas. 
+
+También completé La implementación del quicksort (faltan pruebas de predicados complejos).
+
+Al final del día implementé funciones relacionadas con la interacción del juego.
+
+Por acuerdo con el compañero, decidimos cambiar la representación de un jugador para representar varias banderas de estado en el segundo elemento, de manera que la representación queda algo como 
+('nombre-jugador (active? lost? hanged?) (lista de cartas))
+Queda pendiente documentar las funciones desarrolladas de manera completa. 
 
 ## 10 de marzo:
 
