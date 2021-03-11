@@ -20,9 +20,11 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (next-turn-aux playing last-player)#t)
-(define (next-turn game last-player)
-    {next-turn-aux (active-players game) last-player})
+;debe poder retornarse a sí mismo
+
+
+
+
 (define (try-changing-aces player current-score)#t)
 
 ;-------------------implemented functions
@@ -256,6 +258,29 @@ Ejemplos de uso:
         [else {raise "invalid player identifier"}]
     })
 
+(define (next-turn-aux playing last-player)
+    (define (look-for-active ilist predicate)
+        {cond
+            [{null? ilist} '()]
+            [{predicate (caar ilist) last-player}{car ilist}]
+            [else {look-for-active (cdr ilist) predicate}] 
+        })
+    {cond
+        [{null? playing}'()]
+        [{null? (look-for-active playing >)}
+            {cond
+                [{null? (look-for-active playing <)}{look-for-active playing =}]
+                [else {look-for-active playing <}]
+            }]
+        [else {look-for-active playing >}]
+    })
+    
+(define (next-turn game last-player)
+    {cond
+        [{active? (croupier game)}{next-turn-aux (active-players game) last-player}]
+        [else '()]
+    })
+
 ;------------------- game state change functions END
 
 
@@ -282,5 +307,3 @@ Ejemplos de uso:
     {and (game-finished?-aux (players game)) (active? (croupier game))})
 
 (define game(new-game (list "Foo" "Bar" "Baz")))
-
-
