@@ -26,3 +26,4 @@
 # 11 de marzo
 
 - Se exportan del archivo de lógica las funciones que la interfaz necesitará.
+- Se agrega una ventana de diálogo para preguntar los nombres de los jugadores.
