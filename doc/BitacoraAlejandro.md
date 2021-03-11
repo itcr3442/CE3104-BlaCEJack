@@ -27,3 +27,10 @@
 
 - Se exportan del archivo de lógica las funciones que la interfaz necesitará.
 - Se agrega una ventana de diálogo para preguntar los nombres de los jugadores.
+  Por cada jugador, se presenta un campo de texto. El diálogo incluye un botón
+  para iniciar el juego.
+- Se agrega una ventana que será la principal área del juego. Tanto cada
+  jugador como el croupier disponen de una casilla en la ventana con su nombre,
+  puntaje actual y cartas. En la parte inferior de la ventana se ubica el
+  nombre del jugador actual y botones para tanto tomar otra carta como
+  plantarse.
