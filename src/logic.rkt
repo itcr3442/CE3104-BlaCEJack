@@ -8,6 +8,9 @@ Estudiantes: José Fernando Morales Vargas - 2019024270
              Alejandro Jose Soto Chacón
 _______________________________________________________|#
 
+(provide list-get score name active? lost? hanged? players croupier
+         game-finished? take-card put-card new-game next-turn hanged?
+         quicksort held-cards card-value card-symbol)
 
 #| Notas generales
 - un prefijo 'i' a un sustantivo significa que dicho parámetro es de entrada (input)

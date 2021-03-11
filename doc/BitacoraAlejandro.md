@@ -22,3 +22,7 @@
   concluyendo que la lista de funciones actuales no considera
   esto apropiadamente. Se decide representar con símbolos
   ternarios el estado de actividad de un jugador.
+
+# 11 de marzo
+
+- Se exportan del archivo de lógica las funciones que la interfaz necesitará.
