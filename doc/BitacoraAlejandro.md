@@ -35,3 +35,5 @@
   nombre del jugador actual y botones para tanto tomar otra carta como
   plantarse.
 - Se implementa la rotación de turnos de jugadores en la interfaz gráfica.
+- Se hace que la puntuación del croupier no sea visible durante la primera fase
+  del jugeo.

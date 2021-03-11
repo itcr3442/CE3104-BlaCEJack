@@ -76,7 +76,9 @@
 
       (send current-player set-label (name player)))
 
+	(send (score-label croupier-container) show #f)
     (send window show #t)
+
     (let ([initial-game (new-game player-names)])
       (turn initial-game 0 (car (players initial-game))))))
 
