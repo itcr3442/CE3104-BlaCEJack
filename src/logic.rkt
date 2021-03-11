@@ -20,7 +20,10 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (next-turn game last-player)#t)
+(define (next-turn-aux playing last-player)#t)
+(define (next-turn game last-player)
+    {next-turn-aux (active-players game) last-player})
+(define (try-changing-aces player current-score)#t)
 
 ;-------------------implemented functions
 (define (list-get list position)
@@ -145,6 +148,16 @@ Ejemplos de uso:
 
 (define (players game){car game})
 
+;id comienza en 0
+(define (active-players-aux players id list)
+    {cond
+        [{null? players}{reverse list}]
+        [{active? (first players)}{active-players-aux (cdr players) (+ id 1) (cons (cons id (first players)) list)}]
+        [else {active-players-aux (cdr players) (+ id 1) list}]
+    })
+(define (active-players game)
+    {active-players-aux (players game) 0 '()})
+
 (define (player-count game){length (players game)})
 
 (define (croupier game){cadr game})
@@ -248,7 +261,7 @@ Ejemplos de uso:
 
 (define (new-game-aux player-names player-list)
     {cond
-        [{null? player-names}player-list]
+        [{null? player-names}{reverse player-list}]
         [else {new-game-aux 
                 (cdr player-names)
                 (cons (create-player (car player-names)) player-list)

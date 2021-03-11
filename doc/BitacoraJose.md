@@ -32,6 +32,14 @@ Queda pendiente documentar las funciones desarrolladas de manera completa.
 
 ## 10 de marzo:
 
+Se volvió a cambiar la representación del jugador para preferir un modelo más conciso. Las banderas de estado han sido cambiadas por un solo átomo cuyo valor en sí es el estado del jugador.
+
+Además se decidió agregar una función que le permita a un jugador disminuir el valor de los aces en su mano hasta el mínimo posible en caso de que se encuentre en una posición de "desborde" del puntaje. Forma tentativa:
+
+### `(try-changing-aces player current-score)`
+
+La función trataría de evitar un desborde buscando todos los aces en posesión del jugador y conviertiéndolos a un valor de 1 en vez de un valor por defecto de 11.
+
 ## 11 de marzo:
 
 ## 12 de marzo:
