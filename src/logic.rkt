@@ -20,33 +20,7 @@ Ejemplos de uso:
 ;----------------non implemented functions-----;
 (define (bCEj X)#t)
 
-(define (put-card game player card)
-    (define(hand-card player){accept-card player card})
-    {cond
-        [{eq? player 'croupier}
-            {list 
-                (players game)
-                (hand-card (croupier game))
-                (taken-cards game)
-            }]
-        [{number? player}
-            {cond
-                [{> player (player-count game)}{raise "invalid player number"}]
-                [else
-                    {list
-                        (update-player hand-card (players game) player '())
-                        (croupier game)
-                        (taken-cards game)
-                    }]
-            }]
-        [else {raise "invalid player identifier"}]
-    })
-
-
 (define (next-turn game last-player)#t)
-
-
-
 
 ;-------------------implemented functions
 (define (list-get list position)
@@ -236,7 +210,7 @@ Ejemplos de uso:
             }]
         [{number? player}
             {cond
-                [{> player (player-count game)}{raise "invalid player number"}]
+                [{or (> 0 player) (> player (- (player-count game) 1))}{raise "invalid player number"}]
                 [else
                     {list
                         (update-player set-hanged (players game) player '())
@@ -246,6 +220,29 @@ Ejemplos de uso:
             }]
         [else {raise "invalid player identifier"}]
     })
+
+(define (put-card game player card)
+    (define(hand-card player){accept-card player card})
+    {cond
+        [{eq? player 'croupier}
+            {list 
+                (players game)
+                (hand-card (croupier game))
+                (taken-cards game)
+            }]
+        [{number? player}
+            {cond
+                [{or (> 0 player) (> player (- (player-count game) 1))}{raise "invalid player number"}]
+                [else
+                    {list
+                        (update-player hand-card (players game) player '())
+                        (croupier game)
+                        (taken-cards game)
+                    }]
+            }]
+        [else {raise "invalid player identifier"}]
+    })
+
 ;------------------- game state change functions END
 
 
@@ -274,6 +271,3 @@ Ejemplos de uso:
 (define game(new-game (list "Foo" "Bar" "Baz")))
 
 
-; testing-lines
-[put-card game 'croupier {car (take-card game)}]
-(score (croupier (put-card game 'croupier '(11 pikes))))
