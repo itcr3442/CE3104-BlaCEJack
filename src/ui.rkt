@@ -17,13 +17,13 @@
          [parent names-dialog]
          [label "Play"]
          [callback (λ (button event)
-                      (let ([player-names
-                              (map (λ (field) (string-trim (send field get-value)))
-                                   name-fields)])
+                     (let ([player-names
+                             (map (λ (field) (string-trim (send field get-value)))
+                                  name-fields)])
 
-                        (cond [(empty? (filter (compose not non-empty-string?) player-names))
-                               (send names-dialog show #f)
-                               (run-game player-names)])))])
+                       (cond [(empty? (filter (compose not non-empty-string?) player-names))
+                              (send names-dialog show #f)
+                              (run-game player-names)])))])
 
     (send names-dialog show #t)))
 
@@ -43,17 +43,47 @@
                       [parent window]
                       [alignment '(center center)])]
 
-     [current-player (dynamic-label bottom-row)])
+     [current-player (dynamic-label bottom-row)]
+
+     [on-take-card (make-parameter #f)]
+     [on-hang-up (make-parameter #f)])
 
     (new button%
          [parent bottom-row]
-         [label "Take card"])
+         [label "Take card"]
+         [callback (λ (button event) ((on-take-card)))])
 
     (new button%
          [parent bottom-row]
-         [label "Hang up"])
+         [label "Hang up"]
+         [callback (λ (button event) ((on-hang-up)))])
 
-    (send window show #t)))
+    (define (rotate-player game player-id)
+      (match (next-turn game player-id)
+             [(list) (raise "Not implemented")]
+             [(cons next-id next) (turn game next-id next)]))
+
+    (define (turn game player-id player)
+      (on-hang-up (λ () (rotate-player (hang game player-id) player-id)))
+      (on-take-card
+        (λ () (match (take-card game)
+                     [(cons card game)
+                      (let ((game (put-card game player-id card)))
+                        (update-score (list-get player-containers player-id)
+                                      (score (list-get (players game) player-id)))
+
+                        (rotate-player game player-id))])))
+
+      (send current-player set-label (name player)))
+
+    (send window show #t)
+    (let ([initial-game (new-game player-names)])
+      (turn initial-game 0 (car (players initial-game))))))
+
+;TODO: Delete this during module integration
+(define (next-turn game player-id)
+  (let ([next-id (remainder (+ player-id 1) (length (players game)))])
+    (cons next-id (list-get (players game) next-id))))
 
 (define (add-name-fields dialog up-to next fields)
   (cond [(> next up-to) (reverse fields)]

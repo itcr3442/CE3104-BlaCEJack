@@ -34,3 +34,4 @@
   puntaje actual y cartas. En la parte inferior de la ventana se ubica el
   nombre del jugador actual y botones para tanto tomar otra carta como
   plantarse.
+- Se implementa la rotación de turnos de jugadores en la interfaz gráfica.
