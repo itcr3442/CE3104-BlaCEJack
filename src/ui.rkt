@@ -86,11 +86,6 @@
     (let ([initial-game (new-game player-names)])
       (turn initial-game 0 (car (players initial-game))))))
 
-;TODO: Delete this during module integration
-(define (next-turn game player-id)
-  (let ([next-id (remainder (+ player-id 1) (length (players game)))])
-    (cons next-id (list-get (players game) next-id))))
-
 (define (add-name-fields dialog up-to next fields)
   (cond [(> next up-to) (reverse fields)]
         [else (add-name-fields
