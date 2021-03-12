@@ -9,7 +9,7 @@ Estudiantes: José Fernando Morales Vargas - 2019024270
 _______________________________________________________|#
 
 (provide list-get score name active? lost? hanged? players croupier
-         game-finished? take-card put-card new-game next-turn hanged?
+         game-finished? take-card put-card new-game next-turn hang
          quicksort held-cards card-value card-symbol)
 
 #| Notas generales

@@ -22,8 +22,8 @@
                                   name-fields)])
 
                        (cond [(empty? (filter (compose not non-empty-string?) player-names))
-                              (send names-dialog show #f)
-                              (run-game player-names)])))])
+                              (run-game player-names)
+                              (send names-dialog show #f)])))])
 
     (send names-dialog show #t)))
 
@@ -68,15 +68,19 @@
       (on-take-card
         (λ () (match (take-card game)
                      [(cons card game)
-                      (let ((game (put-card game player-id card)))
-                        (update-score (list-get player-containers player-id)
-                                      (score (list-get (players game) player-id)))
+                      (let*
+                        ([game (put-card game player-id card)]
+                         [container (list-get player-containers player-id)]
+                         [player (list-get (players game) player-id)])
+
+                        (update-cards container (held-cards player))
+                        (update-score container (score player))
 
                         (rotate-player game player-id))])))
 
       (send current-player set-label (name player)))
 
-	(send (score-label croupier-container) show #f)
+    (send (score-label croupier-container) show #f)
     (send window show #t)
 
     (let ([initial-game (new-game player-names)])
@@ -103,15 +107,72 @@
   (new message% [parent parent] [label ""] [auto-resize #t]))
 
 (define (player-container parent name)
-  (let ([panel (new vertical-panel% [parent parent])])
-    (new message% [parent panel] [label name])
+  (let*
+    ([panel (new vertical-panel% [parent parent])]
+     [name-label (new message% [parent panel] [label name])]
+     [score-label (dynamic-label panel)]
 
-    (let ([container (list (dynamic-label panel))])
-      (update-score container 0)
-      container)))
+     [current-cards (make-parameter '())]
+     [card-canvas (new canvas%
+                       [parent panel]
+                       [paint-callback
+                         (λ (canvas dc)
+                            (redraw-cards canvas dc (current-cards) 0))])]
+
+     [container (list score-label card-canvas current-cards)])
+
+    (update-score container 0)
+    container))
 
 (define score-label car)
+(define card-canvas cadr)
+(define current-cards caddr)
 
 (define (update-score container score)
   (send (score-label container) set-label
         (string-append "Score: " (number->string score))))
+
+(define (update-cards container cards)
+  ((current-cards container) cards)
+  (send (card-canvas container) refresh))
+
+(define (redraw-cards canvas dc cards offset)
+  (cond [(not (empty? cards))
+
+         (let*
+           ([bitmap (card-bitmap (car cards))]
+            [scale (/ (send canvas get-height) (send bitmap get-height))])
+
+           (send dc set-scale scale scale)
+           (send dc draw-bitmap bitmap offset 0)
+
+           (redraw-cards canvas dc (cdr cards)
+                         (+ offset (/ (send bitmap get-width) 4))))]))
+
+(define (card-bitmap card)
+  (cond [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
+        [else (let*
+                ([value
+                   (match (card-value card)
+                          [(or 1 11) "A"]
+                          ['jack "J"]
+                          ['queen "Q"]
+                          ['king "K"]
+                          [_ (number->string (card-value card))])]
+
+                 [symbol
+                   (match (card-symbol card)
+                          ['pikes "S"]
+                          ['hearts "H"]
+                          ['clovers "C"]
+                          ['diamonds "D"])]
+
+                 [bitmap (load-bitmap (string-append "cards/" value symbol))])
+
+                (hash-set! loaded-bitmaps card bitmap)
+                bitmap)]))
+
+(define (load-bitmap path)
+  (read-bitmap (string-append "../assets/" path ".png") 'png))
+
+(define loaded-bitmaps (make-hash))
