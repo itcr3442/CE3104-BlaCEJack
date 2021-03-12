@@ -115,6 +115,7 @@
      [current-cards (make-parameter '())]
      [card-canvas (new canvas%
                        [parent panel]
+					   [style '(border transparent)]
                        [paint-callback
                          (λ (canvas dc)
                             (redraw-cards canvas dc (current-cards) 0))])]
