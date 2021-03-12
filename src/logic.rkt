@@ -64,10 +64,12 @@ Ejemplos de uso:
 (define (qs-minor ilist predicate pivot olist)
     {cond
         [{null? ilist} olist]
-        [{and (not (predicate pivot (car ilist))) (not (eq? pivot (car ilist)))}{qs-minor (cdr ilist) predicate pivot (cons (car ilist) olist)}]
+        [{and (not (predicate pivot (car ilist))) (not (eq? pivot (car ilist)))}
+            {qs-minor (cdr ilist) predicate pivot (cons (car ilist) olist)}]
         [else {qs-minor (cdr ilist) predicate pivot olist}]
     })
-#| Función qs-minor
+
+#| Función qs-major
 Descripción: Compara cada elemento de una lista contra un pivote utilizando la función
              parámetro de comparación "predicate". Los elementos que al ser comparados
              con el pivote den un resultado true serán agregados a una lista que se da 
@@ -80,39 +82,54 @@ Entradas:
     - olist: Lista en la que se guardan aquellos elementos cuya comparación contra el pivote 
              usando la función "predicate" de como resultado #t. Debe ser inicializada en '()
              para uso de la función
-Salida: Con
+Salida: Contenido final de olist al finalizar el recorrido por la lista de entrada
 Ejemplos de uso:
-    - >(qs-minor '(8 4 2 3 1 6 7) > 4 '()) >>> (7 6 8)
+    - >(qs-major '(8 4 2 3 1 6 7) > 4 '()) >>> (1 3 2)
 |#
 (define (qs-major ilist predicate pivot olist)
     {cond
         [{null? ilist} olist]
-        [{predicate pivot (car ilist)}{qs-major (cdr ilist) predicate pivot (cons (car ilist) olist)}]
+        [{predicate pivot (car ilist)}
+            {qs-major (cdr ilist) predicate pivot (cons (car ilist) olist)}]
         [else {qs-major (cdr ilist) predicate pivot olist}]
     })
-#| Función
-Descripción: 
+
+#| Función qs-equal
+Descripción: Compara cada elemento de una lista contra un pivote para verificar si sus
+             valores son iguales. Los elementos que al ser comparados
+             con el pivote den un resultado true serán agregados a una lista que se da 
+             como resultado de la función al finalizar de procesar la lista de entrada
 Entradas: 
-    - 
-    -
-Salida: 
+    - ilist: Lista de entrada 
+    - pivot: Elemento a compararse contra cada elemento de la lista dada 
+    - olist: Lista en la que se guardan aquellos elementos de igual valor que el pivote 
+             Debe ser inicializada en '() para uso de la función
+Salida: Contenido final de olist al finalizar el recorrido por la lista de entrada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(qs-equal '(2 8 4 2 3 4 5 4 1 6 7 4) > 4 '()) >>> (4 4 4 4)
 |#
 (define (qs-equal ilist pivot olist)
     {cond
         [{null? ilist} olist]
-        [{eq? pivot (car ilist)} {qs-equal (cdr ilist) pivot (cons (car ilist) olist)}]
+        [{eq? pivot (car ilist)}
+            {qs-equal (cdr ilist) pivot (cons (car ilist) olist)}]
         [else {qs-equal (cdr ilist) pivot olist}]
     })
+
 #| Función
-Descripción: 
+Descripción: Ordena una lista dada utilizando una implementación de quicksort
 Entradas: 
-    - 
-    -
-Salida: 
+    - ilist: Lista a ordenar usando quicksort
+    - predicate: Función que toma dos elementos y determina si el primero se debe 
+                 ordenar como menor que el segundo.
+Salida: Lista de entrada ordenada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(quicksort '(2 3 4 1 1 2 5) <) 
+        >>> '(1 1 2 2 3 4 5)
+    - >(quicksort '(2 3 4 1 1 2 5) >) 
+        >>> '(5 4 3 2 2 1 1)
+    - >(define game ...) (quicksort (players game) (lambda (a b) (> (score a) (score b))))
+        >>> '(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
 |#
 (define (quicksort ilist predicate)
     (define (pivot){car ilist})
@@ -130,14 +147,18 @@ Ejemplos de uso:
     })
 ;------------------quicksort related end------------;
 
-#| Función
-Descripción: 
+#| Función create-card
+Descripción: Crea un par que representa una carta a partir de un valor numérico y
+             un símbolo dados
 Entradas: 
-    - 
-    -
-Salida: 
+    - value: Orden de la carta en un conjunto de cartas de un símbolo
+    - symbol: símbolo del conjunto de cartas a la que pertenece la carta a crear
+Salida: Un par (valor símbolo) que representa una carta. De tener el parámetro value
+        un valor de 11,12 o 13, en la posición respectiva al valor de la carta se 
+        cambiará el valor por 'jack, 'queen y 'king respectivamente.
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(create-card 2 'hearts) >>> '(2 hearts)
+    - >(create-card 11 'pikes) >>> '(jack pikes)
 |#
 (define (create-card value symbol)
     {cond
@@ -147,38 +168,41 @@ Ejemplos de uso:
             {cond
                 [{= value 11}{list 'jack symbol}]
                 [{= value 12}{list 'queen symbol}]
-                [else {list 'king symbol}]
+                [{= value 13}{list 'king symbol}]
+                [else {raise "invalid card value"}]
             }]
     })
 
 #| Función
-Descripción: 
+Descripción: Dado un par que representa una carta, obtiene el primer elemento
+             el cual representa su valor
 Entradas: 
-    - 
-    -
-Salida: 
+    - card: carta cuyo valor se quiere conocer
+Salida: valor de la carta
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(card-value '(queen diamonds)) >>> 'queen
 |#
 (define (card-value card){car card})
-#| Función
-Descripción: 
+
+#| Función card-symbol
+Descripción: Dado un par que representa una carta, obtiene el segundo elemento
+             el cual representa su símbolo
 Entradas: 
-    - 
-    -
-Salida: 
+    - card - carta de la cual se quiere extraer el símbolo
+Salida: Símbolo de la carta dada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(card-symbol '(queen diamonds)) >>> 'diamons
 |#
 (define (card-symbol card){cadr card})
-#| Función
-Descripción: 
+
+#| Función code-symbol
+Descripción: Identifica un símbolo de carta basado en un valor numérico
+            (usado para generación aleatoria de cartas)
 Entradas: 
-    - 
-    -
-Salida: 
+    - code: número que representa uno de los símbolos de un mazo de cartas
+Salida: Valor de símbolo correspondiente al número dado
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(code-symbol 2) >>> 'diamonds
 |#
 (define (code-symbol code)
     {cond
@@ -187,66 +211,73 @@ Ejemplos de uso:
         [{= code 2} 'diamonds]
         [else 'pikes]
     })
-#| Función
-Descripción: 
-Entradas: 
-    - 
-    -
-Salida: 
+#| Función random-card
+Descripción: Genera un par que representa una carta de un mazo de manera aleatoria
+Salida: Par carta generada de forma aleatoria
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(random-card) >>> '(10 pikes)
 |#
 (define (random-card)
     {create-card (+ 1 (random 13)) (code-symbol (random 4))})
-#| Función
-Descripción: 
+
+#| Función high-ace
+Descripción: toma un As con valor de 1 y lo convierte en un As de valor 11
 Entradas: 
-    - 
-    -
-Salida: 
+    - card: As cuyo valor será aumentado
+Salida: Si la entrada es un As de valor uno, la salida será un As con valor de 11,
+        de lo contrario solo se retorna la carta dada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(high-ace '(1 pikes)) >>> '(11 pikes)
 |#
 (define (high-ace card)
     {cond
         [{= 1 (card-value card)}{create-card 11 (card-symbol card)}]
         [else card]
     })
-#| Función
-Descripción: 
+
+
+#| Función taken-cards 
+Descripción: Obtiene la lista de cartas que han sido tomadas del mazo y se enceuntran
+             en juego
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Estado de juego del cual se quieren saber las cartas usadas
+Salida: Lista de cartas en juego de la partida dada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game ...)(taken-cards game) >>> '((1 hearts)(5 diamonds)(11 pikes))
 |#
 (define (taken-cards game){caddr game})
-#| Función
-Descripción: 
+
+#| Función in-list?
+Descripción: Verifica si un elemento dado se encuentra dentro de una lista 
 Entradas: 
-    - 
-    -
-Salida: 
+    - element: valor a buscar en la lista
+    - ilist: lista en la que se buscará element
+Salida: Valor booleano que indica si el elemento dado efectivamente es miembro de la
+        lista dada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(in-list? 3 '(2 3 5)) >>> #t
+    - >(in-list? 3 '(2 4 5)) >>> #f
+
 |#
-( define(in-list? elemento lista)
+( define(in-list? element ilist)
     {cond
-        [{null? lista} #f]
+        [{null? ilist} #f]
         [else {cond
-            ((equal? elemento (car lista)) #t)
-            (else (in-list? elemento (cdr lista)))
+            ((equal? element (car ilist)) #t)
+            (else (in-list? element (cdr ilist)))
         }]
     })
-#| Función
-Descripción: 
+
+
+#| Función add-taken-card
+Descripción: Agrega una carta a la lista de cartas en uso de un juego
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Juego cuya lista de cartas tomadas será modificada
+    - card: Carta a agregar a la lista de cartas tomadas de "game"
+Salida: Estado resultante de "game" al agregar la carta "card"
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game ...) (add-taken-card game (3 clovers)) 
+        >>> '(((Foo...)(Bar...)(Baz...))(croupier...)((3 clovers)...))
 |#
 (define (add-taken-card game card)
     {list
@@ -254,7 +285,9 @@ Ejemplos de uso:
         (croupier game)
         (cons card (taken-cards game))
     })
-#| Función
+
+
+#| Función take-card-aux
 Descripción: 
 Entradas: 
     - 
@@ -733,17 +766,17 @@ Ejemplos de uso:
         [{active? (car players)}{game-finished?-aux (cdr players)}]
         [else #t]
     })
-#| Función
-Descripción: 
+
+#| Función game-finished?
+Descripción: Determina si el estado de juego dado es un estado final
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Juego cuyo estado quiere verificars
+Salida: Booleano que indica si el juego ya terminó o no
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game '(()(croupier 'lost)(...)))(game-finished? game) >>> #t
 |#
 (define (game-finished? game)
-    {and (game-finished?-aux (players game)) (active? (croupier game))})
+    {and (game-finished?-aux (players game)) (not (active? (croupier game)))})
 
 
 ;''''''''''''''''''''''''''''''''''''''''''''''
@@ -753,10 +786,10 @@ Ejemplos de uso:
 ;''''''''''''''''''''''''''''''''''''''''''''''
 
 (define game(new-game (list "Foo" "Bar" "Baz")))
-(define game2 '(((Foo active ((king hearts)(8 pikes)))
-                 (Bar active ((queen clovers)(11 pikes)))
-                 (Baz active ((11 diamonds))))(croupier)
+(define game2 '(((Foo hanged ((king hearts)(8 pikes)))
+                 (Bar lost ((queen clovers)(11 pikes)))
+                 (Baz hanged ((11 diamonds))))(croupier active ())
                  ((king hearts)(8 pikes)(queen clovers)(11 pikes)(11 diamonds))))
-
+(game-finished? game2)
 (score '(Foo active ((king hearts)(8 pikes))))
 (quicksort (players game2) (lambda (a b) (> (score a) (score b)))) 
