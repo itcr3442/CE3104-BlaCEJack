@@ -73,7 +73,7 @@
                          [container (list-get player-containers player-id)]
                          [player (list-get (players game) player-id)])
 
-                        (update-cards container (held-cards player))
+                        (update-cards container (reverse (held-cards player)))
                         (update-score container (score player))
 
                         (rotate-player game player-id))])))

@@ -392,7 +392,7 @@ Ejemplos de uso:
 
 #| Función held-cards
 Descripción: Dado un par que representa un jugador, retorna la lista de cartas en
-             posesión de dicho jugador
+             posesión de dicho jugador, en de pila (última tomada va primero).
 Entradas: 
     - player: lista que representa al jugador del cual se quiere saber su lista de
               cartas
