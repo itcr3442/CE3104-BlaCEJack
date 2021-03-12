@@ -42,4 +42,8 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 ## 11 de marzo:
 
+Se implemnentó la función que transforma los aces a un valor de uno en caso de que el puntaje del jugador se desborde.
+Se implementó también la lógica que maneja el cambio de turno cuando un jugador finaliza su turno.
+Se agregó una sección de código que inicializa todo as con un valor de 11, y se reducen automáticamente si el jugador se sobrepasa de un puntaje de 21.
+
 ## 12 de marzo:

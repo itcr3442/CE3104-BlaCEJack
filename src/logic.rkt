@@ -22,11 +22,6 @@ Ejemplos de uso:
 
 ;debe poder retornarse a sí mismo
 
-
-
-
-(define (try-changing-aces player current-score)#t)
-
 ;-------------------implemented functions
 (define (list-get list position)
     {cond
@@ -73,6 +68,7 @@ Ejemplos de uso:
 
 (define (create-card value symbol)
     {cond
+        [{= value 1}{list 11 symbol}]
         [{< value 11}{list value symbol}]
         [else 
             {cond
@@ -141,6 +137,13 @@ Ejemplos de uso:
 (define (player-state player){cadr player})
 
 (define (held-cards player){caddr player})
+
+(define (update-player-hand player new-hand)
+    {list
+        (name player)
+        (player-state player)
+        new-hand
+    })
 
 (define (active? player){eq? 'active (player-state player)})
 
@@ -280,6 +283,38 @@ Ejemplos de uso:
         [{active? (croupier game)}{next-turn-aux (active-players game) last-player}]
         [else '()]
     })
+
+
+
+(define (has-aces list)
+    {cond
+        [{or 
+            (in-list? '(11 hearts) list) (in-list? '(11 diamonds) list) 
+            (in-list? '(11 pikes) list) (in-list? '(11 clovers) list)}#t]
+        [else #f]
+    })
+
+(define (change-one-ace ilist olist)
+    {cond
+        [{null? ilist}olist]
+        [{eq? (caar ilist) 11} {append (cdr ilist) (cons (list 1 (cadar ilist)) olist)}]
+        [else {change-one-ace (cdr ilist) (cons (car ilist) olist)}]
+    })
+    
+(define (try-changing-aces player)
+    (define (new-player-state){update-player-hand player (change-one-ace (held-cards player) '())})
+    {cond
+        [{has-aces (held-cards player)}
+            {cond
+                [{> 21 (score (new-player-state))}{new-player-state}]
+                [else {try-changing-aces (new-player-state)}]
+            }]
+        {else player} ; 
+    })
+
+;ejemplo de uso y test
+;(define pepe(list "pepe" 'active '((5 pikes) (11 hearts) (11 diamonds) (11 clovers))))
+;(try-changing-aces pepe)
 
 ;------------------- game state change functions END
 
