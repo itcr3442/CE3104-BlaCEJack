@@ -233,6 +233,7 @@ Ejemplo de uso:
 
 [Juego flash](https://www.arkadium.com/games/blackjack/)
 [racket/gui](https://docs.racket-lang.org/gui/)
+[Imágenes de cartas](https://acbl.mybigcommerce.com/52-playing-cards/)
 
 
 ## Link documento plan de actividades: 

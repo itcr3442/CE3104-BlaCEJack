@@ -36,4 +36,5 @@
   plantarse.
 - Se implementa la rotación de turnos de jugadores en la interfaz gráfica.
 - Se hace que la puntuación del croupier no sea visible durante la primera fase
-  del jugeo.
+  del juego.
+- Se busca, encuentra e integra un paquete de imágenes de cartas.
