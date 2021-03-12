@@ -288,61 +288,68 @@ Ejemplos de uso:
 
 
 #| Función take-card-aux
-Descripción: 
+Descripción: Ayuda a la función take-card a agregar la carta dada al estado de juego
+             a ser devuelto
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Juego al que se quiere agregar una carta tomada
+    - card: Carta que se quiere registrar como tomada
+Salida: Un par que tiene de primer elemento la carta tomada, y de segundo elemento el
+        nuevo estado de juego de "game" en el que "card" se encuentra en la lista decartas
+        tomadas.
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(take-card-aux game '(6 clovers)) 
+        >>> '((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
 |#
 (define (take-card-aux game card)
     {cond 
         [{in-list? card (taken-cards game)}{take-card-aux game (random-card)}]
         [else {cons card (add-taken-card game card)}]
     })
-#| Función
-Descripción: 
+
+#| Función take-card
+Descripción: Dado un estado de juego, agrega una carta a la lista de cartas tomadas y
+             comunica la carta tomada junto con el nuevo estado de juego
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Juego al cual se quiere agregar una carta en uso
+Salida: Par que contiene la carta tomada y el nuevo estado de juego que lista dicha carta
+        como usada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(take-card game) 
+        >>> '((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
 |#
 (define (take-card game)
     {take-card-aux game (random-card)})
 
 
 ;--------------player related functions START
-#| Función
-Descripción: 
+#| Función create-player
+Descripción: crea una lista que representa el estado de un jugador a partir de un nombre
+             dado
 Entradas: 
-    - 
-    -
-Salida: 
+    - name: nombre para el jugador a ser generado 
+Salida: lista que representa el estado de un jugador con el nombre provisto
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(create-player "Foo") >>> '("Foo" active ())
 |#
 (define (create-player name){list name 'active '()})
-#| Función
-Descripción: 
+
+#| Función name 
+Descripción: Dado un par que representa un jugador, retorna el nombre del mismo
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: lista que representa al jugador del cual se quiere obtener el nombre del jugador
+Salida: Nombre del jugador correspondiente al estado de jugador dado
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(name '("Foo" active ((3 clovers)(5 diamonds)))) >>> "Foo"
 |#
 (define (name player){car player})
-#| Función
-Descripción: 
+
+#| Función player-state
+Descripción: Dado un par que representa un jugador, retorna el estado (active, hanged, lost) del mismo
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: lista que representa al jugador del cual se quiere saber el estado
+Salida: Retorna si el jugador tiene como estado active,hanged o lost
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(player-state '("Foo" active ((3 clovers)(5 diamonds)))) >>> 'active
 |#
 (define (player-state player){cadr player})
 #| Función
@@ -518,9 +525,10 @@ Ejemplos de uso:
 Descripción: aplica una función modificador a cada jugador y 
              guarda los datos actualizados en una nueva lista
 Entradas: 
-    - predicate: es la operación 
+    - predicate: es la operación modificadora a aplicar a cada jugador 
     - id: debe inicializarse en 0
-    -
+    - index
+    - updated
 Salida: 
 Ejemplos de uso:
     - >codigo >>> resultado
@@ -697,14 +705,19 @@ Ejemplos de uso:
         [{eq? (caar ilist) 11} {append (cdr ilist) (cons (list 1 (cadar ilist)) olist)}]
         [else {change-one-ace (cdr ilist) (cons (car ilist) olist)}]
     })
-#| Función
-Descripción: 
+
+
+#| Función try-changing-aces
+Descripción: Dado un jugador con puntaje actual mayor a 21 trata de convertir una cantidad de 
+            Ases de valor 11 en Ases de valor 1 con el objetivo de reducir el puntaje debajo
+            de un 22. Como resultado se obtiene la mejor combinación de valores para el jugador
+            dada su mano actual.
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: jugador cuyo puntaje se quiere mejorar
+Salida: Mejor combinación posible de valores que el jugador puede tener con su mano actual
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(try-changing-aces '(Foo active ((11 pikes)(2 hearts)(jack diamonds))) 
+        >>> '(Foo active ((2 hearts) (jack diamonds) (1 pikes)))
 |# 
 (define (try-changing-aces player)
     (define (new-player-state){update-player-hand player (change-one-ace (held-cards player) '())})
@@ -723,14 +736,16 @@ Ejemplos de uso:
 
 ;------------------- game state change functions END
 
-#| Función
-Descripción: 
+#| Función new-game-aux
+Descripción: Se encarga de la elaboración de una lista de estados de jugadores a partir
+             de una lista de nombres dada para que la función "new-game" pueda crear un
+             nuevo estado de juego
 Entradas: 
-    - 
-    -
-Salida: 
+    - player-names: lista de nombres de jugadores a ser asignados un estado de juego
+    - player-list: lista almacena los estados de juego que se han ido generando
+Salida: Lista de estados de juego para los diferentes nombres provistos
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(new-game-aux '("Foo" "Bar")) >>> '((Foo active ())(Bar active ()))
 |#
 (define (new-game-aux player-names player-list)
     {cond
@@ -740,32 +755,19 @@ Ejemplos de uso:
                 (cons (create-player (car player-names)) player-list)
         }]
     })
-#| Función
-Descripción: 
+
+#| Función new-game
+Descripción: Genera un nuevo estado de juego a partir de nombres de jugadores
 Entradas: 
-    - 
-    -
-Salida: 
+    - player-names: nombres de los jugadores presentes en la partida
+Salida: Estado del juego nuevo que incluye los nombres dados como jugadores, este
+        estado es de forma ((estados jugadores)(estado croupier)(cartas tomadas del mazo))
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define new-game '("Foo" "Bar")) 
+        >>> '(((Foo active ())(Bar active ()))(croupier active ())()) 
 |#
 (define (new-game player-names)
     {list (new-game-aux player-names '()) (create-player 'croupier) '()})
-#| Función
-Descripción: 
-Entradas: 
-    - 
-    -
-Salida: 
-Ejemplos de uso:
-    - >codigo >>> resultado
-|#
-(define (game-finished?-aux players)
-    {cond
-        [{null? players} #f]
-        [{active? (car players)}{game-finished?-aux (cdr players)}]
-        [else #t]
-    })
 
 #| Función game-finished?
 Descripción: Determina si el estado de juego dado es un estado final
@@ -773,10 +775,11 @@ Entradas:
     - game: Juego cuyo estado quiere verificars
 Salida: Booleano que indica si el juego ya terminó o no
 Ejemplos de uso:
-    - >(define game '(()(croupier 'lost)(...)))(game-finished? game) >>> #t
+    - >(define game '(((Foo 'hanged (...))(Bar 'hanged (...))(Baz 'lost (...)))(croupier 'lost)(...)))
+      >(game-finished? game) >>> #t
 |#
 (define (game-finished? game)
-    {and (game-finished?-aux (players game)) (not (active? (croupier game)))})
+    {and (null? (active-players game)) (not (active? (croupier game)))})
 
 
 ;''''''''''''''''''''''''''''''''''''''''''''''
@@ -786,7 +789,7 @@ Ejemplos de uso:
 ;''''''''''''''''''''''''''''''''''''''''''''''
 
 (define game(new-game (list "Foo" "Bar" "Baz")))
-(define game2 '(((Foo hanged ((king hearts)(8 pikes)))
+(define game2 '(((Foo active ((king hearts)(8 pikes)))
                  (Bar lost ((queen clovers)(11 pikes)))
                  (Baz hanged ((11 diamonds))))(croupier active ())
                  ((king hearts)(8 pikes)(queen clovers)(11 pikes)(11 diamonds))))
