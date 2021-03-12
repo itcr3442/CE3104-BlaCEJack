@@ -331,7 +331,9 @@ Salida: lista que representa el estado de un jugador con el nombre provisto
 Ejemplos de uso:
     - >(create-player "Foo") >>> '("Foo" active ())
 |#
+
 (define (create-player name){list name 'active '()})
+
 
 #| Función name 
 Descripción: Dado un par que representa un jugador, retorna el nombre del mismo
@@ -341,141 +343,173 @@ Salida: Nombre del jugador correspondiente al estado de jugador dado
 Ejemplos de uso:
     - >(name '("Foo" active ((3 clovers)(5 diamonds)))) >>> "Foo"
 |#
+
 (define (name player){car player})
 
+
 #| Función player-state
-Descripción: Dado un par que representa un jugador, retorna el estado (active, hanged, lost) del mismo
+Descripción: Dado un par que representa un jugador, retorna el estado 
+             (active, hanged, lost) del mismo
 Entradas: 
     - player: lista que representa al jugador del cual se quiere saber el estado
 Salida: Retorna si el jugador tiene como estado active,hanged o lost
 Ejemplos de uso:
     - >(player-state '("Foo" active ((3 clovers)(5 diamonds)))) >>> 'active
-|#
+|# 
+
 (define (player-state player){cadr player})
-#| Función
-Descripción: 
+
+
+#| Función held-cards
+Descripción: Dado un par que representa un jugador, retorna la lista de cartas en
+             posesión de dicho jugador
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: lista que representa al jugador del cual se quiere saber su lista de
+              cartas
+Salida: Lista de cartas en posesión del jugador
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(held-cards '("Foo" active ((3 clovers)(5 diamonds)))) >>> '((3 clovers)(5 diamonds))
 |#
+
 (define (held-cards player){caddr player})
-#| Función
-Descripción: 
+
+
+#| Función update-player-hand
+Descripción: Reemplaza la mano del un jugador por una nueva mano representada como
+             una lista de cartas
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: Jugador cuya mano se quiere cambiar
+    - new-hand: Nueva lista de cartas para el jugador 
+Salida: Estado del jugador luego de cambiar su mano
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(update-player-hand '("Foo" active ()) '((11 clovers)(3 pikes)))
+        >>> '("Foo" active ((11 clovers)(3 pikes)))
 |#
+
 (define (update-player-hand player new-hand)
     {list
         (name player)
         (player-state player)
         new-hand
     })
-#| Función
-Descripción: 
+
+
+#| Función active?
+Descripción: Dado un jugador, retorna si el mismo se encuentra activo o no
 Entradas: 
-    - 
-    -
-Salida: 
+    -  player: jugador del cual se quiere saber si se encuentra activo
+Salida: #t si el jugador está activo, #f de lo contrario
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(active? ("Foo" active '())) >>> #t
+    - >(active? '("Bar" hanged '())) >>> #f
 |#
+
 (define (active? player){eq? 'active (player-state player)})
-#| Función
-Descripción: 
+
+
+#| Función lost?
+Descripción: Dado un jugador, retorna si el mismo ya perdió
 Entradas: 
-    - 
-    -
-Salida: 
+    -  player: jugador del cual se quiere saber si perdió
+Salida: #t si el jugador perdió, #f de lo contrario
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(lost? ("Foo" lost '())) >>> #t
+    - >(lost? '("Bar" active '())) >>> #f
 |#
+
 (define (lost? player){eq? 'lost (player-state player)})
-#| Función
-Descripción: 
+
+
+#| Función hanged?
+Descripción: Dado un jugador, retorna si el mismo se encuentra plantado o no
 Entradas: 
-    - 
-    -
-Salida: 
+    -  player: jugador del cual se quiere saber si se encuentra plantado
+Salida: #t si el jugador está plantado, #f de lo contrario
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(hanged? ("Foo" hanged '())) >>> #t
+    - >(hanged? '("Bar" active '())) >>> #f
 |#
+
 (define (hanged? player){eq? 'hanged (player-state player)})
-#| Función
-Descripción: 
+
+
+#| Función players
+Descripción: Obtiene la lista de jugadores de un estado de juego dado
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Estado de juego del cual se quiere obtener la lista de jugadores
+Salida: Lista de jugadores del estado de juego "game"
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game ...)(players game) >>> '(("Foo"...)("Bar"...)("Baz"...))
 |#
 (define (players game){car game})
 
-#| Función
-Descripción: 
+#| Función active-players-aux
+Descripción: Recorre una lista de jugadores y crea otra lista con los jugadores
+             activos de la primera, asegurándose de que el identificador asignado
+             sea congruente con la posición del jugador en el juego
 Entradas: 
-    - 
+    - players: lista de jugadores a ser recorrida
     - id: debe inicializarse en 0
-    -
-Salida: 
+    - olist: Deber ser inicializada en '(). En esta lista se van agragando todos
+             los jugadores activos de una partida
+Salida: Lista de jugadores activos con sus respectivos identificadores como primer elemento
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(active-players-aux '(("Foo" active ())("Bar" hanged (king clovers))("Baz" active ())) 0 '()) 
+        >>> '((0 "Foo" active ())(2 "Baz" active ()))
 |#
-(define (active-players-aux players id list)
+(define (active-players-aux players id olist)
     {cond
-        [{null? players}{reverse list}]
-        [{active? (first players)}{active-players-aux (cdr players) (+ id 1) (cons (cons id (first players)) list)}]
-        [else {active-players-aux (cdr players) (+ id 1) list}]
+        [{null? players}{reverse olist}]
+        [{active? (first players)}{active-players-aux (cdr players) (+ id 1) (cons (cons id (first players)) olist)}]
+        [else {active-players-aux (cdr players) (+ id 1) olist}]
     })
 
 #| Función
-Descripción: 
+Descripción: Obtiene la lista de jugadores activos de una partida junto con su número
+             de turno identificador.
 Entradas: 
-    - 
-Salida: 
+    - game: Juego del que se quieren obtener los jugadores activos
+Salida: lista de jugadores activos de la partida "game"
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game (new-game '("Foo" "Baz")))(active-players game) 
+        >>> '((0 "Foo" active ())(1 "Baz" active ()))
 |#
 (define (active-players game)
     {active-players-aux (players game) 0 '()})
 
-#| Función
-Descripción: 
+#| Función player-count
+Descripción: Retorna la cantidad de jugadores en el juego
 Entradas: 
-    - 
-Salida: 
+    - game: Juego cuya cantidad de jugadores quiere conocerse
+Salida: cantidad de jugadores en "game"
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game (new-game '("Foo" "Baz")))(player-count game)
+        >>> 2
 |#
 (define (player-count game){length (players game)})
 
-#| Función
-Descripción: 
+#| Función croupier
+Descripción: Obtiene la lista que representa el estado del croupier
 Entradas: 
-    - 
-    -
-Salida: 
+    - game: Juego del cual se quiere obtener el estado del croupier
+Salida: Lista que representa estado del croupier
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game (new-game '("Foo" "Baz")))(croupier game)
+        >>> '(croupier active ())
 |#
 (define (croupier game){cadr game})
 
-#| Función
-Descripción: 
+#| Función accept-card 
+Descripción: Agrega una nueva carta a la mano de un jugador
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: lista de estado del jugador al que se le quiere agregar una carta
+              en su mazo
+    - card: Carta a agregar al mazo del jugador
+Salida: Nuevo estado de jugador ahora con la carta dada incluída en su mano
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(accept-card '("Foo" active ()) '(5 clovers)) >>> '("Foo" active ((5 clovers)))
 |#
+
 (define (accept-card player card)
     {list
         (name player)
@@ -483,14 +517,15 @@ Ejemplos de uso:
         (cons card (held-cards player))
     })
 
-#| Función
-Descripción: 
+
+#| Función set-lost
+Descripción: Modifica una lista de estado de jugador para representar que el mismo
+             ha perdido
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: Jugador que se quiere indicar que perdió
+Salida: Lista de nuevo estado de jugador
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(set-lost '("Foo" active ())) >>> '("Foo" lost ())
 |#
 (define (set-lost player)
     {list 
@@ -499,15 +534,16 @@ Ejemplos de uso:
         (held-cards player)
     })
 
-#| Función
-Descripción: 
+#| Función set-hanged
+Descripción: Modifica una lista de estado de jugador para representar que el mismo
+             se encuentra plantado
 Entradas: 
-    - 
-    -
-Salida: 
+    - player: Jugador que se quiere indicar que se plantó
+Salida: Lista de nuevo estado de jugador
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(set-hanged '("Foo" active ())) >>> '("Foo" hanged ())
 |#
+
 (define (set-hanged player)
     {list 
         (name player) 
@@ -516,22 +552,23 @@ Ejemplos de uso:
     })
 
 
-; esto aplica una modificacion cualquier a un player
 ; index valores de 0 a 2 
 ; updated inicializado en '()
 ; devuleve toda la listya de players 
 
-#| Función
-Descripción: aplica una función modificador a cada jugador y 
-             guarda los datos actualizados en una nueva lista
+#| Función update-player
+Descripción: Aplica una función modificador a un jugador de una lista identificado
+             por un índice. Obtiene la nueva lista de jugadores con el jugador
+             del índice especificado con su estado actualizado
 Entradas: 
     - predicate: es la operación modificadora a aplicar a cada jugador 
-    - id: debe inicializarse en 0
-    - index
-    - updated
-Salida: 
+    - index: índice de la lista en el que se encuentra el jugador. Empieza
+             desde 0 y en un juego de 3 el máximo es 2
+    - updated: Debe inicializarse en '(). Almacena la lista de jugadores ya procesados
+Salida: Lista de jugadores con el estado del jugador especificado actualizada
 Ejemplos de uso:
-    - >codigo >>> resultado
+    - >(define game (new-game '("Foo" "Bar")))(update-player set-hanged (players game) 0 '()) 
+        >>> '(("Foo" hanged ()) ("Bar" active ()))
 |#
 (define (update-player predicate players index updated)
     {cond
