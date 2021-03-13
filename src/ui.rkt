@@ -3,7 +3,7 @@
 (require racket/gui)
 (require "logic.rkt")
 
-(provide bCEj)
+(provide bCEj run-game)
 
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]

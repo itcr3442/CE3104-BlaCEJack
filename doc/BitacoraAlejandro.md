@@ -52,3 +52,5 @@
 - Ahora se oculta la primera carta de tanto jugadores como croupier.
 - Se implementa el deshabilitado de áreas de juego de jugadores que han perdido
   o se han plantado.
+- Se agrega un archivo `main.rkt` por conveniencia que evita escribir los
+  nombres de jugadores en cada prueba. Será eliminado a futuro.
