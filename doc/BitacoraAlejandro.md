@@ -50,3 +50,5 @@
 - Las imágenes de cartas ahora se precargan al inicio en vez de al requerirse
   cada una, lo cual mejora el tiempo de respuesta al tomar una carta.
 - Ahora se oculta la primera carta de tanto jugadores como croupier.
+- Se implementa el deshabilitado de áreas de juego de jugadores que han perdido
+  o se han plantado.

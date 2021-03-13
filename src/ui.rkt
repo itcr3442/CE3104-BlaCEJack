@@ -58,6 +58,9 @@
       (send current-player set-label (name player)))
 
     (define (rotate-player game player-id)
+        (cond [(not (active? (get-player game player-id)))
+             (send (container-panel (list-get player-containers player-id)) enable #f)])
+
       (match (next-turn game player-id)
              [(list) (raise "Not implemented")]
              [(cons next-id next) (do-turn game next-id next)]))
@@ -117,10 +120,15 @@
                          (λ (canvas dc)
                             (redraw-cards canvas dc (current-cards)))])]
 
-     [container (list score-label card-canvas current-cards)])
+     [container (list panel score-label card-canvas current-cards)])
 
     (update-score container 0)
     container))
+
+(define container-panel car)
+(define score-label cadr)
+(define card-canvas caddr)
+(define current-cards cadddr)
 
 (define (initial-grab game container player-id)
   (cond [(ready? (get-player game player-id)) game]
@@ -137,10 +145,6 @@
             (update-score container (score player))
 
             game)]))
-
-(define score-label car)
-(define card-canvas cadr)
-(define current-cards caddr)
 
 (define (update-score container score)
   (send (score-label container) set-label
