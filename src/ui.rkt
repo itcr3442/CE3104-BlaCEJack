@@ -115,7 +115,7 @@
                        [style '(border transparent)]
                        [paint-callback
                          (λ (canvas dc)
-                            (redraw-cards canvas dc (current-cards) 0))])]
+                            (redraw-cards canvas dc (current-cards)))])]
 
      [container (list score-label card-canvas current-cards)])
 
@@ -148,20 +148,23 @@
 
 (define (update-cards container cards)
   ((current-cards container) cards)
-  (send (card-canvas container) refresh-now))
+  (send (card-canvas container) refresh))
 
-(define (redraw-cards canvas dc cards offset)
-  (cond [(not (empty? cards))
+(define (redraw-cards canvas dc cards)
+  (define (redraw-cards offset cards)
+    (cond [(not (empty? cards))
 
-         (let*
-           ([bitmap (card-bitmap (car cards))]
-            [scale (/ (send canvas get-height) (send bitmap get-height))])
+           (let*
+             ([bitmap (card-bitmap (car cards))]
+              [scale (/ (send canvas get-height) (send bitmap get-height))])
 
-           (send dc set-scale scale scale)
-           (send dc draw-bitmap bitmap offset 0)
+             (send dc set-scale scale scale)
+             (send dc draw-bitmap bitmap offset 0)
 
-           (redraw-cards canvas dc (cdr cards)
-                         (+ offset (/ (send bitmap get-width) 4))))]))
+             (redraw-cards (+ offset (/ (send bitmap get-width) 4)) (cdr cards)))]))
+
+  (redraw-cards 0 (cond [(empty? cards) empty]
+                        [else (cons 'hidden (cdr cards))])))
 
 (define (card-bitmap card)
   (cond [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
@@ -190,6 +193,7 @@
   (read-bitmap (string-append "../assets/" path ".png") 'png))
 
 (define loaded-bitmaps (make-hash))
+(hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back"))
 
 ; Preload images
 (for-each card-bitmap (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
