@@ -10,12 +10,12 @@
   especificación.
 - Se acuerdan diseños a gran escala de lógica e interfaz.
 
-# 8 de marzo
+## 8 de marzo
 
 - Se escribe una revisión inicial de la lista de funciones a
   implementar junto a sus descripciones.
 
-# 9 de marzo
+## 9 de marzo
 
 - Se discute entre el equipo de trabajo el caso de que un
   jugador y el croupier pierdan en la misma partida,
@@ -23,7 +23,7 @@
   esto apropiadamente. Se decide representar con símbolos
   ternarios el estado de actividad de un jugador.
 
-# 11 de marzo
+## 11 de marzo
 
 - Se exportan del archivo de lógica las funciones que la interfaz
   necesitará.
@@ -45,7 +45,9 @@
   ser una pila de cartas. Esto ocurre conforme se avanza y se agregan
   cartas.
 
-# 12 de marzo
+## 13 de marzo
+
+- Se encontró una incompatib
 - Se implementa la toma de las dos cartas iniciales para cada participante.
 - Las imágenes de cartas ahora se precargan al inicio en vez de al requerirse
   cada una, lo cual mejora el tiempo de respuesta al tomar una carta.
@@ -55,3 +57,10 @@
 - Se agrega un archivo `main.rkt` por conveniencia que evita escribir los
   nombres de jugadores en cada prueba. Será eliminado a futuro.
 - Se implementan acciones gráficas referentes al final del juego.
+- Se encuentra una incompatibilidad menor entre el diseño propuesto y la
+  especificación acerca de si debe o no mostrarse la primera carta de cada
+  jugador. Se consultará al profesor.
+- En respuesta a indicación del profesor, se persiste con el diseño propuesto
+  por el equipo de trabajo. Debido a lo anterior, se modificó la interfaz para
+  que solo oculte la primera carta del croupier y ninguna otra, y que esta
+  misma sea descubierta al momento de comenzar el croupier a tomar cartas.

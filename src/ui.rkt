@@ -81,6 +81,7 @@
          [label "Hang up"]
          [callback (λ (button event) ((on-hang-up)))])
 
+    (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
     (send window show #t)
 
@@ -98,6 +99,9 @@
       (do-turn game 0 (car (players game))))))
 
 (define (end-of-game game croupier-container)
+  (send (container-panel croupier-container) enable #t)
+  (send (container-panel croupier-container) refresh)
+
   (cond [(not (game-finished? game))
          (end-of-game (grab game croupier-container 'croupier) croupier-container)]))
 
@@ -149,9 +153,17 @@
          [(cons card game)
           (let*
             ([game (put-card game player-id card)]
-             [player (get-player game player-id)])
+             [player (get-player game player-id)]
 
-            (update-cards container (reverse (held-cards player)))
+             [cards (reverse (held-cards player))]
+             [show-first (or (empty? cards)
+                             (not (eqv? player-id 'croupier))
+                             (send (container-panel container) is-enabled?))]
+
+             [cards (cond [show-first cards]
+                          [else (cons 'hidden (cdr cards))])])
+
+            (update-cards container cards)
             (update-score container (score player))
 
             game)]))
@@ -177,8 +189,7 @@
 
              (redraw-cards (+ offset (/ (send bitmap get-width) 4)) (cdr cards)))]))
 
-  (redraw-cards 0 (cond [(empty? cards) empty]
-                        [else (cons 'hidden (cdr cards))])))
+  (redraw-cards 0 cards))
 
 (define (card-bitmap card)
   (cond [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
