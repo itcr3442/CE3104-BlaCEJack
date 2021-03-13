@@ -22,8 +22,8 @@
                                   name-fields)])
 
                        (cond [(empty? (filter (compose not non-empty-string?) player-names))
-                              (run-game player-names)
-                              (send names-dialog show #f)])))])
+                              (send names-dialog show #f)
+                              (run-game player-names)])))])
 
     (send names-dialog show #t)))
 
@@ -45,8 +45,22 @@
 
      [current-player (dynamic-label bottom-row)]
 
-     [on-take-card (make-parameter #f)]
-     [on-hang-up (make-parameter #f)])
+     [on-hang-up (make-parameter #f)]
+     [on-take-card (make-parameter 0)])
+
+    (define (do-turn game player-id player)
+      (on-hang-up (λ () (rotate-player (hang game player-id) player-id)))
+      (on-take-card
+        (λ () (rotate-player
+                 (grab game (list-get player-containers player-id) player-id)
+                 player-id)))
+
+      (send current-player set-label (name player)))
+
+    (define (rotate-player game player-id)
+      (match (next-turn game player-id)
+             [(list) (raise "Not implemented")]
+             [(cons next-id next) (do-turn game next-id next)]))
 
     (new button%
          [parent bottom-row]
@@ -58,33 +72,21 @@
          [label "Hang up"]
          [callback (λ (button event) ((on-hang-up)))])
 
-    (define (rotate-player game player-id)
-      (match (next-turn game player-id)
-             [(list) (raise "Not implemented")]
-             [(cons next-id next) (turn game next-id next)]))
-
-    (define (turn game player-id player)
-      (on-hang-up (λ () (rotate-player (hang game player-id) player-id)))
-      (on-take-card
-        (λ () (match (take-card game)
-                     [(cons card game)
-                      (let*
-                        ([game (put-card game player-id card)]
-                         [container (list-get player-containers player-id)]
-                         [player (list-get (players game) player-id)])
-
-                        (update-cards container (reverse (held-cards player)))
-                        (update-score container (score player))
-
-                        (rotate-player game player-id))])))
-
-      (send current-player set-label (name player)))
-
     (send (score-label croupier-container) show #f)
     (send window show #t)
 
-    (let ([initial-game (new-game player-names)])
-      (turn initial-game 0 (car (players initial-game))))))
+    (define (initial-grab-for-players game containers player-ids)
+      (cond [(empty? player-ids) game]
+            [else (initial-grab-for-players
+                    (initial-grab game (car containers) (car player-ids))
+                    (cdr containers) (cdr player-ids))]))
+
+    (let* ([game (new-game player-names)]
+           [game (initial-grab game croupier-container 'croupier)]
+           [game (initial-grab-for-players
+                   game player-containers (range (length (players game))))])
+
+      (do-turn game 0 (car (players game))))))
 
 (define (add-name-fields dialog up-to next fields)
   (cond [(> next up-to) (reverse fields)]
@@ -110,7 +112,7 @@
      [current-cards (make-parameter '())]
      [card-canvas (new canvas%
                        [parent panel]
-					   [style '(border transparent)]
+                       [style '(border transparent)]
                        [paint-callback
                          (λ (canvas dc)
                             (redraw-cards canvas dc (current-cards) 0))])]
@@ -119,6 +121,22 @@
 
     (update-score container 0)
     container))
+
+(define (initial-grab game container player-id)
+  (cond [(ready? (get-player game player-id)) game]
+        [else (initial-grab (grab game container player-id) container player-id)]))
+
+(define (grab game container player-id)
+  (match (take-card game)
+         [(cons card game)
+          (let*
+            ([game (put-card game player-id card)]
+             [player (get-player game player-id)])
+
+            (update-cards container (reverse (held-cards player)))
+            (update-score container (score player))
+
+            game)]))
 
 (define score-label car)
 (define card-canvas cadr)
@@ -130,7 +148,7 @@
 
 (define (update-cards container cards)
   ((current-cards container) cards)
-  (send (card-canvas container) refresh))
+  (send (card-canvas container) refresh-now))
 
 (define (redraw-cards canvas dc cards offset)
   (cond [(not (empty? cards))

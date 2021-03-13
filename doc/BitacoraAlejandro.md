@@ -44,3 +44,6 @@
 - Se implementa el acomodo de varias cartas en lo que visualmente parece
   ser una pila de cartas. Esto ocurre conforme se avanza y se agregan
   cartas.
+
+# 12 de marzo
+- Se implementa la toma de las dos cartas iniciales para cada participante.

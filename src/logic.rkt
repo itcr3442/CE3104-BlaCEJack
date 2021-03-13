@@ -8,9 +8,9 @@ Estudiantes: José Fernando Morales Vargas - 2019024270
              Alejandro Jose Soto Chacón
 _______________________________________________________|#
 
-(provide list-get score name active? lost? hanged? players croupier
-         game-finished? take-card put-card new-game next-turn hang
-         quicksort held-cards card-value card-symbol)
+(provide list-get score name active? lost? hanged? ready? players
+         get-player croupier game-finished? take-card put-card new-game
+         next-turn hang quicksort held-cards card-value card-symbol)
 
 #| Notas generales
 - un prefijo 'i' a un sustantivo significa que dicho parámetro es de entrada (input)
@@ -462,6 +462,17 @@ Ejemplos de uso:
 
 (define (hanged? player){eq? 'hanged (player-state player)})
 
+#| Función ready?
+Descripción: Determina si un participante ha tomado suficientes cartas para iniciar
+Entradas: 
+    - player: jugador del cual se quiere saber si ha tomado suficientes cartas
+Salida: #t si el jugador ha tomado al menos dos cartas, #f de lo contrario
+Ejemplos de uso:
+    - >(ready? '("Foo" active '())) >>> #f
+    - >(ready? '("Foo" active '((4 clovers) (3 hearts)))) >>> #t
+|#
+(define (ready? player)
+    {>= (length (held-cards player)) 2})
 
 #| Función players
 Descripción: Obtiene la lista de jugadores de un estado de juego dado
@@ -471,9 +482,22 @@ Salida: Lista de jugadores del estado de juego "game"
 Ejemplos de uso:
     - >(define game ...)(players game) >>> '(("Foo"...)("Bar"...)("Baz"...))
 |#
-
 (define (players game){car game})
 
+#| Función get-player
+Descripción: Conveniencia para obtener sea un jugador o el croupier
+Entradas: 
+    - game: Estado de juego del cual se quiere obtener un jugador
+    - id: 'croupier, o un identificador de jugador válido
+Salida: Participante según identificador
+Ejemplos de uso:
+    - >(define game ...)(get-player game 1) >>> '("Foo" hanged (...))
+    - >(get-player game 'croupier) >> '(croupier active (...))
+|#
+
+(define (get-player game id)
+  {cond [{eq? id 'croupier} (croupier game)]
+        [else (list-get (players game) id)]})
 
 #| Función active-players-aux
 Descripción: Recorre una lista de jugadores y crea otra lista con los jugadores
