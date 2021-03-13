@@ -190,3 +190,7 @@
   (read-bitmap (string-append "../assets/" path ".png") 'png))
 
 (define loaded-bitmaps (make-hash))
+
+; Preload images
+(for-each card-bitmap (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
+                                         '(pikes hearts clovers diamonds)))

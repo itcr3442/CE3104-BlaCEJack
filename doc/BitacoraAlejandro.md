@@ -47,3 +47,5 @@
 
 # 12 de marzo
 - Se implementa la toma de las dos cartas iniciales para cada participante.
+- Las imágenes de cartas ahora se precargan al inicio en vez de al requerirse
+  cada una, lo cual mejora el tiempo de respuesta al tomar una carta.
