@@ -62,7 +62,13 @@
              (send (container-panel (list-get player-containers player-id)) enable #f)])
 
       (match (next-turn game player-id)
-             [(list) (raise "Not implemented")]
+             [(list) ; No active player remains
+
+              (send bottom-row show #f)
+              (end-of-game game croupier-container)
+              (sleep/yield 5)
+              (send window show #f)]
+
              [(cons next-id next) (do-turn game next-id next)]))
 
     (new button%
@@ -90,6 +96,10 @@
                    game player-containers (range (length (players game))))])
 
       (do-turn game 0 (car (players game))))))
+
+(define (end-of-game game croupier-container)
+  (cond [(not (game-finished? game))
+         (end-of-game (grab game croupier-container 'croupier) croupier-container)]))
 
 (define (add-name-fields dialog up-to next fields)
   (cond [(> next up-to) (reverse fields)]
