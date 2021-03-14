@@ -68,3 +68,6 @@
   corregir el valor de sus aces de ser posible para tratar de no superar 21.
 - Se muestra la puntuación del croupier al comenzar este a tomar cartas.
 - Se agrega un efecto de sonido para movimientos de cartas.
+- Se agrega una pantalla de splash con una selección de imágenes, esto debido a
+  que el tiempo necesario para precargar los bitmaps de cartas es notorio para
+  el usuario.

@@ -3,7 +3,7 @@
 (require racket/gui)
 (require "logic.rkt")
 
-(provide bCEj run-game)
+(provide bCEj splash-screen run-game)
 
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
@@ -23,11 +23,31 @@
 
                        (cond [(empty? (filter (compose not non-empty-string?) player-names))
                               (send names-dialog show #f)
-                              (run-game player-names)])))])
+                              (run-game player-names (splash-screen))])))])
 
     (send names-dialog show #t)))
 
-(define (run-game player-names)
+(define (splash-screen)
+  (let* ([splashes '("aces" "honor_clubs" "honor_diamonds" "honor_hearts" "honor_spades")]
+         [splash (load-bitmap
+                   (string-append "splash/" (list-ref splashes (random (length splashes)))))]
+
+         [screen (new frame%
+                      [label ""]
+                      [style '(float no-resize-border no-caption no-system-menu)])])
+
+    (new canvas%
+         [parent (new pane% [parent screen])]
+         [min-width (quotient (send splash get-width) 3)]
+         [min-height (quotient (send splash get-height) 3)]
+         [paint-callback (λ (canvas dc) null
+                            (send dc set-scale (/ 1 3) (/ 1 3))
+                            (send dc draw-bitmap splash 0 0))])
+
+    (send screen show #t)
+    screen))
+
+(define (run-game player-names splash-screen)
   (let*
     ([window (new frame%
                   [label "BlaCEJack"]
@@ -81,9 +101,12 @@
 
     (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
-
     (send bottom-row show #f)
+
+    (preload-bitmaps)
+    (send splash-screen show #f)
     (send window show #t)
+
     (sleep/yield 0.5)
 
     (define (initial-grab-for-players game containers player-ids)
@@ -230,6 +253,12 @@
 (define loaded-bitmaps (make-hash))
 (hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back"))
 
-; Preload images
-(for-each card-bitmap (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
-                                         '(pikes hearts clovers diamonds)))
+(define (preload-bitmaps)
+  (define (preload-bitmaps cards)
+    (cond [(not (empty? cards))
+           (yield)
+           (card-bitmap (car cards))
+           (preload-bitmaps (cdr cards))]))
+
+  (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
+                                      '(pikes hearts clovers diamonds))))
