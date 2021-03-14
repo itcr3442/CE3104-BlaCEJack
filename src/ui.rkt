@@ -170,9 +170,12 @@
              [cards (cond [show-first cards]
                           [else (cons 'hidden (cdr cards))])])
 
+            (play-sound "../assets/card-flip.wav" #t)
+
             (update-cards container cards)
             (update-score container (score player))
 
+            (sleep/yield 0.3)
             game)]))
 
 (define (update-score container score)
@@ -181,10 +184,7 @@
 
 (define (update-cards container cards)
   ((current-cards container) cards)
-
-  (play-sound "../assets/card-flip.wav" #t)
-  (send (card-canvas container) refresh-now)
-  (sleep/yield 0.3))
+  (send (card-canvas container) refresh-now))
 
 (define (redraw-cards canvas dc cards)
   (define (redraw-cards offset cards)
