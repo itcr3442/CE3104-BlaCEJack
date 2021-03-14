@@ -78,3 +78,7 @@
 - Se hace que las pilas de cartas por jugador/croupier se centren con respecto
   a sus contenedores.
 - Se reemplazan algunos patrones estructurales en `ui.rkt`.
+- Los botones de acción (tomar carta y plantarse) ahora se desactivan durante
+  transiciones y animaciones causadas por los mismos botones, evitando posibles
+  condiciones de carrera que hubieran surgido al presionar varias veces estos
+  botones de manera rápida.

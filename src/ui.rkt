@@ -99,16 +99,35 @@
 
      [current-player (dynamic-label bottom-row)]
 
+     [action-button
+       (λ (parameter label)
+          (new button%
+               [parent bottom-row]
+               [label label]
+               [callback
+                 (λ (button event)
+                    (enable-action-buttons #f)
+                    ((parameter)))]))]
+
      [on-hang-up (make-parameter #f)]
      [on-take-card (make-parameter 0)]
+
+     [take-card-button (action-button on-take-card "Take card")]
+     [hang-up-button (action-button on-hang-up "Hang up")]
+
+     [enable-action-buttons
+       (λ (enable?)
+          (send take-card-button enable enable?)
+          (send hang-up-button enable enable?))]
 
      [do-turn
        (λ (game player-id player)
           (on-hang-up (λ () (rotate-player (hang game player-id) player-id)))
           (on-take-card
-            (λ () (rotate-player
-                     (grab game (list-get player-containers player-id) player-id)
-                     player-id)))
+            (λ ()
+               (rotate-player
+                 (grab game (list-get player-containers player-id) player-id)
+                 player-id)))
 
           (send current-player set-label (name player)))]
 
@@ -123,17 +142,10 @@
                   (send bottom-row show #f)
                   (end-of-game game croupier-container)]
 
-                 [(cons next-id next) (do-turn game next-id next)]))])
+                 [(cons next-id next)
 
-    (new button%
-         [parent bottom-row]
-         [label "Take card"]
-         [callback (λ (button event) ((on-take-card)))])
-
-    (new button%
-         [parent bottom-row]
-         [label "Hang up"]
-         [callback (λ (button event) ((on-hang-up)))])
+                  (enable-action-buttons #t)
+                  (do-turn game next-id next)]))])
 
     (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
