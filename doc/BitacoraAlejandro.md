@@ -77,3 +77,4 @@
 - La pantalla de splash ahora muestra el título "BlaCEJack".
 - Se hace que las pilas de cartas por jugador/croupier se centren con respecto
   a sus contenedores.
+- Se reemplazan algunos patrones estructurales en `ui.rkt`.
