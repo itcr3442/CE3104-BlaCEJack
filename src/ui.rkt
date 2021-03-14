@@ -32,19 +32,52 @@
          [splash (load-bitmap
                    (string-append "splash/" (list-ref splashes (random (length splashes)))))]
 
+         [width (send splash get-width)]
+         [height (send splash get-height)]
+
          [screen (new frame%
                       [label ""]
                       [style '(float no-resize-border no-caption no-system-menu)])])
 
     (new canvas%
          [parent (new pane% [parent screen])]
-         [min-width (quotient (send splash get-width) 3)]
-         [min-height (quotient (send splash get-height) 3)]
-         [paint-callback (λ (canvas dc) null
-                            (send dc set-scale (/ 1 3) (/ 1 3))
-                            (send dc draw-bitmap splash 0 0))])
+         [min-width (quotient width 3)]
+         [min-height (quotient height 3)]
+         [paint-callback
+           (λ (canvas dc)
+
+              (send dc set-scale (/ 1 3) (/ 1 3))
+              (send dc draw-bitmap splash 0 0)
+
+              (let*
+                ([font (send the-font-list find-or-create-font 130 'default 'normal 'normal)]
+                 [text-width
+                   (λ (text) (call-with-values
+                                (λ () (send dc get-text-extent text font))
+                                (λ (width height baseline padding) width)))]
+
+                 [bla (text-width "Bla")]
+                 [ce (text-width "CE")]
+                 [jack (text-width "Jack")]
+
+                 [start-x (quotient (- width bla ce jack) 2)]
+                 [start-y (quotient (* height 3) 4)]
+
+                 [black (send dc get-text-foreground)]
+                 [red (send the-color-database find-color "red")])
+
+                (send dc set-font font)
+                (send dc draw-text "Bla" start-x start-y)
+
+                (send dc set-text-foreground red)
+                (send dc draw-text "CE" (+ start-x bla) start-y)
+
+                (send dc set-text-foreground black)
+                (send dc draw-text "Jack" (+ start-x bla ce) start-y)))])
 
     (send screen show #t)
+    (yield)
+
     screen))
 
 (define (run-game player-names splash-screen)
@@ -251,14 +284,17 @@
   (read-bitmap (string-append "../assets/" path ".png") 'png))
 
 (define loaded-bitmaps (make-hash))
-(hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back"))
 
 (define (preload-bitmaps)
   (define (preload-bitmaps cards)
     (cond [(not (empty? cards))
+
            (yield)
            (card-bitmap (car cards))
            (preload-bitmaps (cdr cards))]))
+
+  (cond [(not (hash-has-key? loaded-bitmaps 'hidden))
+         (hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back"))])
 
   (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
                                       '(pikes hearts clovers diamonds))))
