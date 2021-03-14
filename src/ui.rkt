@@ -38,10 +38,12 @@
 
          [screen (new frame%
                       [label ""]
-                      [style '(float no-resize-border no-caption no-system-menu)])])
+                      [style '(float no-resize-border no-caption no-system-menu)])]
+
+         [pane (new vertical-pane% [parent screen])])
 
     (new canvas%
-         [parent (new pane% [parent screen])]
+         [parent pane]
          [min-width (quotient width 3)]
          [min-height (quotient height 3)]
          [paint-callback
@@ -76,12 +78,17 @@
                 (send dc set-text-foreground black)
                 (send dc draw-text "Jack" (+ start-x bla ce) start-y)))])
 
-    (send screen show #t)
-    (yield)
+    (let ([gauge (new gauge%
+                      [parent pane]
+                      [label "Loading... "]
+                      ; The real range will be set later
+                      [range 1])])
 
-    screen))
+      (send screen show #t)
+      (yield)
+      gauge)))
 
-(define (run-game player-names splash-screen)
+(define (run-game player-names [splash-gauge #f])
   (letrec
     ([window (new frame%
                   [label "BlaCEJack"]
@@ -151,8 +158,17 @@
     (send (score-label croupier-container) show #f)
     (send bottom-row show #f)
 
-    (preload-bitmaps)
-    (send splash-screen show #f)
+    (when splash-gauge
+      #| +1 for all setup operations before bitmap loading
+      || +1 for the bitmap preload for 'hidden
+      || +52 for every other preloaded bitmap
+      ||#
+      (send splash-gauge set-range (+ 1 1 52))
+      (progress splash-gauge))
+
+    (preload-bitmaps splash-gauge)
+
+    (when splash-gauge (send (send splash-gauge get-top-level-window) show #f))
     (send window show #t)
 
     (sleep/yield 0.5)
@@ -326,9 +342,10 @@
 
 (define loaded-bitmaps (make-hash))
 
-(define (preload-bitmaps)
+(define (preload-bitmaps [gauge #f])
   (when [not (hash-has-key? loaded-bitmaps 'hidden)]
     (hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back")))
+  (progress gauge)
 
   (letrec
     ([preload-bitmaps
@@ -336,7 +353,12 @@
           (when [not (empty? cards)]
             (yield)
             (card-bitmap (car cards))
+
+            (progress gauge)
             (preload-bitmaps (cdr cards))))])
 
     (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
                                         '(pikes hearts clovers diamonds)))))
+
+(define (progress gauge)
+  (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range))))

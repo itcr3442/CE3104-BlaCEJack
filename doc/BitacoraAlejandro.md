@@ -82,3 +82,5 @@
   transiciones y animaciones causadas por los mismos botones, evitando posibles
   condiciones de carrera que hubieran surgido al presionar varias veces estos
   botones de manera rápida.
+- Se agrega una barra de progreso a la pantalla de splash. Este progreso es
+  real, producto de los tiempos de carga de bitmaps, y no es dado por estética.
