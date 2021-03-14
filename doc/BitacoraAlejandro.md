@@ -71,3 +71,9 @@
 - Se agrega una pantalla de splash con una selección de imágenes, esto debido a
   que el tiempo necesario para precargar los bitmaps de cartas es notorio para
   el usuario.
+
+## 14 de marzo
+
+- La pantalla de splash ahora muestra el título "BlaCEJack".
+- Se hace que las pilas de cartas por jugador/croupier se centren con respecto
+  a sus contenedores.

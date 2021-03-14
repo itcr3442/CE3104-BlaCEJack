@@ -231,7 +231,7 @@
             (update-cards container cards)
             (update-score container (score player))
 
-            (sleep/yield 0.3)
+            (sleep/yield 0.25)
             game)]))
 
 (define (update-score container score)
@@ -243,19 +243,38 @@
   (send (card-canvas container) refresh-now))
 
 (define (redraw-cards canvas dc cards)
+  (define (spacing bitmap)
+    (quotient (send bitmap get-width) 4))
+
+  (define (scale bitmap)
+    (/ (send canvas get-height) (send bitmap get-height)))
+
   (define (redraw-cards offset cards)
     (cond [(not (empty? cards))
 
            (let*
              ([bitmap (card-bitmap (car cards))]
-              [scale (/ (send canvas get-height) (send bitmap get-height))])
+              [scale (scale bitmap)])
 
              (send dc set-scale scale scale)
              (send dc draw-bitmap bitmap offset 0)
 
-             (redraw-cards (+ offset (/ (send bitmap get-width) 4)) (cdr cards)))]))
+             (redraw-cards (+ offset (spacing bitmap)) (cdr cards)))]))
 
-  (redraw-cards 0 cards))
+  #| We want a centered card stack, therefore:
+  || base-offset = canvas-width/2 - stack-width/2
+  ||             = (canvas-width - ((n - 1) * card-spacing + card-width))/2
+  ||             = (canvas-width - ((n - 1) * card-spacing + card-spacing * 4))/2
+  ||             = (real-canvas-width/scale - (n + 3) * card-spacing)/2
+  |#
+  (let ([base-offset
+          (when [not (empty? cards)]
+            (/ (- (/ (send canvas get-width) (scale (card-bitmap (car cards))))
+                  (* (+ (length cards) 3)
+                     (spacing (card-bitmap (car cards)))))
+               2))])
+
+    (redraw-cards base-offset cards)))
 
 (define (card-bitmap card)
   (cond [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
