@@ -67,3 +67,4 @@
   para provocar que un jugador pierda si su puntuación excede 21, así como
   corregir el valor de sus aces de ser posible para tratar de no superar 21.
 - Se muestra la puntuación del croupier al comenzar este a tomar cartas.
+- Se agrega un efecto de sonido para movimientos de cartas.
