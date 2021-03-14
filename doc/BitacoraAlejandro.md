@@ -47,7 +47,9 @@
 
 ## 13 de marzo
 
-- Se encontró una incompatib
+- Se encuentra una incompatibilidad menor entre el diseño propuesto y la
+  especificación acerca de si debe o no mostrarse la primera carta de cada
+  jugador. Se consultará al profesor.
 - Se implementa la toma de las dos cartas iniciales para cada participante.
 - Las imágenes de cartas ahora se precargan al inicio en vez de al requerirse
   cada una, lo cual mejora el tiempo de respuesta al tomar una carta.
@@ -57,10 +59,10 @@
 - Se agrega un archivo `main.rkt` por conveniencia que evita escribir los
   nombres de jugadores en cada prueba. Será eliminado a futuro.
 - Se implementan acciones gráficas referentes al final del juego.
-- Se encuentra una incompatibilidad menor entre el diseño propuesto y la
-  especificación acerca de si debe o no mostrarse la primera carta de cada
-  jugador. Se consultará al profesor.
 - En respuesta a indicación del profesor, se persiste con el diseño propuesto
   por el equipo de trabajo. Debido a lo anterior, se modificó la interfaz para
   que solo oculte la primera carta del croupier y ninguna otra, y que esta
   misma sea descubierta al momento de comenzar el croupier a tomar cartas.
+- Se integra en la función `(accept-card player card)` el soporte existente
+  para provocar que un jugador pierda si su puntuación excede 21, así como
+  corregir el valor de sus aces de ser posible para tratar de no superar 21.

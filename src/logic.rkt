@@ -5,7 +5,7 @@ Instituto Tecnológico de Costa Rica
 Lenguajes, Compiladores e Intérpretes Grupo 02
 Profesor: Marco Rivera Meneses
 Estudiantes: José Fernando Morales Vargas - 2019024270
-             Alejandro Jose Soto Chacón
+             Alejandro José Soto Chacón - 2019008164
 _______________________________________________________|#
 
 (provide list-get score name active? lost? hanged? ready? players
@@ -24,8 +24,6 @@ players  = (("Foo" 'flag (cards)) ("Bar" 'flag ()) ("Baz" 'flag ()))
 player = ("nombre" 'flag (held-cards))
 croupier = '(croupier 'flag (held-cards))
 |#
-;----------------non implemented functions-----;
-(define (bCEj X)#t)
 ;-------------------implemented functions
 
 #| Función list-get
@@ -45,7 +43,6 @@ Ejemplo de uso:
         [{= 0 position} {car list}]
         [else {list-get (cdr list) (- position 1)}]
     })
-
 
 ;------------------quicksort related start------------;
 
@@ -497,7 +494,7 @@ Ejemplos de uso:
 
 (define (get-player game id)
   {cond [{eq? id 'croupier} (croupier game)]
-        [else (list-get (players game) id)]})
+        [else {list-get (players game) id}]})
 
 #| Función active-players-aux
 Descripción: Recorre una lista de jugadores y crea otra lista con los jugadores
@@ -575,29 +572,49 @@ Ejemplos de uso:
 |#
 
 (define (accept-card player card)
-    {list
-        (name player)
-        (player-state player)
-        (cons card (held-cards player))
+    {maybe-hang-croupier
+        (maybe-lost
+            (try-changing-aces (list (name player) (player-state player)
+                                     (cons card (held-cards player)))))
     })
 
 
-#| Función set-lost
-Descripción: Modifica una lista de estado de jugador para representar que el mismo
-             ha perdido
+#| Función maybe-hang-croupier
+Descripción: Si el jugador indicado es el croupier, se encuentra activo
+             y además su puntuación es al menos 17, provoca que se plante,
+             finalizando el juego. De lo contrario, retorna su entrada.
 Entradas: 
-    - player: Jugador que se quiere indicar que perdió
+    - player: Jugador que posiblemente es el croupier en estado final
 Salida: Lista de nuevo estado de jugador
 Ejemplos de uso:
-    - >(set-lost '("Foo" active ())) >>> '("Foo" lost ())
+    - >(maybe-hang-croupier '(croupier active ((11 hearts) (9 pikes))))
+      >>> '(croupier hanged (...))
 |#
 
-(define (set-lost player)
-    {list 
-        (name player) 
-        'lost 
-        (held-cards player)
+(define (maybe-hang-croupier player)
+    {cond [{and (eq? (name player) 'croupier)
+                (active? player)
+                (>= (score player) 17)}
+           {list 'croupier 'hanged (held-cards player)}]
+
+          [else player]
     })
+
+
+#| Función maybe-lost
+Descripción: Modifica una lista de estado de jugador para representar que el mismo
+             ha perdido en caso de que su puntuación exceda 21
+Entradas: 
+    - player: Jugador que puede haber perdido
+Salida: Lista de nuevo estado de jugador
+Ejemplos de uso:
+    - >(maybe-lost '("Foo" active ())) >>> '("Foo" active ())
+    - >(maybe-lost '("Foo" active ((10 jack) (10 jack) (10 jack)))) >>> '("Foo" lost (...))
+|#
+
+(define (maybe-lost player)
+    {cond [{> (raw-score player) 21}{list (name player) 'lost (held-cards player)}]
+          [else player]})
 
 
 #| Función set-hanged
@@ -648,25 +665,36 @@ Ejemplos de uso:
 #| Función score-aux
 Descripción: Basada en la lista de cartas, retorna el puntaje que suman sus cartas. 
              Se encarga de descifrar el puntaje que agregan las cartas de valor no 
-             numérico
+             numérico. Nótese que no es posible exceder una puntuación de 21, por
+             lo que al perder el juego la última carta no altera la puntuación.
 Entradas: 
     - cards: Lista de cartas cuyo puntaje quiere sumarse
+    - previous-sum: suma de puntaje justo antes de sumada la última carta
+                    en el valor contenido en `score-sum`
     - score-sum: valor numérico que contiene el puntaje que se suma conforme se
                  recorre la lista de cartas. Debe inicializarse en 0 
+    - limit-to-21?: indica si deben ignorarse cartas que provoquen que
+                    el puntaje se sobrepase de 21 o no
 Salida: Puntaje que suma la lista de cartas dada
 Ejemplos de uso:
-    - >(score-aux '((3 clovers)(5 diamonds)) 0) >>> 8
+    - >(score-aux '((3 clovers)(5 diamonds)) 0 0) >>> 8
 |#
 
-(define (score-aux cards score-sum)
+(define (score-aux cards previous-sum score-sum limit-to-21?)
     (define (first-card){caar cards})
     (define (remaining-cards){cdr cards})
+    (define (card-worth)
+        {cond
+            [{integer? (first-card)}{first-card}]
+            [{equal? (first-card) 'jack} 10]
+            [{equal? (first-card) 'queen} 10]
+            [{equal? (first-card) 'king} 10]
+        })
+
     {cond
-        [{null? cards}score-sum]
-        [{integer? (first-card)}{score-aux (remaining-cards) (+ (first-card) score-sum)}]
-        [{equal? (first-card) 'jack}{score-aux (remaining-cards) (+ 10 score-sum)}]
-        [{equal? (first-card) 'queen}{score-aux (remaining-cards) (+ 10 score-sum)}]
-        [{equal? (first-card) 'king}{score-aux (remaining-cards) (+ 10 score-sum)}]
+        [{and limit-to-21? (> score-sum 21)} previous-sum]
+        [{null? cards} score-sum]
+        [else {score-aux (remaining-cards) score-sum (+ score-sum (card-worth)) limit-to-21?}]
     })
 
 
@@ -680,7 +708,20 @@ Ejemplos de uso:
     - >(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds)))) >>> 12
 |#
 
-(define (score player){score-aux (held-cards player) 0})
+(define (score player){score-aux (reverse (held-cards player)) 0 0 #t})
+
+
+#| Función raw-score
+Descripción: Equivalente a `score`, pero no ignora cartas que exceden
+             el puntaje más allá 21
+Entradas: 
+    - player: jugador cuyo puntaje se quiere obtener
+Salida: Puntaje que suman las cartas en posesión del jugador
+Ejemplos de uso:
+    - >(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds)))) >>> 12
+|#
+
+(define (raw-score player){score-aux (reverse (held-cards player)) 0 0 #f})
 
 ;----------------- player related functions END
 ;----------------- game state change functions START
@@ -886,10 +927,10 @@ Ejemplos de uso:
     {cond
         [{has-aces (held-cards player)}
             {cond
-                [{> 21 (score (new-player-state))}{new-player-state}]
+                [{> 21 (raw-score (new-player-state))}{new-player-state}]
                 [else {try-changing-aces (new-player-state)}]
             }]
-        {else player} ; 
+        {else player}
     })
 
 ;------------------- game state change functions END

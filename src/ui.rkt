@@ -99,11 +99,14 @@
       (do-turn game 0 (car (players game))))))
 
 (define (end-of-game game croupier-container)
+  (define (grab-last-croupier-cards game)
+    (cond [(not (game-finished? game))
+           (grab-last-croupier-cards (grab game croupier-container 'croupier))]))
+
   (send (container-panel croupier-container) enable #t)
   (send (container-panel croupier-container) refresh)
 
-  (cond [(not (game-finished? game))
-         (end-of-game (grab game croupier-container 'croupier) croupier-container)]))
+  (grab-last-croupier-cards game))
 
 (define (add-name-fields dialog up-to next fields)
   (cond [(> next up-to) (reverse fields)]
