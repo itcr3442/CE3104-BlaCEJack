@@ -81,7 +81,10 @@
 
     (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
+
+    (send bottom-row show #f)
     (send window show #t)
+    (sleep/yield 0.5)
 
     (define (initial-grab-for-players game containers player-ids)
       (cond [(empty? player-ids) game]
@@ -94,7 +97,9 @@
            [game (initial-grab-for-players
                    game player-containers (range (length (players game))))])
 
-      (do-turn game 0 (car (players game))))))
+      (do-turn game 0 (car (players game))))
+
+    (send bottom-row show #t)))
 
 (define (end-of-game game croupier-container)
   (define (grab-last-croupier-cards game)
@@ -176,7 +181,10 @@
 
 (define (update-cards container cards)
   ((current-cards container) cards)
-  (send (card-canvas container) refresh))
+
+  (play-sound "../assets/card-flip.wav" #t)
+  (send (card-canvas container) refresh-now)
+  (sleep/yield 0.3))
 
 (define (redraw-cards canvas dc cards)
   (define (redraw-cards offset cards)
