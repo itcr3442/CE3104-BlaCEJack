@@ -65,9 +65,7 @@
              [(list) ; No active player remains
 
               (send bottom-row show #f)
-              (end-of-game game croupier-container)
-              (sleep/yield 5)
-              (send window show #f)]
+              (end-of-game game croupier-container)]
 
              [(cons next-id next) (do-turn game next-id next)]))
 
@@ -105,6 +103,7 @@
 
   (send (container-panel croupier-container) enable #t)
   (send (container-panel croupier-container) refresh)
+  (send (score-label croupier-container) show #t)
 
   (grab-last-croupier-cards game))
 
