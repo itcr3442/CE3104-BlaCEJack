@@ -240,23 +240,6 @@ Ejemplos de uso:
     {create-card (+ 1 (random 13)) (code-symbol (random 4))})
 
 
-#| Función high-ace
-Descripción: toma un As con valor de 1 y lo convierte en un As de valor 11
-Entradas: 
-    - card: As cuyo valor será aumentado
-Salida: Si la entrada es un As de valor uno, la salida será un As con valor de 11,
-        de lo contrario solo se retorna la carta dada
-Ejemplos de uso:
-    - >(high-ace '(1 pikes)) >>> '(11 pikes)
-|#
-
-(define (high-ace card)
-    {cond
-        [{= 1 (card-value card)}{create-card 11 (card-symbol card)}]
-        [else card]
-    })
-
-
 #| Función taken-cards 
 Descripción: Obtiene la lista de cartas que han sido tomadas del mazo y se enceuntran
              en juego

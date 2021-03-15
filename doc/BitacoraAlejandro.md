@@ -104,3 +104,5 @@
   Scheme de Guzmán (2006).
 - Se reemplazan las ocurrencias de "hang" por "stand", ya que es el verbo
   correcto.
+- Se elimina l función `(high-ace card)`, la cual fue parte del diseño original
+  pero ya no tiene un uso actual o esperado.
