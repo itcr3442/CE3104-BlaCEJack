@@ -899,13 +899,13 @@ Salida: Si la lista original tenía un As de valor 11, retorna la lista con ese 
         a un as de valor 1, de lo contrario, retorna la misma lista de entrada
 Ejemplos de uso:
     - >(change-one-ace '((3 pikes)(11 hearts)(11 clovers)) '()) 
-        >>> '((11 clovers) (1 hearts) (3 pikes))
+        >>> '((3 pikes) (1 hearts) (11 clovers))
 |#
 
 (define (change-one-ace ilist olist)
     {cond
-        [{null? ilist}olist]
-        [{eq? (caar ilist) 11} {append (cdr ilist) (cons (list 1 (cadar ilist)) olist)}]
+        [{null? ilist} {reverse olist}]
+        [{eq? (caar ilist) 11} {change-one-ace '() (append (reverse(cdr ilist)) (cons (list 1 (cadar ilist)) olist))}]
         [else {change-one-ace (cdr ilist) (cons (car ilist) olist)}]
     })
 
