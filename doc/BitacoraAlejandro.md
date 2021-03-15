@@ -82,3 +82,16 @@
   transiciones y animaciones causadas por los mismos botones, evitando posibles
   condiciones de carrera que hubieran surgido al presionar varias veces estos
   botones de manera rápida.
+- Se agrega una barra de progreso a la pantalla de splash. Este progreso es
+  real, producto de los tiempos de carga de bitmaps, y no es dado por estética.
+- Se muestra el mazo en el área de juego. Para ello, se genera una imagen
+  estática de una pila de cartas grande:
+  ```bash
+  cp red_back.png many.png
+  seq 51 | while read X; do
+    convert many.png red_back.png -set page '+%[fx:u[t-1]page.x+u[t-1].w-669]+%[fx:u[t-1]page.y]' -background none -layers merge +repage many.png
+  done
+  ```
+  Esta imagen es luego utilizada como bitmap, recortada según convenga para dar
+  la impresión que el mazo está bajando de tamaño, y dibujando al final el
+  bitmap de carta oculta.
