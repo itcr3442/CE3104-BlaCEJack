@@ -579,6 +579,7 @@ Ejemplos de uso:
                                      (cons card (held-cards player)))))
     })
 
+
 #| Función maybe-hang-croupier
 Descripción: Si el jugador indicado es el croupier, se encuentra activo
              y además su puntuación es al menos 17, provoca que se plante,
@@ -830,7 +831,7 @@ Ejemplos de uso:
 |#
 
 (define (next-turn-aux playing last-player)
-    ;función que busca un jugador cuyo id cumpla con la condición dada por predicate
+    ;función que busca un jugador cuyo id cumpla con la condición dada por predicate    
     (define (look-for-active ilist predicate)
         {cond
             [{null? ilist} '()]
@@ -864,7 +865,7 @@ Ejemplos de uso:
 
 (define (next-turn game last-player)
     {cond
-        [{active? (croupier game)}{next-turn-aux (active-players game) last-player}]
+        [{not (null? (active-players game))}{next-turn-aux (active-players game) last-player}]
         [else '()]
     })
 
