@@ -346,7 +346,19 @@ Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguien
    * Descripción: Cuando el croupier 
    * Intento de solución sin éxito
    * Solucion: Se cambió el condicional de la función que decidía próximo turno
+
 2. **Situación de nunca blackjack**:
+
+3. **Nunca se descubre la primera carta del croupier**
+
+   * Descripción: Cuando el croupier llega a una puntuación de 17 o más con
+	 solamente las dos cartas iniciales.
+
+   * Solución: Se movió la condición gráfica de cubrimiento y descubrimiento a
+	 su propia función. Al inicio de la etapa final del juego, se refresca el
+	 área del croupier con la lista de cartas indicadas por esta función, en
+	 vez de depender de que más cartas sean insertadas para invocar el
+	 refrescado.
 
 ## 1.6. Plan de Actividades
 

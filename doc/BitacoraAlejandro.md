@@ -106,3 +106,4 @@
   correcto.
 - Se elimina l función `(high-ace card)`, la cual fue parte del diseño original
   pero ya no tiene un uso actual o esperado.
+- Se documentan algunos bugs antes descritos en esta bitácora (ver README.md).
