@@ -118,20 +118,20 @@
                     (enable-action-buttons #f)
                     ((parameter)))]))]
 
-     [on-hang-up (make-parameter #f)]
+     [on-stand-up (make-parameter #f)]
      [on-take-card (make-parameter 0)]
 
      [take-card-button (action-button on-take-card "Take card")]
-     [hang-up-button (action-button on-hang-up "Hang up")]
+     [stand-up-button (action-button on-stand-up "Stand")]
 
      [enable-action-buttons
        (λ (enable?)
           (send take-card-button enable enable?)
-          (send hang-up-button enable enable?))]
+          (send stand-up-button enable enable?))]
 
      [do-turn
        (λ (game player-id player)
-          (on-hang-up (λ () (rotate-player (hang game player-id) player-id)))
+          (on-stand-up (λ () (rotate-player (stand game player-id) player-id)))
           (on-take-card
             (λ ()
                (rotate-player
