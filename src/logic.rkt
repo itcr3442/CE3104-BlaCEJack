@@ -578,7 +578,6 @@ Ejemplos de uso:
                                      (cons card (held-cards player)))))
     })
 
-
 #| Función maybe-hang-croupier
 Descripción: Si el jugador indicado es el croupier, se encuentra activo
              y además su puntuación es al menos 17, provoca que se plante,
@@ -925,9 +924,10 @@ Ejemplos de uso:
 (define (try-changing-aces player)
     (define (new-player-state){update-player-hand player (change-one-ace (held-cards player) '())})
     {cond
+        [{> 22 (raw-score player)}player]
         [{has-aces (held-cards player)}
             {cond
-                [{> 21 (raw-score (new-player-state))}{new-player-state}]
+                [{> 22 (raw-score (new-player-state))}{new-player-state}]
                 [else {try-changing-aces (new-player-state)}]
             }]
         {else player}
