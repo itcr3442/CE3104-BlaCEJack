@@ -278,6 +278,9 @@ Ejemplo de uso:
 
 ## Bibliografía
 
+Guzman, J. E. (2006). Introducción a la programación con Scheme. Cartago:
+Editorial Tecnológica de Costa Rica.
+
 [Juego flash](https://www.arkadium.com/games/blackjack/)
 [racket/gui](https://docs.racket-lang.org/gui/)
 [Imágenes de cartas](https://acbl.mybigcommerce.com/52-playing-cards/)

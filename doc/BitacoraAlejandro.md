@@ -100,3 +100,5 @@
 
 - Se arregla un bug que ocurría cuando el croupier se plantaba con solo las dos
   cartas iniciales, causando que no se mostrara la primera carta al final.
+- Se agrega una referencia bibliográfica para Introducción a la Programción con
+  Scheme de Guzmán (2006).
