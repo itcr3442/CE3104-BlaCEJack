@@ -265,15 +265,113 @@ Ejemplo de uso:
 '(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
 ```
 
-## 1.3. Estructuras de datos
+## 1.3. Estructuras de datos desarrolladas
+
+### **Representación de cartas**
+
+**Descripción**
+
+Es conjunto de pares implementado con listas de racket. En una lista de cartas, ninguna carta puede estar repetida. La representación se muestra a continuación 
+
+```scheme
+'((valor símbolo)(valor símbolo)(valor símbolo))
+```
+
+Un ejemplo de uso se da en la lista de cartas que usa el juego para verificar que cartas del mazo han sido ya utilizadas
+
+``` Scheme
+'((11 hearts)(jack diamonds)...[])
+```
+
+Estas listas se utilizan como elementos hijos de estructuras mayores, jugadores y estados de juego.
+
+
+### **Representación de jugadores**
+
+**Descripción**
+
+Los jugadores se describen como una lista de racket de 3 elementos: 
+
+- Nombre
+- Estado de juego (activo, plantado o perdedor)
+- Lista de cartas que representa la mano del jugador
+
+```Scheme
+'(Nombre estado (lista de cartas))
+```
+
+La estructura de un jugador llamado Foo, activo en primer turno, y con un blackjack en mano se vería de la siguiente manera:
+
+```Scheme
+'(Foo active ((11 pikes)(king hearts)))
+```
+
+### **Representación de un estado de juego**
+
+**Descripción**
+
+Es una lista racket que a su vez contiene 3 sublistas, y dos de estas sublistas contienen sus propias sublistas. 
+
+```Scheme
+'((jugadores),croupier,(cartas tomadas))
+```
+
+El primer elemento es una lista que representa a los jugadores de la partida, excluyendo al croupier. 
+
+```
+((Nombre1 estado1 (lista-cartas1)) (Nombre2 estado2 (lista-cartas2))...[etc])
+```
+
+El átomo que representa al croupier es igual al de un jugador normal, pero se prefirió colocarlo en una posición separada de la lista para facilitar el acceso a los datos del croupier. Este átomo solo puede tener en el espacio de nombre "croupier"
+
+```Scheme
+'(croupier active ((11 pikes)(king hearts)))
+```
+
+El tercer átomo es la lista de cartas, cuya implementación ya se cubrió anteriormente.
+
+Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguiente manera:
+
+```Scheme
+'(((jose active ((10 hearts)(8 pikes)))(maria active ((5 hearts)(2 diamonds)))(pedro active ((jack pikes)(2 clovers)))),(croupier active ((11 clovers)(3 hearts))),((10 hearts)(8 pikes)(5 hearts)(2 diamonds)(jack pikes)(2 clovers)(11 clovers)(3 hearts)))
+```
 
 ## 1.4. Conclusiones
 
 ## 1.5. Problemas encontrados
 
+### Bugs menores encontrados en la etapa final
+
+1. **Greedy croupier**: 
+   * Descripción: Cuando el croupier 
+   * Intento de solución sin éxito
+   * Solucion: Se cambió el condicional de la función que decidía próximo turno
+2. **Situación de nunca blackjack**:
+
 ## 1.6. Plan de Actividades
+
+El registro del plan de actividades se llevó a cabo en una tabla de excel. La misma se puede ver en línea en el siguiente link:
+
+<https://estudianteccr-my.sharepoint.com/:x:/g/personal/josfemova_estudiantec_cr/EdpIY5FMafRGoKklTgOMdgkBAk4891vVfR0VT2qTk_yCvQ?e=OWfe6d> 
+
+Seguidamente, se incluyen las capturas del plan:
+
+![](./doc/actividades1.png)
+![](./doc/actividades2.png)
+![](./doc/actividades3.png)
+
+
+
 ## 1.7. Conclusiones.
+
+- 
+
+
 ## 1.8. Recomendaciones.
+
+
+
+
 ## 1.9. Bibliografía consultada en todo el proyecto
 
 ## Bibliografía
@@ -288,4 +386,4 @@ Editorial Tecnológica de Costa Rica.
 
 ## Link documento plan de actividades: 
 
-<https://estudianteccr-my.sharepoint.com/:x:/g/personal/josfemova_estudiantec_cr/EdpIY5FMafRGoKklTgOMdgkBAk4891vVfR0VT2qTk_yCvQ?e=OWfe6d> 
+
