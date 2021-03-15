@@ -95,3 +95,8 @@
   Esta imagen es luego utilizada como bitmap, recortada según convenga para dar
   la impresión que el mazo está bajando de tamaño, y dibujando al final el
   bitmap de carta oculta.
+
+## 15 de marzo
+
+- Se arregla un bug que ocurría cuando el croupier se plantaba con solo las dos
+  cartas iniciales, causando que no se mostrara la primera carta al final.

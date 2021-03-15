@@ -193,9 +193,13 @@
     (send bottom-row show #t)))
 
 (define (end-of-game game deck croupier-container)
-  (send (container-panel croupier-container) enable #t)
-  (send (container-panel croupier-container) refresh)
-  (send (score-label croupier-container) show #t)
+  (flip 
+    (λ ()
+       (send (container-panel croupier-container) enable #t)
+       (send (score-label croupier-container) show #t)
+       (update-cards croupier-container
+                     (shown-cards (reverse (held-cards (croupier game)))
+                                  croupier-container 'croupier))))
 
   (letrec
     ([grab-last-croupier-cards
@@ -261,22 +265,30 @@
             ([game (put-card game player-id card)]
              [player (get-player game player-id)]
 
-             [cards (reverse (held-cards player))]
-             [show-first (or (empty? cards)
-                             (not (eqv? player-id 'croupier))
-                             (send (container-panel container) is-enabled?))]
+             [cards (shown-cards (reverse (held-cards player))
+                                 container player-id)])
 
-             [cards (cond [show-first cards]
-                          [else (cons 'hidden (cdr cards))])])
+            (flip 
+              (λ ()
+                 (update-cards deck (- 52 (length (taken-cards game))))
+                 (update-cards container cards)
+                 (update-score container (score player))))
 
-            (play-sound "../assets/card-flip.wav" #t)
-
-            (update-cards deck (- 52 (length (taken-cards game))))
-            (update-cards container cards)
-            (update-score container (score player))
-
-            (sleep/yield 0.25)
             game)]))
+
+(define (shown-cards all-cards container player-id)
+  (cond [(or (empty? all-cards)
+             (not (eqv? player-id 'croupier))
+             (send (container-panel container) is-enabled?))
+
+         all-cards]
+
+        [else (cons 'hidden (cdr all-cards))]))
+
+(define (flip action)
+  (play-sound "../assets/card-flip.wav" #t)
+  (action)
+  (sleep/yield 0.25))
 
 (define (update-score container score)
   (send (score-label container) set-label
