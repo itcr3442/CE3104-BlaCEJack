@@ -46,4 +46,7 @@ Se implemnentó la función que transforma los aces a un valor de uno en caso de
 Se implementó también la lógica que maneja el cambio de turno cuando un jugador finaliza su turno.
 Se agregó una sección de código que inicializa todo as con un valor de 11, y se reducen automáticamente si el jugador se sobrepasa de un puntaje de 21.
 
-## 12 de marzo:
+## 14 de marzo:
+
+Este días nos dedicamos mayoritariamente a las pruebas de calidad del software. Falta implementar las pantallas de gane/pérdida, pero el resto del programa quedó funcionando como es de esperarse.
+Se corrigieron algunos errores menores. Uno, que se identificó como "greedy croupier" era un bug causado cuando el crupier se sobrepasa del 16 en su puntaje inicial, lo que causaba una cadena de problemas que resultaban en recursión infinita. Otros bugs arreglados involucraban tan solo algunos cambios de valores numéricos que por error causaban un cambio de valor de As incluso cuando no era conveniente (un blackjack por ejemplo).

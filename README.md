@@ -1,8 +1,47 @@
+---
+title:
+- Instituto Tecnológico de Costa Rica\endgraf\bigskip Tarea Corta 1 - BlaCEJack 
+author:
+- José Morales Vargas
+- Alejandro Soto Chacón
+date: Marzo-2021
+header-includes:
+- \setlength\parindent{24pt}
+
+lang: es-ES
+papersize: letter
+classoption: fleqn
+geometry: margin=1in
+fontfamily: noto
+fontsize: 12pt
+linestretch: 1.5
+...
+
+
+\maketitle
+\thispagestyle{empty}
+\clearpage
+\tableofcontents
+\pagenumbering{roman}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+
 # CE3104-BlaCEJack
 
-## Algoritmos Desarrollados
+## 1.1. Algoritmos Desarrollados
 
-## Funciones implementadas
+___
+
+### Round Robin
+
+### Quicksort
+
+___
+
+## 1.2. Funciones implementadas
 
 ### `(bCEj X)`
 
@@ -223,11 +262,16 @@ Ejemplo de uso:
 '(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
 ```
 
-## Estructuras de datos
+## 1.3. Estructuras de datos
 
-## Conclusiones
+## 1.4. Conclusiones
 
-## Recomendaciones
+## 1.5. Problemas encontrados
+
+## 1.6. Plan de Actividades
+## 1.7. Conclusiones.
+## 1.8. Recomendaciones.
+## 1.9. Bibliografía consultada en todo el proyecto
 
 ## Bibliografía
 
