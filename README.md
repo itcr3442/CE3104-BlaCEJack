@@ -1,10 +1,13 @@
 ---
-title:
-- Instituto Tecnológico de Costa Rica\endgraf\bigskip Tarea Corta 1 - BlaCEJack 
-author:
-- José Morales Vargas
+title: Instituto Tecnológico de Costa Rica\endgraf\bigskip \endgraf\bigskip\bigskip\
+ Tarea Corta 1 - BlaCEJack \endgraf\bigskip\bigskip\bigskip\bigskip
+
+
+author: 
+- José Morales Vargas 
 - Alejandro Soto Chacón
-date: Marzo-2021
+  
+date: \bigskip\bigskip\bigskip\bigskip Area Académica de\endgraf Ingeniería en Computadores \endgraf\bigskip\bigskip\ Lenguajes, Compiladores \endgraf e intérpretes (CE3104) \endgraf\bigskip\bigskip Profesor Marco Rivera Meneses \endgraf\vfill  Semestre I
 header-includes:
 - \setlength\parindent{24pt}
 
