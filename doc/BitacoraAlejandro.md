@@ -102,3 +102,5 @@
   cartas iniciales, causando que no se mostrara la primera carta al final.
 - Se agrega una referencia bibliográfica para Introducción a la Programción con
   Scheme de Guzmán (2006).
+- Se reemplazan las ocurrencias de "hang" por "stand", ya que es el verbo
+  correcto.

@@ -8,9 +8,9 @@ Estudiantes: José Fernando Morales Vargas - 2019024270
              Alejandro José Soto Chacón - 2019008164
 _______________________________________________________|#
 
-(provide list-get score name active? lost? hanged? ready? players
+(provide list-get score name active? lost? has-stood? ready? players
          get-player croupier game-finished? take-card put-card new-game
-         next-turn hang quicksort held-cards card-value card-symbol
+         next-turn stand quicksort held-cards card-value card-symbol
          taken-cards)
 
 #| Notas generales
@@ -377,10 +377,10 @@ Ejemplos de uso:
 
 #| Función player-state
 Descripción: Dado un par que representa un jugador, retorna el estado 
-             (active, hanged, lost) del mismo
+             (active, stood, lost) del mismo
 Entradas: 
     - player: lista que representa al jugador del cual se quiere saber el estado
-Salida: Retorna si el jugador tiene como estado active,hanged o lost
+Salida: Retorna si el jugador tiene como estado active,stood o lost
 Ejemplos de uso:
     - >(player-state '("Foo" active ((3 clovers)(5 diamonds)))) >>> 'active
 |# 
@@ -429,7 +429,7 @@ Entradas:
 Salida: #t si el jugador está activo, #f de lo contrario
 Ejemplos de uso:
     - >(active? ("Foo" active '())) >>> #t
-    - >(active? '("Bar" hanged '())) >>> #f
+    - >(active? '("Bar" stood '())) >>> #f
 |#
 
 (define (active? player){eq? 'active (player-state player)})
@@ -448,17 +448,17 @@ Ejemplos de uso:
 (define (lost? player){eq? 'lost (player-state player)})
 
 
-#| Función hanged?
+#| Función has-stood?
 Descripción: Dado un jugador, retorna si el mismo se encuentra plantado o no
 Entradas: 
     -  player: jugador del cual se quiere saber si se encuentra plantado
 Salida: #t si el jugador está plantado, #f de lo contrario
 Ejemplos de uso:
-    - >(hanged? ("Foo" hanged '())) >>> #t
-    - >(hanged? '("Bar" active '())) >>> #f
+    - >(has-stood? ("Foo" stood '())) >>> #t
+    - >(has-stood? '("Bar" active '())) >>> #f
 |#
 
-(define (hanged? player){eq? 'hanged (player-state player)})
+(define (has-stood? player){eq? 'stood (player-state player)})
 
 #| Función ready?
 Descripción: Determina si un participante ha tomado suficientes cartas para iniciar
@@ -489,7 +489,7 @@ Entradas:
     - id: 'croupier, o un identificador de jugador válido
 Salida: Participante según identificador
 Ejemplos de uso:
-    - >(define game ...)(get-player game 1) >>> '("Foo" hanged (...))
+    - >(define game ...)(get-player game 1) >>> '("Foo" stood (...))
     - >(get-player game 'croupier) >> '(croupier active (...))
 |#
 
@@ -508,7 +508,7 @@ Entradas:
              los jugadores activos de una partida
 Salida: Lista de jugadores activos con sus respectivos identificadores como primer elemento
 Ejemplos de uso:
-    - >(active-players-aux '(("Foo" active ())("Bar" hanged (king clovers))("Baz" active ())) 0 '()) 
+    - >(active-players-aux '(("Foo" active ())("Bar" stood (king clovers))("Baz" active ())) 0 '()) 
         >>> '((0 "Foo" active ())(2 "Baz" active ()))
 |#
 
@@ -573,14 +573,14 @@ Ejemplos de uso:
 |#
 
 (define (accept-card player card)
-    {maybe-hang-croupier
+    {maybe-stand-croupier
         (maybe-lost
             (try-changing-aces (list (name player) (player-state player)
                                      (cons card (held-cards player)))))
     })
 
 
-#| Función maybe-hang-croupier
+#| Función maybe-stand-croupier
 Descripción: Si el jugador indicado es el croupier, se encuentra activo
              y además su puntuación es al menos 17, provoca que se plante,
              finalizando el juego. De lo contrario, retorna su entrada.
@@ -588,15 +588,15 @@ Entradas:
     - player: Jugador que posiblemente es el croupier en estado final
 Salida: Lista de nuevo estado de jugador
 Ejemplos de uso:
-    - >(maybe-hang-croupier '(croupier active ((11 hearts) (9 pikes))))
-      >>> '(croupier hanged (...))
+    - >(maybe-stand-croupier '(croupier active ((11 hearts) (9 pikes))))
+      >>> '(croupier stood (...))
 |#
 
-(define (maybe-hang-croupier player)
+(define (maybe-stand-croupier player)
     {cond [{and (eq? (name player) 'croupier)
                 (active? player)
                 (>= (score player) 17)}
-           {list 'croupier 'hanged (held-cards player)}]
+           {list 'croupier 'stood (held-cards player)}]
 
           [else player]
     })
@@ -618,20 +618,20 @@ Ejemplos de uso:
           [else player]})
 
 
-#| Función set-hanged
+#| Función set-stood
 Descripción: Modifica una lista de estado de jugador para representar que el mismo
              se encuentra plantado
 Entradas: 
     - player: Jugador que se quiere indicar que se plantó
 Salida: Lista de nuevo estado de jugador
 Ejemplos de uso:
-    - >(set-hanged '("Foo" active ())) >>> '("Foo" hanged ())
+    - >(set-stood '("Foo" active ())) >>> '("Foo" stood ())
 |#
 
-(define (set-hanged player)
+(define (set-stood player)
     {list 
         (name player) 
-        'hanged 
+        'stood 
         (held-cards player)
     })
 
@@ -651,8 +651,8 @@ Entradas:
     - updated: Debe inicializarse en '(). Almacena la lista de jugadores ya procesados
 Salida: Lista de jugadores con el estado del jugador especificado actualizada
 Ejemplos de uso:
-    - >(define game (new-game '("Foo" "Bar")))(update-player set-hanged (players game) 0 '()) 
-        >>> '(("Foo" hanged ()) ("Bar" active ()))
+    - >(define game (new-game '("Foo" "Bar")))(update-player set-stood (players game) 0 '()) 
+        >>> '(("Foo" stood ()) ("Bar" active ()))
 |#
 
 (define (update-player predicate players index updated)
@@ -727,7 +727,7 @@ Ejemplos de uso:
 ;----------------- player related functions END
 ;----------------- game state change functions START
 
-#| Función hang
+#| Función stand
 Descripción: Indica que el participante player, expresado como un entero correspondiente
              a un jugador o el átomo 'croupier, se ha plantado. Retorna el nuevo estado 
              de juego.
@@ -739,22 +739,22 @@ Salida: Nuevo estado de juego con lista de jugadores actualizada para mostrar
         el cambio en el estado del jugador plantado
 Ejemplos de uso:
       >(define game(new-game '("Foo" "Bar" "Baz")))
-    - >(hang game 0) 
-        >>>'((("Foo" hanged ()) ("Bar" active ()) ("Baz" active ()))(croupier active ())())
-    - >(hang game 1)
-        >>>'((("Foo" active ()) ("Bar" hanged ()) ("Baz" active ()))(croupier active ())())
-    - >(hang game 2)
-        >>>'((("Foo" active ()) ("Bar" active ()) ("Baz" hanged ()))(croupier active ())())
-    - >(hang game 'croupier)
-        >>>'((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))(croupier hanged ())())
+    - >(stand game 0) 
+        >>>'((("Foo" stood ()) ("Bar" active ()) ("Baz" active ()))(croupier active ())())
+    - >(stand game 1)
+        >>>'((("Foo" active ()) ("Bar" stood ()) ("Baz" active ()))(croupier active ())())
+    - >(stand game 2)
+        >>>'((("Foo" active ()) ("Bar" active ()) ("Baz" stood ()))(croupier active ())())
+    - >(stand game 'croupier)
+        >>>'((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))(croupier stood ())())
 |#
 
-(define (hang game player)
+(define (stand game player)
     {cond
         [{eq? player 'croupier}
             {list 
                 (players game)
-                (set-hanged (croupier game))
+                (set-stood (croupier game))
                 (taken-cards game)
             }]
         [{number? player}
@@ -762,7 +762,7 @@ Ejemplos de uso:
                 [{or (> 0 player) (> player (- (player-count game) 1))}{raise "invalid player number"}]
                 [else
                     {list
-                        (update-player set-hanged (players game) player '())
+                        (update-player set-stood (players game) player '())
                         (croupier game)
                         (taken-cards game)
                     }]
@@ -980,7 +980,7 @@ Entradas:
     - game: Juego cuyo estado quiere verificars
 Salida: Booleano que indica si el juego ya terminó o no
 Ejemplos de uso:
-    - >(define game '(((Foo 'hanged (...))(Bar 'hanged (...))(Baz 'lost (...)))(croupier 'lost)(...)))
+    - >(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))(croupier 'lost)(...)))
       >(game-finished? game) >>> #t
 |#
 
