@@ -10,7 +10,8 @@ _______________________________________________________|#
 
 (provide list-get score name active? lost? hanged? ready? players
          get-player croupier game-finished? take-card put-card new-game
-         next-turn hang quicksort held-cards card-value card-symbol)
+         next-turn hang quicksort held-cards card-value card-symbol
+         taken-cards)
 
 #| Notas generales
 - un prefijo 'i' a un sustantivo significa que dicho parámetro es de entrada (input)

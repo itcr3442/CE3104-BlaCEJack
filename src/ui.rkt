@@ -96,14 +96,16 @@
                   [height 600]
                   [alignment '(center top)])]
 
-     [croupier-container (player-container window "Croupier")]
+     [top-row (new horizontal-panel% [parent window])]
      [game-table (new horizontal-panel% [parent window])]
-     [player-containers (map (curry player-container game-table) player-names)]
-
      [bottom-row (new horizontal-panel%
                       [parent window]
                       [alignment '(center center)])]
 
+     [croupier-container (game-container top-row "Croupier")]
+     [deck (game-container top-row "Deck" draw-deck 52)]
+
+     [player-containers (map (curry game-container game-table) player-names)]
      [current-player (dynamic-label bottom-row)]
 
      [action-button
@@ -133,7 +135,7 @@
           (on-take-card
             (λ ()
                (rotate-player
-                 (grab game (list-get player-containers player-id) player-id)
+                 (grab game deck (list-get player-containers player-id) player-id)
                  player-id)))
 
           (send current-player set-label (name player)))]
@@ -147,7 +149,7 @@
                  [(list) ; No active players are left
 
                   (send bottom-row show #f)
-                  (end-of-game game croupier-container)]
+                  (end-of-game game deck croupier-container)]
 
                  [(cons next-id next)
 
@@ -159,11 +161,11 @@
     (send bottom-row show #f)
 
     (when splash-gauge
-      #| +1 for all setup operations before bitmap loading
-      || +1 for the bitmap preload for 'hidden
+      #| +1 for all operations that go before bitmap loading
+      || +2 for 'hidden and 'large-stack
       || +52 for every other preloaded bitmap
       ||#
-      (send splash-gauge set-range (+ 1 1 52))
+      (send splash-gauge set-range (+ 1 2 52))
       (progress splash-gauge))
 
     (preload-bitmaps splash-gauge)
@@ -178,19 +180,19 @@
          (λ (game containers player-ids)
             (cond [(empty? player-ids) game]
                   [else (initial-grab-for-players
-                          (initial-grab game (car containers) (car player-ids))
+                          (initial-grab game deck (car containers) (car player-ids))
                           (cdr containers) (cdr player-ids))]))]
 
        [empty-game (new-game player-names)]
        [game (initial-grab-for-players
-               (initial-grab empty-game croupier-container 'croupier)
+               (initial-grab empty-game deck croupier-container 'croupier)
                player-containers (range (length (players empty-game))))])
 
       (do-turn game 0 (car (players game))))
 
     (send bottom-row show #t)))
 
-(define (end-of-game game croupier-container)
+(define (end-of-game game deck croupier-container)
   (send (container-panel croupier-container) enable #t)
   (send (container-panel croupier-container) refresh)
   (send (score-label croupier-container) show #t)
@@ -199,7 +201,7 @@
     ([grab-last-croupier-cards
        (λ (game)
           (when [not (game-finished? game)]
-            (grab-last-croupier-cards (grab game croupier-container 'croupier))))])
+            (grab-last-croupier-cards (grab game deck croupier-container 'croupier))))])
 
     (grab-last-croupier-cards game)))
 
@@ -221,23 +223,25 @@
 (define (dynamic-label parent)
   (new message% [parent parent] [label ""] [auto-resize #t]))
 
-(define (player-container parent name)
+(define (game-container parent name [custom-draw #f] [initial-cards '()])
   (let*
     ([panel (new vertical-panel% [parent parent])]
      [name-label (new message% [parent panel] [label name])]
      [score-label (dynamic-label panel)]
 
-     [current-cards (make-parameter '())]
-     [card-canvas (new canvas%
-                       [parent panel]
-                       [style '(border transparent)]
-                       [paint-callback
-                         (λ (canvas dc)
-                            (redraw-cards canvas dc (current-cards)))])]
+     [current-cards (make-parameter initial-cards)]
+     [card-canvas
+       (new canvas%
+            [parent panel]
+            [style '(border transparent)]
+            [paint-callback
+              (λ (canvas dc)
+                 ((or custom-draw draw-stack)
+                  canvas dc (current-cards)))])]
 
      [container (list panel score-label card-canvas current-cards)])
 
-    (update-score container 0)
+    (when [not custom-draw] (update-score container 0))
     container))
 
 (define container-panel car)
@@ -245,11 +249,12 @@
 (define card-canvas caddr)
 (define current-cards cadddr)
 
-(define (initial-grab game container player-id)
+(define (initial-grab game deck container player-id)
   (cond [(ready? (get-player game player-id)) game]
-        [else (initial-grab (grab game container player-id) container player-id)]))
+        [else (initial-grab (grab game deck container player-id)
+                            deck container player-id)]))
 
-(define (grab game container player-id)
+(define (grab game deck container player-id)
   (match (take-card game)
          [(cons card game)
           (let*
@@ -266,6 +271,7 @@
 
             (play-sound "../assets/card-flip.wav" #t)
 
+            (update-cards deck (- 52 (length (taken-cards game))))
             (update-cards container cards)
             (update-score container (score player))
 
@@ -280,22 +286,20 @@
   ((current-cards container) cards)
   (send (card-canvas container) refresh-now))
 
-(define (redraw-cards canvas dc cards)
+(define (draw-stack canvas dc cards)
   (letrec 
     ([spacing (λ (bitmap) (quotient (send bitmap get-width) 4))]
-     [scale (λ (bitmap) (/ (send canvas get-height) (send bitmap get-height)))]
-
-     [redraw-cards
+     [draw-stack
        (λ (offset cards)
           (when [not (empty? cards)]
             (let*
               ([bitmap (card-bitmap (car cards))]
-               [scale (scale bitmap)])
+               [scale (fitting-scale canvas bitmap)])
 
               (send dc set-scale scale scale)
               (send dc draw-bitmap bitmap offset 0)
 
-              (redraw-cards (+ offset (spacing bitmap)) (cdr cards)))))]
+              (draw-stack (+ offset (spacing bitmap)) (cdr cards)))))]
 
      #| We want a centered card stack, therefore:
      || base-offset = canvas-width/2 - stack-width/2
@@ -305,12 +309,39 @@
      |#
      [base-offset
        (when [not (empty? cards)]
-         (/ (- (/ (send canvas get-width) (scale (card-bitmap (car cards))))
+         (/ (- (/ (send canvas get-width)
+                  (fitting-scale canvas (card-bitmap (car cards))))
+
                (* (+ (length cards) 3)
                   (spacing (card-bitmap (car cards)))))
             2))])
 
-    (redraw-cards base-offset cards)))
+    (draw-stack base-offset cards)))
+
+(define (draw-deck canvas dc count)
+  (when [> count 0]
+    (let* ([many-cards (card-bitmap 'large-stack)]
+           [hidden (card-bitmap 'hidden)]
+
+           [width (send many-cards get-width)]
+           [height (send many-cards get-height)]
+           ; Should be the same for 'hidden
+           [scale (fitting-scale canvas many-cards)]
+
+           [spacing (round (/ (send hidden get-width) 32))]
+           [crop-width (* spacing (- count 1))]
+           [joint (- width (* spacing 51))])
+
+      (send dc set-scale scale scale)
+
+      (send dc draw-bitmap-section many-cards 0 0 0 0 crop-width height)
+      (send dc draw-bitmap-section many-cards
+            crop-width 0 (- width joint) 0 joint height)
+
+      (send dc draw-bitmap hidden (+ crop-width joint) 0))))
+
+(define (fitting-scale canvas bitmap)
+  (/ (send canvas get-height) (send bitmap get-height)))
 
 (define (card-bitmap card)
   (cond
@@ -343,12 +374,15 @@
 (define loaded-bitmaps (make-hash))
 
 (define (preload-bitmaps [gauge #f])
-  (when [not (hash-has-key? loaded-bitmaps 'hidden)]
-    (hash-set! loaded-bitmaps 'hidden (load-bitmap "cards/red_back")))
-  (progress gauge)
-
   (letrec
-    ([preload-bitmaps
+    ([special-bitmap
+       (λ (key asset)
+          (when [not (hash-has-key? loaded-bitmaps key)]
+            (hash-set! loaded-bitmaps key (load-bitmap asset)))
+
+          (progress gauge))]
+
+     [preload-bitmaps
        (λ (cards)
           (when [not (empty? cards)]
             (yield)
@@ -356,6 +390,9 @@
 
             (progress gauge)
             (preload-bitmaps (cdr cards))))])
+
+    (special-bitmap 'hidden "cards/red_back")
+    (special-bitmap 'large-stack "cards/many")
 
     (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
                                         '(pikes hearts clovers diamonds)))))
