@@ -1056,9 +1056,11 @@ El registro del plan de actividades se llevó a cabo en una tabla de excel. La m
 
 Seguidamente, se incluyen las capturas del plan:
 
-![](./doc/actividades1.png)
-![](./doc/actividades2.png)
-![](./doc/actividades3.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/actividades1.PNG)
+
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/actividades2.PNG)
+
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/actividades3.PNG)
 
 
 
