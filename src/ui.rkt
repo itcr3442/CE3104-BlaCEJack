@@ -3,7 +3,7 @@
 (require racket/gui)
 (require "logic.rkt")
 
-(provide bCEj splash-screen run-game)
+(provide bCEj start-game)
 
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
@@ -24,9 +24,12 @@
 
                 (when [empty? (filter (compose not non-empty-string?) player-names)]
                   (send names-dialog show #f)
-                  (run-game player-names (splash-screen)))))])
+                  (start-game player-names))))])
 
     (send names-dialog show #t)))
+
+(define (start-game player-names)
+  (run-game player-names (splash-screen)))
 
 (define (splash-screen)
   (let* ([splashes '("aces" "honor_clubs" "honor_diamonds" "honor_hearts" "honor_spades")]
@@ -90,11 +93,12 @@
 
 (define (run-game player-names [splash-gauge #f])
   (letrec
-    ([window (new frame%
-                  [label "BlaCEJack"]
-                  [width 800]
-                  [height 600]
-                  [alignment '(center top)])]
+    ([window
+       (new frame%
+            [label "BlaCEJack"]
+            [width 800]
+            [height 600]
+            [alignment '(center top)])]
 
      [top-row (new horizontal-panel% [parent window])]
      [game-table (new horizontal-panel% [parent window])]
@@ -149,7 +153,9 @@
                  [(list) ; No active players are left
 
                   (send bottom-row show #f)
-                  (end-of-game game deck croupier-container)]
+                  (let ([restart? (end-of-game game deck croupier-container window)])
+                    (send window show #f)
+                    (when restart? (run-game player-names)))]
 
                  [(cons next-id next)
 
@@ -192,7 +198,7 @@
 
     (send bottom-row show #t)))
 
-(define (end-of-game game deck croupier-container)
+(define (end-of-game game deck croupier-container window)
   (flip 
     (λ ()
        (send (container-panel croupier-container) enable #t)
@@ -207,7 +213,9 @@
           (when [not (game-finished? game)]
             (grab-last-croupier-cards (grab game deck croupier-container 'croupier))))])
 
-    (grab-last-croupier-cards game)))
+    (grab-last-croupier-cards game))
+
+  #f)
 
 (define (add-name-fields dialog up-to next fields)
   (cond
