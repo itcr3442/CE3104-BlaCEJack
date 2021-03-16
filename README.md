@@ -36,9 +36,17 @@ linestretch: 1.5
 
 ## 1.1. Algoritmos Desarrollados
 
-### Round Robin
+### Algoritmo General de Resolución
 
-### Quicksort
+El algoritmo de resolución del programa se encuentra descrito en el siguiente diagrama:
+
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-1.png)
+
+Como se puede observar, inicialmente se realizan algunas tareas que forman parte de una rutina de preparación para entrar en el *game loop* en sí. Funciones como `run-game` se encargan del cargado inicial de la interfaz, y `initial-grab` prepara la mesa de juego en sí. 
+
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-2.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-3.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-4.png)
 
 ## 1.2. Funciones implementadas
 
@@ -942,8 +950,7 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 >(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))(croupier 'lost)(...)))
 >(game-finished? game)
 #t
-````
-
+```
 
 ## 1.3. Estructuras de datos desarrolladas
 
@@ -951,7 +958,7 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Descripción**
 
-Es conjunto de pares implementado con listas de racket. En una lista de cartas, ninguna carta puede estar repetida. La representación se muestra a continuación 
+Es conjunto de pares implementado con listas de racket. En una lista de cartas, ninguna carta puede estar repetida. La representación se muestra a continuación.
 
 ```scheme
 '((valor símbolo)(valor símbolo)(valor símbolo))
@@ -993,7 +1000,7 @@ La estructura de un jugador llamado Foo, activo en primer turno, y con un blackj
 Es una lista racket que a su vez contiene 3 sublistas, y dos de estas sublistas contienen sus propias sublistas. 
 
 ```Scheme
-'((jugadores),croupier,(cartas tomadas))
+'((jugadores) croupier (cartas tomadas))
 ```
 
 El primer elemento es una lista que representa a los jugadores de la partida, excluyendo al croupier. 
@@ -1016,16 +1023,19 @@ Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguien
 '(((jose active ((10 hearts)(8 pikes)))(maria active ((5 hearts)(2 diamonds)))(pedro active ((jack pikes)(2 clovers)))),(croupier active ((11 clovers)(3 hearts))),((10 hearts)(8 pikes)(5 hearts)(2 diamonds)(jack pikes)(2 clovers)(11 clovers)(3 hearts)))
 ```
 
-## 1.4. Conclusiones
+## 1.4 Problemas no solucionados
 
-## 1.5. Problemas encontrados
+No se encontraron problemas que no se hayan resolvido. 
+
+## 1.5. Problemas encontrados y solucionados
 
 ### Bugs menores encontrados en la etapa final
 
 1. **Greedy croupier**: 
    
-   * *Descripción*: Cuando el croupier obtenía un puntaje que sumaba 17 o más con sus primeras dos cartas se marcaba a sí mismo como plantado. Este comportamiento era esperado, pero una consecuencia no prevista era que uno de los condicionales de la función que asignaba turnos `next-turn` requería un croupier activo, o de lo contrario empezaba la rutina final en la que el croupier toma cartas. El problema que surgía en esta situación es que la función `game-finished?` chequea si hay jugadores activos **y**  si el croupier ya perdió. Como la función de asignar turnos fallaba, efectivamente quedaban jugadores activos, y el croupier seguía tomando cartas ya que su condicional para seguir tomando cartas era el valor de retorno de `game-finished?`, el cual en este caso seguiría siendo `#t` hasta un tiempo indefinido 
-   * *Intentos de solución sin éxito*: Inicialmente se creyó que el problema tenía que ver con una función que confirmaba si el crupier debía detenerse o asumir un estado de "lost", se modificaron algunos valores de las funciones momentáneamente. Si bien no la causa, esta era una de las funciones involucradas en el bug, por lo cual este intento terminó siendo la base para encontrar el verdadero problema
+   * *Descripción*: Cuando el croupier obtenía un puntaje que sumaba 17 o más con sus primeras dos cartas se marcaba a sí mismo como plantado. Este comportamiento era esperado, pero una consecuencia no prevista era que uno de los condicionales de la función que asignaba turnos `next-turn` requería un croupier activo, o de lo contrario empezaba la rutina final en la que el croupier toma cartas. El problema que surgía en esta situación es que la función `game-finished?` chequea si hay jugadores activos **y**  si el croupier ya perdió. Como la función de asignar turnos fallaba, efectivamente quedaban jugadores activos, y el croupier seguía tomando cartas ya que su condicional para seguir tomando cartas era el valor de retorno de `game-finished?`, el cual en este caso seguiría siendo `#t` hasta un tiempo indefinido.
+   
+   * *Intentos de solución sin éxito*: Inicialmente se creyó que el problema tenía que ver con una función que confirmaba si el crupier debía detenerse o asumir un estado de "lost", se modificaron algunos valores de las funciones momentáneamente. Si bien no la causa, esta era una de las funciones involucradas en el bug, por lo cual este intento terminó siendo la base para encontrar el verdadero problema.
    
    * *Solución*: Se cambió el condicional de la función que decidía próximo turno para que en vez de verificar el estado del croupier, verificara la presencia de jugadores activos. Ambos condicionales son relativamente equivalentes, solo que el segundo evita el problema de que un crupier sea marcado como inactivo en el primer turno.
 
@@ -1066,13 +1076,17 @@ Seguidamente, se incluyen las capturas del plan:
 
 ## 1.7. Conclusiones.
 
+- Se implementó de manera exitosa un programa de funcionalidad compleja en un lenguaje funcional, de esta manera se demostró que la capacidad de implementar un programa es independiente del paradigma de un lenguaje de programación, lo que puede variar es la dificultad, pero no la posibilidad.
+- Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación. 
 - 
 
 
 ## 1.8. Recomendaciones.
 
-
-
+- Si bien como ejercicio propio de programación puede ser útil, el desarrollo de aplicaciones de interfaz gráfica en el lenguaje racket es algo deficiente en comparación a lenguajes más dominantes.
+- Racket es un lenguaje algo ineficiente con el uso de memoria. De ser esta una limitante para una implementación, se recomienda evitar el uso de este lenguaje en estos casos.
+- Para evitar un uso de memoria desmedido al renderizar elementos gráficos es deseable recurrir a efectos visuales que den la apariencia de ser más complejos de lo que de verdad son.
+- Para trabajos de programación que integran a varios colaboradores se recomienda propiciar una buena comunicación y coordinación, no solo respecto a horarios y fechas de trabajo, pero también respecto a las tareas técnicas desarrolladas por cada miembro, esto porque es particularmente útil cuando surgen problemas en las secciones del proyecto en las cuales hay interacción entre las lógicas desarrolladas por los distintos colaboradores. 
 
 ## 1.9. Bibliografía consultada en todo el proyecto
 
@@ -1080,6 +1094,9 @@ Seguidamente, se incluyen las capturas del plan:
 
 Guzman, J. E. (2006). Introducción a la programación con Scheme. Cartago:
 Editorial Tecnológica de Costa Rica.
+
+
+## Recursos adicionales 
 
 [Juego flash](https://www.arkadium.com/games/blackjack/)
 [racket/gui](https://docs.racket-lang.org/gui/)

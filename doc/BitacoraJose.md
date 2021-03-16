@@ -9,32 +9,33 @@ Se realizó la primera reunión para coordinación de proyecto
 
 ## 7 de marzo:
 
-Compañero entregó la plan de módulos principales. 
+- Compañero entregó la plan de módulos principales. 
 
 ## 8 de marzo:
 
 Diseñé el restante del plan de actividades basado en las reuniones grupales anteriores y el plan de módulos presentado por el compañero. 
 
-Le propuse al compañero la idea de utilizar una estructura de interfaz gráfica similar al juego que se encuentra en el siguiente enlace:
+Se le propuso al compañero la idea de utilizar una estructura de interfaz gráfica similar al juego que se encuentra en el siguiente enlace:
 <https://casualpixel.itch.io/pixel-blackjack>
+
 
 ## 9 de marzo:
 
-Implementé varias de las funciones relacionadas al estado de juego y creación de cartas. 
+- Se implementaron varias de las funciones relacionadas al estado de juego y creación de cartas. 
 
-También completé La implementación del quicksort (faltan pruebas de predicados complejos).
+- También se completó La implementación del quicksort (faltan pruebas de predicados complejos).
 
-Al final del día implementé funciones relacionadas con la interacción del juego.
+- Al final del día se implementaron funciones relacionadas con la interacción del juego.
 
-Por acuerdo con el compañero, decidimos cambiar la representación de un jugador para representar varias banderas de estado en el segundo elemento, de manera que la representación queda algo como 
+- Por acuerdo con el compañero, se decidió cambiar la representación de un jugador para representar varias banderas de estado en el segundo elemento, de manera que la representación quede algo como 
 ('nombre-jugador (active? lost? hanged?) (lista de cartas))
 Queda pendiente documentar las funciones desarrolladas de manera completa. 
 
 ## 10 de marzo:
 
-Se volvió a cambiar la representación del jugador para preferir un modelo más conciso. Las banderas de estado han sido cambiadas por un solo átomo cuyo valor en sí es el estado del jugador.
+- Se volvió a cambiar la representación del jugador para preferir un modelo más conciso. Las banderas de estado han sido cambiadas por un solo átomo cuyo valor en sí es el estado del jugador.
 
-Además se decidió agregar una función que le permita a un jugador disminuir el valor de los aces en su mano hasta el mínimo posible en caso de que se encuentre en una posición de "desborde" del puntaje. Forma tentativa:
+- Además se decidió agregar una función que le permita a un jugador disminuir el valor de los aces en su mano hasta el mínimo posible en caso de que se encuentre en una posición de "desborde" del puntaje. Forma tentativa:
 
 ### `(try-changing-aces player current-score)`
 
@@ -42,11 +43,19 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 ## 11 de marzo:
 
-Se implemnentó la función que transforma los aces a un valor de uno en caso de que el puntaje del jugador se desborde.
-Se implementó también la lógica que maneja el cambio de turno cuando un jugador finaliza su turno.
-Se agregó una sección de código que inicializa todo as con un valor de 11, y se reducen automáticamente si el jugador se sobrepasa de un puntaje de 21.
+- Se implementó la función que transforma los aces a un valor de uno en caso de que el puntaje del jugador se desborde.
+- Se implementó también la lógica que maneja el cambio de turno cuando un jugador finaliza su turno.
+- Se agregó una sección de código que inicializa todo as con un valor de 11, y se reducen automáticamente si el jugador se sobrepasa de un puntaje de 21.
 
 ## 14 de marzo:
 
-Este días nos dedicamos mayoritariamente a las pruebas de calidad del software. Falta implementar las pantallas de gane/pérdida, pero el resto del programa quedó funcionando como es de esperarse.
-Se corrigieron algunos errores menores. Uno, que se identificó como "greedy croupier" era un bug causado cuando el crupier se sobrepasa del 16 en su puntaje inicial, lo que causaba una cadena de problemas que resultaban en recursión infinita. Otros bugs arreglados involucraban tan solo algunos cambios de valores numéricos que por error causaban un cambio de valor de As incluso cuando no era conveniente (un blackjack por ejemplo).
+- Este día se dedicó mayoritariamente a las pruebas de calidad del software. Falta implementar las pantallas de gane/pérdida, pero el resto del programa quedó funcionando como es de esperarse.
+- Se corrigieron algunos errores menores. Uno, que se identificó como "greedy croupier" era un bug causado cuando el crupier se sobrepasa del 16 en su puntaje inicial, lo que causaba una cadena de problemas que resultaban en recursión infinita. Otros bugs arreglados involucraban tan solo algunos cambios de valores numéricos que por error causaban un cambio de valor de As incluso cuando no era conveniente (un blackjack por ejemplo). Para la resolución de los mismo fue esencial el trabajo en grupo, y fue una ventaja muy útil el hecho de que ambos integrantes estuvieran al tanto de el funcionamiento de las funciones implementadas por el otro. 
+
+## 15 de marzo:
+
+- Se trabajó mayoritariamente la documentación mientras el otro compañero refina ciertos elementos del juego y la lógica
+- Se realizó una reunión para coordinar la organización para esta semana final de desarrollo del proyecto. Se discutieron posibles mejoras al programa y se conversó sobre el desempeño como grupo de trabajo. 
+
+
+## 16 de marzo
