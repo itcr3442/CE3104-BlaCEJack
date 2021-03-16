@@ -9,3 +9,5 @@
 .vscode
 *.pdf
 *_test.rkt
+ 
+dummy.*
