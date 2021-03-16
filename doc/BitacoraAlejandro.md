@@ -112,3 +112,4 @@
 ## 16 de marzo
 
 - Se implementan aspectos de terminación y reinicio de juego en interfaz.
+- Se agregan botones para reiniciar y salir del juego.

@@ -10,11 +10,11 @@
         [(or (< X 1) (> X 3)) (raise "There may only be one, two, or three players")])
 
   (let*
-    ([names-dialog (new dialog% [label "Player nams"])]
+    ([names-dialog (new dialog% [label "Player names"])]
      [name-fields (add-name-fields names-dialog X 1 empty)])
 
     (new button%
-         [parent names-dialog]
+         [parenet names-dialog]
          [label "Play"]
          [callback
            (λ (button event)
@@ -153,9 +153,10 @@
                  [(list) ; No active players are left
 
                   (send bottom-row show #f)
-                  (let ([restart? (end-of-game game deck croupier-container window)])
-                    (send window show #f)
-                    (when restart? (run-game player-names)))]
+                  (end-of-game game deck croupier-container window
+                               (λ (restart?)
+                                  (send window show #f)
+                                  (when restart? (run-game player-names))))]
 
                  [(cons next-id next)
 
@@ -198,7 +199,7 @@
 
     (send bottom-row show #t)))
 
-(define (end-of-game game deck croupier-container window)
+(define (end-of-game game deck croupier-container window then)
   (flip 
     (λ ()
        (send (container-panel croupier-container) enable #t)
@@ -215,7 +216,29 @@
 
     (grab-last-croupier-cards game))
 
-  #f)
+  (show-score game window then))
+
+(define (show-score game window then)
+  (let*
+    ([dialog (new dialog%
+                  [parent window]
+                  [label "Scoreboard"])]
+
+     [bottom-row (new horizontal-pane% [parent dialog])]
+     [final-action
+       (λ (label restart?)
+          (new button%
+               [parent bottom-row]
+               [label label]
+               [callback
+                 (λ (button event)
+                    (send dialog show #f)
+                    (then restart?))]))])
+
+    (final-action "Restart" #t)
+    (final-action "Quit" #f)
+
+    (send dialog show #t)))
 
 (define (add-name-fields dialog up-to next fields)
   (cond
@@ -418,4 +441,5 @@
                                         '(pikes hearts clovers diamonds)))))
 
 (define (progress gauge)
-  (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range))))
+  (when gauge
+    (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range)))))
