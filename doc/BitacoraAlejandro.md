@@ -107,3 +107,18 @@
 - Se elimina l función `(high-ace card)`, la cual fue parte del diseño original
   pero ya no tiene un uso actual o esperado.
 - Se documentan algunos bugs antes descritos en esta bitácora (ver README.md).
+- Se agrega una referencia bibliográfica para `racket/draw`.
+
+## 16 de marzo
+
+- Se implementan aspectos de terminación y reinicio de juego en interfaz.
+- Se agregan botones para reiniciar y salir del juego.
+- Se escribe una función `(scoreboard game)` que produce la tabla de posiciones
+  de jugadores al terminar el juego, incluyendo condiciones de empate y
+  aquellas donde el croupier pierde.
+- Debido a que `racket/gui` carece de un contenedor de rejilla (grid) o
+  semejante, así como la preferencia para no incluir dependencias externas en
+  esta fase del proyecto, se escogió implementar la vistas gráfica de la tabla
+  de posiciones por medio de cálculos manuales de posiciones sobre un canvas.
+  Se toma en cuenta el tamaño de cada columna en función del máximo ancho (en
+  píxeles, tras renderizar) de cada fragmento de texto asociado a esa columna.

@@ -3,14 +3,14 @@
 (require racket/gui)
 (require "logic.rkt")
 
-(provide bCEj splash-screen run-game)
+(provide bCEj start-game)
 
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
         [(or (< X 1) (> X 3)) (raise "There may only be one, two, or three players")])
 
   (let*
-    ([names-dialog (new dialog% [label "Player nams"])]
+    ([names-dialog (new dialog% [label "Player names"])]
      [name-fields (add-name-fields names-dialog X 1 empty)])
 
     (new button%
@@ -24,9 +24,12 @@
 
                 (when [empty? (filter (compose not non-empty-string?) player-names)]
                   (send names-dialog show #f)
-                  (run-game player-names (splash-screen)))))])
+                  (start-game player-names))))])
 
     (send names-dialog show #t)))
+
+(define (start-game player-names)
+  (run-game player-names (splash-screen)))
 
 (define (splash-screen)
   (let* ([splashes '("aces" "honor_clubs" "honor_diamonds" "honor_hearts" "honor_spades")]
@@ -54,10 +57,7 @@
 
               (let*
                 ([font (send the-font-list find-or-create-font 130 'default 'normal 'normal)]
-                 [text-width
-                   (λ (text) (call-with-values
-                                (λ () (send dc get-text-extent text font))
-                                (λ (width height baseline padding) width)))]
+                 [text-width (λ (text) (get-text-width dc text font))]
 
                  [bla (text-width "Bla")]
                  [ce (text-width "CE")]
@@ -90,11 +90,12 @@
 
 (define (run-game player-names [splash-gauge #f])
   (letrec
-    ([window (new frame%
-                  [label "BlaCEJack"]
-                  [width 800]
-                  [height 600]
-                  [alignment '(center top)])]
+    ([window
+       (new frame%
+            [label "BlaCEJack"]
+            [width 800]
+            [height 600]
+            [alignment '(center top)])]
 
      [top-row (new horizontal-panel% [parent window])]
      [game-table (new horizontal-panel% [parent window])]
@@ -149,7 +150,10 @@
                  [(list) ; No active players are left
 
                   (send bottom-row show #f)
-                  (end-of-game game deck croupier-container)]
+                  (end-of-game game deck croupier-container window
+                               (λ (restart?)
+                                  (send window show #f)
+                                  (when restart? (run-game player-names))))]
 
                  [(cons next-id next)
 
@@ -192,7 +196,7 @@
 
     (send bottom-row show #t)))
 
-(define (end-of-game game deck croupier-container)
+(define (end-of-game game deck croupier-container window then)
   (flip 
     (λ ()
        (send (container-panel croupier-container) enable #t)
@@ -204,10 +208,101 @@
   (letrec
     ([grab-last-croupier-cards
        (λ (game)
-          (when [not (game-finished? game)]
-            (grab-last-croupier-cards (grab game deck croupier-container 'croupier))))])
+          (cond [(game-finished? game) game]
+                [else (grab-last-croupier-cards
+                        (grab game deck croupier-container 'croupier))]))])
 
-    (grab-last-croupier-cards game)))
+    (show-score (grab-last-croupier-cards game) window then)))
+
+(define (show-score game window then)
+  (letrec
+    ([dialog (new dialog%
+                  [parent window]
+                  [label "Scoreboard"])]
+
+     [rows
+       (append
+         (list
+           '("No." "Name" "Score" "Outcome")
+           '("" "" "" "") ; Fake padding
+
+           (list "" "Croupier"
+                 (number->string (score (croupier game)))
+                 (cond [(lost? (croupier game)) "Loses if player wins"]
+                       [else ""])))
+
+         (map
+		   (curry apply
+				  (λ (position name score outcome)
+					 (list (string-append "#" (number->string (+ position 1)))
+						   name (number->string score)
+						   (match outcome
+								  ['tie "Tie"]
+								  ['wins "Wins"]
+								  ['loses "Loses"]))))
+
+		   (scoreboard game)))]
+
+     [column-widths
+       (λ (dc)
+          (map (λ (column)
+                  (apply max
+                         (map (compose (curry get-text-width dc)
+                                       (λ (row) (list-ref row column)))
+
+                              rows)))
+
+               (range (length (car rows)))))]
+
+     [draw-cell
+       (λ (dc rows widths all-widths x-offset y-offset)
+          (when [not (empty? rows)]
+            (cond [(empty? (car rows))
+                   (draw-cell dc (cdr rows) all-widths all-widths 0 (+ y-offset 15))]
+
+                  [else (send dc draw-text (car (car rows)) x-offset y-offset)
+                        (draw-cell dc (cons (cdr (car rows)) (cdr rows))
+                                   (cdr widths) all-widths
+                                   (+ x-offset (car widths) 20) y-offset)])))])
+
+    (new canvas% 
+         [parent dialog]
+         [style '(transparent)]
+         [min-height (* 20 (length rows))]
+         [min-width
+           (apply (compose exact-round +)
+                  (map (curry + 20)
+                       (column-widths (send (new canvas% [parent dialog]) get-dc))))]
+
+         [paint-callback
+           (λ (canvas dc)
+              (let ([widths (column-widths dc)])
+                (draw-cell dc rows widths widths 0 0)))])
+
+    (let*
+      ([bottom-row (new horizontal-pane%
+                        [parent dialog]
+                        [alignment '(center top)])]
+
+       [final-action
+         (λ (label restart?)
+            (new button%
+                 [parent bottom-row]
+                 [label label]
+                 [callback
+                   (λ (button event)
+                      (send dialog show #f)
+                      (then restart?))]))])
+
+      (final-action "Restart" #t)
+      (final-action "Quit" #f)
+
+      (send dialog show #t))))
+
+(define (get-text-width dc text [font #f])
+  (call-with-values
+     (λ () (send dc get-text-extent text font))
+     (λ (width height baseline padding) width)))
 
 (define (add-name-fields dialog up-to next fields)
   (cond
@@ -410,4 +505,5 @@
                                         '(pikes hearts clovers diamonds)))))
 
 (define (progress gauge)
-  (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range))))
+  (when gauge
+    (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range)))))

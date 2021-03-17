@@ -10,8 +10,8 @@ _______________________________________________________|#
 
 (provide list-get score name active? lost? has-stood? ready? players
          get-player croupier game-finished? take-card put-card new-game
-         next-turn stand quicksort held-cards card-value card-symbol
-         taken-cards)
+         next-turn stand held-cards card-value card-symbol taken-cards
+         scoreboard)
 
 #| Notas generales
 - un prefijo 'i' a un sustantivo significa que dicho parámetro es de entrada (input)
@@ -969,3 +969,43 @@ Ejemplos de uso:
 
 (define (game-finished? game)
     {and (null? (active-players game)) (not (active? (croupier game)))})
+
+
+#| Función scoreboard
+Descripción: Genera una lista de jugadores ordenada por puntaje
+Entradas: 
+    - game: Estado de juego del que se determina la tabla
+Salida: Lista de jugadores con nombre, puntuación y resultado
+Ejemplos de uso:
+    - >(define game ...)(scoreboard game)
+        >>> '((0 "Foo" 20 wins) (1 "Baz" 18 loses) (2 "Bar" 17 tie))
+|#
+
+(define (scoreboard game)
+    (define (outcome player)
+        {cond [{lost? player} 'loses]
+              [{or (lost? (croupier game))
+                   (> (score player) (score (croupier game)))}
+               'wins]
+              [{< (score player) (score (croupier game))} 'loses]
+              [{not (= (score player) 21)} 'tie]
+              [{< (length (taken-cards player)) (length (taken-cards (croupier game)))}
+               'wins]
+              [{> (length (taken-cards player)) (length (taken-cards (croupier game)))}
+               'loses]
+              [else 'loses]})
+
+    (define (add-with-outcome output players)
+        {cond [{null? players} output]
+              [else (add-with-outcome
+                        (cons (list (- (length players) 1)
+                                    (name (car players))
+                                    (score (car players))
+                                    (outcome (car players)))
+
+                              output)
+
+                        (cdr players))]})
+
+    {add-with-outcome
+        '() (quicksort (players game) (lambda (a b) (< (score a) (score b))))})
