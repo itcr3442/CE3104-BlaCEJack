@@ -113,3 +113,6 @@
 
 - Se implementan aspectos de terminación y reinicio de juego en interfaz.
 - Se agregan botones para reiniciar y salir del juego.
+- Se escribe una función `(scoreboard game)` que produce la tabla de posiciones
+  de jugadores al terminar el juego, incluyendo condiciones de empate y
+  aquellas donde el croupier pierde.
