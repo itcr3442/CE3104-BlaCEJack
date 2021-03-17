@@ -141,3 +141,5 @@
   botones, y los botones se acomodan verticalmente entre sí. Esto evita
   situaciones en el pasado donde la longitud del nombre del jugador actual
   afectaba la posición de los botones de tomar carta y plantarse.
+- Se actualiza el archivo `.gitignore` raíz para artefactos generados
+  por `raco`, como `compiled/`.
