@@ -58,6 +58,17 @@ La forma en la que opera el quicksort es singular. Es un algoritmo basado en la 
 
 Para el quicksort implementado en el proyecto, se utilizó la composición de funciones para permitir establecer el criterio de evaluación a utilizar que defina los conceptos de menor, mayor e igual para cada ejecución del algoritmo, es decir, el algoritmo funciona independientemente de la clase de elemento a comparar o jerarquía de los elementos de la lista a ordenar.  
 
+Otro algoritmo del programa a notar es la implementación de _Round-Robin_ para decidir el siguiente jugador. 
+
+![](./doc/Diagrama-next-turn.png)
+
+Se usan los símbolos que en un diagrama de flujo que indican "salida" puesto que en este punto del programa el algoritmo retorna un valor, con una consecuencia general en el _game loop_, la cual se indica en el diagrama general.
+
+Por último, otro algoritmo a tomar en cuenta es el utilizado para modelar la interacción con los ases. En teoría, un jugador puede asignarle un valor de 1 a un as cuando lo recibe, sin embargo, siempre esta en su conveniencia tomar el valor de 11 por defecto, y solo disminuír el valor del as en caso de sobrepasarse. Esta condición implica que no es necesario ofrecer un botón adicional para este comportamiento, puesto que es redundante, pero sí es esencial que el programa maneje los casos de sobrepaso para evitar que un as de valor 11 sea la causa de pérdida de una partida.
+
+![](./doc/Diagrama-try-changing-aces.png)
+
+Al igual que otras implementaciones de blackjack como videojuego, el programa hecho tiene una rutina que busca un as en la mano del jugador solo si el mismo se encuentra en una situación de sobrepaso. De encontrar un as o varios, cambia la cantidad de ases necesarios para evitar un sobrepaso, ni más ni menos. 
 
 
 ## 1.2. Funciones implementadas
@@ -256,13 +267,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(high-ace card)`
 
-**Descripción:** toma un As con valor de 1 y lo convierte en un As de valor 11
+**Descripción:** toma un as con valor de 1 y lo convierte en un as de valor 11
 
 **Entradas:** 
 
-- card: As cuyo valor será aumentado
+- card: as cuyo valor será aumentado
 
-**Salida:** Si la entrada es un As de valor uno, la salida será un As con valor de 11, de lo contrario solo se retorna la carta dada
+**Salida:** Si la entrada es un as de valor uno, la salida será un as con valor de 11, de lo contrario solo se retorna la carta dada
 
 **Ejemplo de uso:** 
 
@@ -858,13 +869,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(has-aces ilist)`
 
-**Descripción:** Verifica si una lista de cartas dada contiene un As de valor 11
+**Descripción:** Verifica si una lista de cartas dada contiene un as de valor 11
 
 **Entradas:** 
 
 - ilist: lista de entrada que contiene el conjunto a verificar
 
-**Salida:** #t si el conjunto dado tiene un As de valor 11, #f de lo contrario
+**Salida:** #t si el conjunto dado tiene un as de valor 11, #f de lo contrario
 
 **Ejemplo de uso:**
 
@@ -877,14 +888,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(change-one-ace ilist olist)`
 
-**Descripción:** Toma una lista de cartas, y de encontrar un As de valor 11, lo intercambia por un As de valor 11. Solo un As es cambiado.
+**Descripción:** Toma una lista de cartas, y de encontrar un as de valor 11, lo intercambia por un as de valor 11. Solo un as es cambiado.
 
 **Entradas:** 
 
 - ilist: lista de cartas de entrada
 - olist: inicializada en '(). Almacena las cartas procesadas que no han sido ases de valor 11
 
-**Salida:** Si la lista original tenía un As de valor 11, retorna la lista con ese As cambiado a un as de valor 1, de lo contrario, retorna la misma lista de entrada
+**Salida:** Si la lista original tenía un as de valor 11, retorna la lista con ese as cambiado a un as de valor 1, de lo contrario, retorna la misma lista de entrada
 
 **Ejemplo de uso:**
 
@@ -1053,7 +1064,7 @@ No se encontraron problemas que no se hayan resolvido.
 
 2. **Situación de nunca blackjack**:
    
-   * *Descripción*: El problema consistía en que los jugadores, al tomar un as y una carta de valor 10, en vez de plantarse con un puntaje de 21, cambiaban de manera automática un as de valor 11 por uno de valor 1. Igual habían comportamientos similares en caso de alcanzar el 21. Este problema se debía a una equivocación en el valor escogido para comparar contra el puntaje del jugador. La función `try-changing-aces` intercambiaba un as del jugador inclusive en las situaciones en las que tenía un 21 y no le convenía en absoluto. Esto era porque la condicional permitía un cambio de As si al cambiar un As el puntaje era estrictamente menor a 21.
+   * *Descripción*: El problema consistía en que los jugadores, al tomar un as y una carta de valor 10, en vez de plantarse con un puntaje de 21, cambiaban de manera automática un as de valor 11 por uno de valor 1. Igual habían comportamientos similares en caso de alcanzar el 21. Este problema se debía a una equivocación en el valor escogido para comparar contra el puntaje del jugador. La función `try-changing-aces` intercambiaba un as del jugador inclusive en las situaciones en las que tenía un 21 y no le convenía en absoluto. Esto era porque la condicional permitía un cambio de as si al cambiar un as el puntaje era estrictamente menor a 21.
    
    * *Intentos de solución*: Inicialmente se exploró el problema. No hubo intentos de solución fallidos per se, pero si una rutina de pruebas que permitió identificar el origen del problema, lo que al final llevó a la solución efectiva del mismo.
   
