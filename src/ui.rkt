@@ -14,7 +14,7 @@
      [name-fields (add-name-fields names-dialog X 1 empty)])
 
     (new button%
-         [parenet names-dialog]
+         [parent names-dialog]
          [label "Play"]
          [callback
            (λ (button event)
@@ -57,10 +57,7 @@
 
               (let*
                 ([font (send the-font-list find-or-create-font 130 'default 'normal 'normal)]
-                 [text-width
-                   (λ (text) (call-with-values
-                                (λ () (send dc get-text-extent text font))
-                                (λ (width height baseline padding) width)))]
+                 [text-width (λ (text) (get-text-width dc text font))]
 
                  [bla (text-width "Bla")]
                  [ce (text-width "CE")]
@@ -211,34 +208,101 @@
   (letrec
     ([grab-last-croupier-cards
        (λ (game)
-          (when [not (game-finished? game)]
-            (grab-last-croupier-cards (grab game deck croupier-container 'croupier))))])
+          (cond [(game-finished? game) game]
+                [else (grab-last-croupier-cards
+                        (grab game deck croupier-container 'croupier))]))])
 
-    (grab-last-croupier-cards game))
-
-  (show-score game window then))
+    (show-score (grab-last-croupier-cards game) window then)))
 
 (define (show-score game window then)
-  (let*
+  (letrec
     ([dialog (new dialog%
                   [parent window]
                   [label "Scoreboard"])]
 
-     [bottom-row (new horizontal-pane% [parent dialog])]
-     [final-action
-       (λ (label restart?)
-          (new button%
-               [parent bottom-row]
-               [label label]
-               [callback
-                 (λ (button event)
-                    (send dialog show #f)
-                    (then restart?))]))])
+     [rows
+       (append
+         (list
+           '("No." "Name" "Score" "Outcome")
+           '("" "" "" "") ; Fake padding
 
-    (final-action "Restart" #t)
-    (final-action "Quit" #f)
+           (list "" "Croupier"
+                 (number->string (score (croupier game)))
+                 (cond [(lost? (croupier game)) "Loses if player wins"]
+                       [else ""])))
 
-    (send dialog show #t)))
+         (map
+		   (curry apply
+				  (λ (position name score outcome)
+					 (list (string-append "#" (number->string (+ position 1)))
+						   name (number->string score)
+						   (match outcome
+								  ['tie "Tie"]
+								  ['wins "Wins"]
+								  ['loses "Loses"]))))
+
+		   (scoreboard game)))]
+
+     [column-widths
+       (λ (dc)
+          (map (λ (column)
+                  (apply max
+                         (map (compose (curry get-text-width dc)
+                                       (λ (row) (list-ref row column)))
+
+                              rows)))
+
+               (range (length (car rows)))))]
+
+     [draw-cell
+       (λ (dc rows widths all-widths x-offset y-offset)
+          (when [not (empty? rows)]
+            (cond [(empty? (car rows))
+                   (draw-cell dc (cdr rows) all-widths all-widths 0 (+ y-offset 15))]
+
+                  [else (send dc draw-text (car (car rows)) x-offset y-offset)
+                        (draw-cell dc (cons (cdr (car rows)) (cdr rows))
+                                   (cdr widths) all-widths
+                                   (+ x-offset (car widths) 20) y-offset)])))])
+
+    (new canvas% 
+         [parent dialog]
+         [style '(transparent)]
+         [min-height (* 20 (length rows))]
+         [min-width
+           (apply (compose exact-round +)
+                  (map (curry + 20)
+                       (column-widths (send (new canvas% [parent dialog]) get-dc))))]
+
+         [paint-callback
+           (λ (canvas dc)
+              (let ([widths (column-widths dc)])
+                (draw-cell dc rows widths widths 0 0)))])
+
+    (let*
+      ([bottom-row (new horizontal-pane%
+                        [parent dialog]
+                        [alignment '(center top)])]
+
+       [final-action
+         (λ (label restart?)
+            (new button%
+                 [parent bottom-row]
+                 [label label]
+                 [callback
+                   (λ (button event)
+                      (send dialog show #f)
+                      (then restart?))]))])
+
+      (final-action "Restart" #t)
+      (final-action "Quit" #f)
+
+      (send dialog show #t))))
+
+(define (get-text-width dc text [font #f])
+  (call-with-values
+     (λ () (send dc get-text-extent text font))
+     (λ (width height baseline padding) width)))
 
 (define (add-name-fields dialog up-to next fields)
   (cond
