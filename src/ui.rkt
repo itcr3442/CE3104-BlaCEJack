@@ -197,7 +197,7 @@
     (send bottom-row show #t)))
 
 (define (end-of-game game deck croupier-container window then)
-  (flip 
+  (flip 0.25
     (λ ()
        (send (container-panel croupier-container) enable #t)
        (send (score-label croupier-container) show #t)
@@ -365,7 +365,7 @@
 
              [cards-in-deck (- 52 (length (taken-cards game)))])
 
-            (flip 
+            (flip 0.1
               (λ ()
                  (animate-deck-grab (card-canvas deck) cards-in-deck)
 
@@ -400,10 +400,10 @@
 
         [else (cons 'hidden (cdr all-cards))]))
 
-(define (flip action)
+(define (flip duration action)
   (play-sound "../assets/card-flip.wav" #t)
   (action)
-  (sleep/yield 0.25))
+  (sleep/yield duration))
 
 (define (update-score container score)
   (send (score-label container) set-label

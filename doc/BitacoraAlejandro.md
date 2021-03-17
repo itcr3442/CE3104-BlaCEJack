@@ -135,3 +135,5 @@
   acción de tomar una carta del mazo. Con este cambio, se observa
   momentáneamente como la carta que se encontraba en el tope el mazo se mueve
   hacia la derecha para luego reaparecer en donde se necesita.
+- Se reducen los tiempos de espera al tomar cartas, para considerar el tiempo
+  que toma la animación del mazo.
