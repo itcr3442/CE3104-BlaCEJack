@@ -232,16 +232,16 @@
                        [else ""])))
 
          (map
-		   (curry apply
-				  (λ (position name score outcome)
-					 (list (string-append "#" (number->string (+ position 1)))
-						   name (number->string score)
-						   (match outcome
-								  ['tie "Tie"]
-								  ['wins "Wins"]
-								  ['loses "Loses"]))))
+           (curry apply
+                  (λ (position name score outcome)
+                     (list (string-append "#" (number->string (+ position 1)))
+                           name (number->string score)
+                           (match outcome
+                                  ['tie "Tie"]
+                                  ['wins "Wins"]
+                                  ['loses "Loses"]))))
 
-		   (scoreboard game)))]
+           (scoreboard game)))]
 
      [column-widths
        (λ (dc)
@@ -361,15 +361,35 @@
              [player (get-player game player-id)]
 
              [cards (shown-cards (reverse (held-cards player))
-                                 container player-id)])
+                                 container player-id)]
+
+             [cards-in-deck (- 52 (length (taken-cards game)))])
 
             (flip 
               (λ ()
-                 (update-cards deck (- 52 (length (taken-cards game))))
+                 (animate-deck-grab (card-canvas deck) cards-in-deck)
+
+                 (update-cards deck cards-in-deck)
                  (update-cards container cards)
                  (update-score container (score player))))
 
             game)]))
+
+(define (animate-deck-grab canvas remaining)
+  (define (do-frame dc steps)
+    (when [< steps 5]
+
+      (send dc suspend-flush)
+      (send dc erase)
+
+      (draw-deck canvas dc remaining (* 0.1 (+ steps 1)))
+      (send dc resume-flush)
+
+      (sleep 0.025)
+      (do-frame dc (+ steps 1))))
+
+  (let ([dc (send canvas get-dc)])
+    (do-frame dc 0)))
 
 (define (shown-cards all-cards container player-id)
   (cond [(or (empty? all-cards)
@@ -425,7 +445,7 @@
 
     (draw-stack base-offset cards)))
 
-(define (draw-deck canvas dc count)
+(define (draw-deck canvas dc count [swipe-factor 0])
   (when [> count 0]
     (let* ([many-cards (card-bitmap 'large-stack)]
            [hidden (card-bitmap 'hidden)]
@@ -435,7 +455,8 @@
            ; Should be the same for 'hidden
            [scale (fitting-scale canvas many-cards)]
 
-           [spacing (round (/ (send hidden get-width) 32))]
+           [swipe-unit (send hidden get-width)]
+           [spacing (round (/ swipe-unit 32))]
            [crop-width (* spacing (- count 1))]
            [joint (- width (* spacing 51))])
 
@@ -445,7 +466,14 @@
       (send dc draw-bitmap-section many-cards
             crop-width 0 (- width joint) 0 joint height)
 
-      (send dc draw-bitmap hidden (+ crop-width joint) 0))))
+      (let
+        ([draw-hidden
+           (λ (displacement)
+              (send dc draw-bitmap hidden (+ crop-width joint displacement) 0))])
+
+        (draw-hidden 0)
+        (when [not (zero? swipe-factor)]
+          (draw-hidden (* swipe-factor swipe-unit)))))))
 
 (define (fitting-scale canvas bitmap)
   (/ (send canvas get-height) (send bitmap get-height)))

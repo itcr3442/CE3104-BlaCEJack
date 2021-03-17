@@ -131,3 +131,7 @@
   jugador teniendo al menos tres cartas y el croupier más de tres o viceversa.
   Se arregla asegurando que deban ser específicamente dos cartas para
   blackjack.
+- Se implementa una animación no fluida (basada en timings estáticos) para la
+  acción de tomar una carta del mazo. Con este cambio, se observa
+  momentáneamente como la carta que se encontraba en el tope el mazo se mueve
+  hacia la derecha para luego reaparecer en donde se necesita.
