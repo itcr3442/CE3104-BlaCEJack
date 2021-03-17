@@ -59,3 +59,7 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 
 ## 16 de marzo
+
+- Se agragó contenido vario a la documentación.
+- Se confeccionaron los diagramas de la solución general y al algoritmo quicksort.
+- Se confeccionó el manual de usuario.

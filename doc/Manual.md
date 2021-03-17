@@ -27,19 +27,19 @@ linestretch: 1.5
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-# 2.1 Requisistos de sistema:
+# 2.1. Requisistos de sistema:
 
 - Instalación de intérprete de racket 8.0 en el sistema.
 - 1 GB de Memoria RAM libre.
 - 7,46 MB de espacio libre en disco duro.
 
-# 2.2 Ambientes en los que se comprobó funcionamiento:
+# 2.2. Ambientes en los que se comprobó funcionamiento:
 
 - Windows 10
 - Arch Linux
 - Manjaro Linux 
 
-# 2.3 Reglas de juego:
+# 2.3. Reglas de juego:
 
 - Cada jugador comienza con dos cartas.
 - Cada turno un jugador puede escoger si plantarse o solicitar una carta.
@@ -53,7 +53,7 @@ linestretch: 1.5
 - Un 21 producto de un blackjack gana sobre un 21 obtenido con suma de cartas comunes.
 - Si un jugador se planta no puede tomar carta hasta terminar el juego. 
 
-# 2.4 Inicio de Juego:
+# 2.4. Inicio de Juego:
 
 Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cuál indica la cantidad de jugadores que se desean tener en la partida.
 
@@ -90,10 +90,10 @@ Alternativamente se puede cargar el archivo ui.rkt en un programa como DrRacket 
 
 Ejecutado el comando, se mostrará una ventana inicial para ingresar los nombres de los jugadores a estar en la partida:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/startdialog.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/startdialog.PNG)
 
 
-# 2.5 Interfaz:
+# 2.5. Interfaz:
 
 Mientras se cargan los recursos del programa, se muestra una pantalla con imágenes conjuntos de carta que varían al azar con cada inicio de juego.
 
@@ -101,7 +101,7 @@ Mientras se cargan los recursos del programa, se muestra una pantalla con imáge
 
 Una vez cargado el juego se muestra la interfaz de juego:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/start-screen.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/start-screen.PNG)
 
 Los elementos de la misma se pueden dividir entre tres secciones. La primera sección es el tablero de información externa a los jugadores:
 
@@ -122,7 +122,7 @@ En esta sección se muestra al jugador activo, y dos botones que le permiten dec
 
 El juego se desarrollará según lo especificado en la sección de reglas, hasta finalmente llegar a un estado final. El reporte de juego se presenta en una ventana de puntajes al finalizar una partida:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/game-end.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/game-end.PNG)
 
 Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Quit" cerrará el programa, mientras que "Restart" permitirá comenzar una partida adicional desde el inicio con los mismos jugadores. Si se desea iniciar con otro set de jugadores, se deberá cerrar el programa e iniciarlo de nuevo con el parámetro de cantidad de jugadores deseado (ver sección de "Inicio de Juego").
 

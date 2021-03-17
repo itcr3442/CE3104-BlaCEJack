@@ -42,7 +42,23 @@ El algoritmo de resolución del programa se encuentra descrito en el siguiente d
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-Page-1.png)
 
-Como se puede observar, inicialmente se realizan algunas tareas que forman parte de una rutina de preparación para entrar en el *game loop* en sí. Funciones como `run-game` se encargan del cargado inicial de la interfaz, y `initial-grab` prepara la mesa de juego en sí. 
+Como se puede observar, inicialmente se realizan algunas tareas que forman parte de una rutina de preparación para entrar en el *game loop* en sí. Funciones como `run-game` se encargan del cargado inicial de la interfaz, y `initial-grab` prepara la mesa de juego en sí.
+
+Por defecto, el jugador uno es el primero en comenzar su turno. Si el jugador decide plantarse, el juego cambia su estado a uno inactivo y pasa a calcular cual es el jugador cuyo turno es el siguiente. Si el jugador decide tomar carta, suceden una serie de verificaciones varias, algunas son omitidas en el diagrama para ofrecer una mayor claridad del flujo del programa. 
+
+Si bien se omiten algunas funciones de verificación de estado, es importante remarcar otras unidades funcionales las cuales se omitieron del diagrama para la solución general puesto que su desarrollo podía dificultar la legibilidad del diagrama.
+
+Uno de estos algoritmos es el quicksort, el cual es utilizado en la rutina de comparación de puntajes antes de la muestra de puntajes:
+
+![](./doc/Diagrama-qs.png)
+
+El funcionamiento de este algoritmo es difícil de representar en un diagrama finito, por lo cual se utilizan las líneas punteadas para indicar que en la zonas demarcadas sucede auto-replicado del diagrama, la cual alcanza profundidades distintas dependiendo de la situación específica en la que se llamó la función.
+
+La forma en la que opera el quicksort es singular. Es un algoritmo basado en la técnica de divide y vencerás. En su forma más pura, consiste en tomar una lista, seleccionar un pivote basado en una heurística definida, y dividir la lista en tres grupos (o dos, dependiendo de la literatura utilizada o conveniencia del caso), una lista de elementos mayores al pivote, menores al pivote, e iguales al pivote. La función quicksort retorna entonces la unión de el resultado de aplicar quicksort sobre estas tres listas. Como se puede predecir, el algoritmo solo alcanzará su nivel de profundidad final cuando el pivote sea el único elemento restante. Al llegar a una lista de un solo elemento, el algoritmo comienza a devolverse nivel por nivel hasta alcanzar el nivel de profundidad inicial y retornar el valor de la lista original de entrada, pero ordenada.
+
+Para el quicksort implementado en el proyecto, se utilizó la composición de funciones para permitir establecer el criterio de evaluación a utilizar que defina los conceptos de menor, mayor e igual para cada ejecución del algoritmo, es decir, el algoritmo funciona independientemente de la clase de elemento a comparar o jerarquía de los elementos de la lista a ordenar.  
+
+
 
 ## 1.2. Funciones implementadas
 
@@ -1075,6 +1091,7 @@ Seguidamente, se incluyen las capturas del plan:
 - Se implementó de manera exitosa un programa de funcionalidad compleja en un lenguaje funcional, de esta manera se demostró que la capacidad de implementar un programa es independiente del paradigma de un lenguaje de programación, lo que puede variar es la dificultad, pero no la posibilidad.
 - Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores. 
 - Los problemas experimentados demuestran que es fundamental listar por adelantado todas las posibles excepciones a reglas generales de un programa (los llamados _corner cases_). Si bien con los problemas descritos la dificultad de resolución no fue mayor, no se podría afirmar que en todo caso que se de una situación similar la dificultad de resolución sería la misma. 
+- Se comprueba la utilidad de los mecanismos de manejo de funciones de alto orden provistos por racket, puesto que poder recibir funciones como argumento de una función permite desarrollar algortimos sin necesidad de definir varios detalles de casos específicos, es decir, propicia la reutilizacipon de código y evita el problema de verse forzado en hacer implementaciones varias de un mismo algoritmo por diferencias menores entre los datos siendo procesados. 
 
 
 ## 1.8. Recomendaciones.
