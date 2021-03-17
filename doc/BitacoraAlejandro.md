@@ -122,3 +122,12 @@
   de posiciones por medio de cálculos manuales de posiciones sobre un canvas.
   Se toma en cuenta el tamaño de cada columna en función del máximo ancho (en
   píxeles, tras renderizar) de cada fragmento de texto asociado a esa columna.
+
+## 17 de marzo
+
+- Se arregla un bug en las condiciones de gane-pérdida-empate de final de
+  juego.  Específicamente, se hubiese considerado incorrectamente como
+  blackjack una situación donde tanto jugador como croupier logran 21, con el
+  jugador teniendo al menos tres cartas y el croupier más de tres o viceversa.
+  Se arregla asegurando que deban ser específicamente dos cartas para
+  blackjack.

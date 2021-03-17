@@ -984,16 +984,26 @@ Ejemplos de uso:
 (define (scoreboard game)
     (define (outcome player)
         {cond [{lost? player} 'loses]
+
               [{or (lost? (croupier game))
                    (> (score player) (score (croupier game)))}
                'wins]
-              [{< (score player) (score (croupier game))} 'loses]
-              [{not (= (score player) 21)} 'tie]
-              [{< (length (taken-cards player)) (length (taken-cards (croupier game)))}
-               'wins]
-              [{> (length (taken-cards player)) (length (taken-cards (croupier game)))}
+
+              [{< (score player) (score (croupier game))}
                'loses]
-              [else 'loses]})
+
+              [{not (= (score player) 21)}
+               'tie]
+
+              [{and (= (length (taken-cards player)) 2)
+                    (> (length (taken-cards (croupier game))) 2)}
+               'wins]
+
+              [{and (> (length (taken-cards player)) 2)
+                    (= (length (taken-cards (croupier game))) 2)}
+               'loses]
+
+              [else 'tie]})
 
     (define (add-with-outcome output players)
         {cond [{null? players} output]
