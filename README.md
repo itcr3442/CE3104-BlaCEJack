@@ -50,7 +50,7 @@ Si bien se omiten algunas funciones de verificación de estado, es importante re
 
 Uno de estos algoritmos es el quicksort, el cual es utilizado en la rutina de comparación de puntajes antes de la muestra de puntajes:
 
-![](./doc/Diagrama-qs.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-qs.png)
 
 El funcionamiento de este algoritmo es difícil de representar en un diagrama finito, por lo cual se utilizan las líneas punteadas para indicar que en la zonas demarcadas sucede auto-replicado del diagrama, la cual alcanza profundidades distintas dependiendo de la situación específica en la que se llamó la función.
 
@@ -60,13 +60,13 @@ Para el quicksort implementado en el proyecto, se utilizó la composición de fu
 
 Otro algoritmo del programa a notar es la implementación de _Round-Robin_ para decidir el siguiente jugador. 
 
-![](./doc/Diagrama-next-turn.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-next-turn.png)
 
 Se usan los símbolos que en un diagrama de flujo que indican "salida" puesto que en este punto del programa el algoritmo retorna un valor, con una consecuencia general en el _game loop_, la cual se indica en el diagrama general.
 
 Por último, otro algoritmo a tomar en cuenta es el utilizado para modelar la interacción con los ases. En teoría, un jugador puede asignarle un valor de 1 a un as cuando lo recibe, sin embargo, siempre esta en su conveniencia tomar el valor de 11 por defecto, y solo disminuír el valor del as en caso de sobrepasarse. Esta condición implica que no es necesario ofrecer un botón adicional para este comportamiento, puesto que es redundante, pero sí es esencial que el programa maneje los casos de sobrepaso para evitar que un as de valor 11 sea la causa de pérdida de una partida.
 
-![](./doc/Diagrama-try-changing-aces.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-try-changing-aces.png)
 
 Al igual que otras implementaciones de blackjack como videojuego, el programa hecho tiene una rutina que busca un as en la mano del jugador solo si el mismo se encuentra en una situación de sobrepaso. De encontrar un as o varios, cambia la cantidad de ases necesarios para evitar un sobrepaso, ni más ni menos. 
 
