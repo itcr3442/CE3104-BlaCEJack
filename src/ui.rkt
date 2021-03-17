@@ -99,20 +99,36 @@
 
      [top-row (new horizontal-panel% [parent window])]
      [game-table (new horizontal-panel% [parent window])]
-     [bottom-row (new horizontal-panel%
-                      [parent window]
-                      [alignment '(center center)])]
+     [bottom-panel (new horizontal-panel%
+                        [parent window]
+                        [alignment '(center center)])]
 
      [croupier-container (game-container top-row "Croupier")]
      [deck (game-container top-row "Deck" draw-deck 52)]
 
      [player-containers (map (curry game-container game-table) player-names)]
-     [current-player (dynamic-label bottom-row)]
+     [current-player
+       (new message%
+            [parent
+              (new horizontal-pane%
+                   [parent bottom-panel]
+                   [alignment '(center center)])]
+
+            [label (cdar (quicksort (map (λ (name) (cons (string-length name) name))
+                                         player-names)
+                                    (λ (a b) (> (car a) (car b)))))]
+
+            [font (send the-font-list find-or-create-font 30 'default 'normal 'bold)])]
+
+     [action-pane
+       (new vertical-pane%
+            [parent bottom-panel]
+            [alignment '(left center)])]
 
      [action-button
        (λ (parameter label)
           (new button%
-               [parent bottom-row]
+               [parent action-pane]
                [label label]
                [callback
                  (λ (button event)
@@ -149,7 +165,7 @@
           (match (next-turn game player-id)
                  [(list) ; No active players are left
 
-                  (send bottom-row show #f)
+                  (send bottom-panel show #f)
                   (end-of-game game deck croupier-container window
                                (λ (restart?)
                                   (send window show #f)
@@ -162,7 +178,7 @@
 
     (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
-    (send bottom-row show #f)
+    (send bottom-panel show #f)
 
     (when splash-gauge
       #| +1 for all operations that go before bitmap loading
@@ -194,7 +210,7 @@
 
       (do-turn game 0 (car (players game))))
 
-    (send bottom-row show #t)))
+    (send bottom-panel show #t)))
 
 (define (end-of-game game deck croupier-container window then)
   (flip 0.25
@@ -319,14 +335,15 @@
                                 (number->string next))])
               fields))]))
 
-(define (dynamic-label parent)
-  (new message% [parent parent] [label ""] [auto-resize #t]))
-
 (define (game-container parent name [custom-draw #f] [initial-cards '()])
   (let*
     ([panel (new vertical-panel% [parent parent])]
      [name-label (new message% [parent panel] [label name])]
-     [score-label (dynamic-label panel)]
+     [score-label
+       (new message%
+            [parent panel]
+            [label ""]
+            [auto-resize #t])]
 
      [current-cards (make-parameter initial-cards)]
      [card-canvas

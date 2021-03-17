@@ -126,14 +126,18 @@
 ## 17 de marzo
 
 - Se arregla un bug en las condiciones de gane-pérdida-empate de final de
-  juego.  Específicamente, se hubiese considerado incorrectamente como
-  blackjack una situación donde tanto jugador como croupier logran 21, con el
-  jugador teniendo al menos tres cartas y el croupier más de tres o viceversa.
-  Se arregla asegurando que deban ser específicamente dos cartas para
-  blackjack.
+  juego. Específicamente, se hubiese considerado incorrectamente como blackjack
+  una situación donde tanto jugador como croupier logran 21, con el jugador
+  teniendo al menos tres cartas y el croupier más de tres o viceversa.  Se
+  arregla asegurando que deban ser específicamente dos cartas para blackjack.
 - Se implementa una animación no fluida (basada en timings estáticos) para la
   acción de tomar una carta del mazo. Con este cambio, se observa
   momentáneamente como la carta que se encontraba en el tope el mazo se mueve
   hacia la derecha para luego reaparecer en donde se necesita.
 - Se reducen los tiempos de espera al tomar cartas, para considerar el tiempo
   que toma la animación del mazo.
+- Se mejoran algunos aspectos estéticos. El nombre del jugador actual ahora es
+  mucho más visible en todo instante, se ubica ahora a la izquierda de los
+  botones, y los botones se acomodan verticalmente entre sí. Esto evita
+  situaciones en el pasado donde la longitud del nombre del jugador actual
+  afectaba la posición de los botones de tomar carta y plantarse.

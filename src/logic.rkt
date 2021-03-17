@@ -11,7 +11,7 @@ _______________________________________________________|#
 (provide list-get score name active? lost? has-stood? ready? players
          get-player croupier game-finished? take-card put-card new-game
          next-turn stand held-cards card-value card-symbol taken-cards
-         scoreboard)
+         quicksort scoreboard)
 
 #| Notas generales
 - un prefijo 'i' a un sustantivo significa que dicho parámetro es de entrada (input)
