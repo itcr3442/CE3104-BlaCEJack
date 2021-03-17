@@ -40,13 +40,9 @@ linestretch: 1.5
 
 El algoritmo de resolución del programa se encuentra descrito en el siguiente diagrama:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-1.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-Page-1.png)
 
 Como se puede observar, inicialmente se realizan algunas tareas que forman parte de una rutina de preparación para entrar en el *game loop* en sí. Funciones como `run-game` se encargan del cargado inicial de la interfaz, y `initial-grab` prepara la mesa de juego en sí. 
-
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-2.png)
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-3.png)
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-BlackjackCE-4.png)
 
 ## 1.2. Funciones implementadas
 

@@ -29,7 +29,7 @@ linestretch: 1.5
 
 # Requisistos de sistema:
 
-- Instalación de intérprete de racket en el sistema.
+- Instalación de intérprete de racket 8.0 en el sistema.
 
 # Sistemas operativos probados:
 
