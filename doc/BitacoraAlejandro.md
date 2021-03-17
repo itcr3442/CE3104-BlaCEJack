@@ -146,3 +146,4 @@
 - Se soporta la generación de ejecutables standalone utilizando `raco`.
 - Se automatiza la generación de ejecutables bajo plataformas Unix con un
   `Makefile`.
+- Se agregan pruebas unitarias basadas en ejemplos existentes.

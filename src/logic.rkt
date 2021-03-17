@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 #|______________________________________________________ 
 Instituto Tecnológico de Costa Rica
 Área Académica de Ingeniería en Computadores
@@ -498,7 +498,7 @@ Ejemplos de uso:
 (define (active-players-aux players id olist)
     {cond
         [{null? players}{reverse olist}]
-        [{active? (first players)}{active-players-aux (cdr players) (+ id 1) (cons (cons id (first players)) olist)}]
+        [{active? (car players)}{active-players-aux (cdr players) (+ id 1) (cons (cons id (car players)) olist)}]
         [else {active-players-aux (cdr players) (+ id 1) olist}]
     })
 
