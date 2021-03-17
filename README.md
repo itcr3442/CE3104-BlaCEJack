@@ -1073,8 +1073,8 @@ Seguidamente, se incluyen las capturas del plan:
 ## 1.7. Conclusiones.
 
 - Se implementó de manera exitosa un programa de funcionalidad compleja en un lenguaje funcional, de esta manera se demostró que la capacidad de implementar un programa es independiente del paradigma de un lenguaje de programación, lo que puede variar es la dificultad, pero no la posibilidad.
-- Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación. 
-- 
+- Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores. 
+- Los problemas experimentados demuestran que es fundamental listar por adelantado todas las posibles excepciones a reglas generales de un programa (los llamados _corner cases_). Si bien con los problemas descritos la dificultad de resolución no fue mayor, no se podría afirmar que en todo caso que se de una situación similar la dificultad de resolución sería la misma. 
 
 
 ## 1.8. Recomendaciones.
@@ -1086,19 +1086,27 @@ Seguidamente, se incluyen las capturas del plan:
 
 ## 1.9. Bibliografía consultada en todo el proyecto
 
-## Bibliografía
-
 Guzman, J. E. (2006). Introducción a la programación con Scheme. Cartago:
 Editorial Tecnológica de Costa Rica.
 
+Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_[Videojuego]. Disponible en: 
+https://www.arkadium.com/games/blackjack/
 
-## Recursos adicionales 
+Flatt M., Findler R., Clements J. (s.f). _The Racket Graphical Interface Toolkit_.Obtenido de:
+Obtenido de: https://docs.racket-lang.org/gui/
 
-[Juego flash](https://www.arkadium.com/games/blackjack/)
-[racket/gui](https://docs.racket-lang.org/gui/)
-[racket/draw](https://docs.racket-lang.org/draw/)
-[Imágenes de cartas](https://acbl.mybigcommerce.com/52-playing-cards/)
-[Sonido de carta](https://orangefreesounds.com/card-flip-sound-effect/)
+Flatt M., Findler R., Clements J. (s.f). _The Racket Drawing Toolkit_.Obtenido de:
+Obtenido de: https://docs.racket-lang.org/gui/
+
+
+## Recursos gráficos
+
+Imágenes de cartas obtenidas de:
+https://acbl.mybigcommerce.com/52-playing-cards/
+
+Sonidos de cartas obtenidas de:
+https://orangefreesounds.com/card-flip-sound-effect/
+
 
 
 
