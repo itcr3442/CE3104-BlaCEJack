@@ -7,6 +7,7 @@
 
 (define-runtime-path assets-path "../assets")
 
+
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
         [(or (< X 1) (> X 3)) (raise "There may only be one, two, or three players")])
@@ -30,8 +31,10 @@
 
     (send names-dialog show #t)))
 
+
 (define (start-game player-names)
   (run-game player-names (splash-screen)))
+
 
 (define (splash-screen)
   (let* ([splashes '("aces" "honor_clubs" "honor_diamonds" "honor_hearts" "honor_spades")]
@@ -89,6 +92,7 @@
       (send screen show #t)
       (yield)
       gauge)))
+
 
 (define (run-game player-names [splash-gauge #f])
   (letrec
@@ -214,6 +218,7 @@
 
     (send bottom-panel show #t)))
 
+
 (define (end-of-game game deck croupier-container window then)
   (flip 0.25
     (λ ()
@@ -231,6 +236,7 @@
                         (grab game deck croupier-container 'croupier))]))])
 
     (show-score (grab-last-croupier-cards game) window then)))
+
 
 (define (show-score game window then)
   (letrec
@@ -317,10 +323,12 @@
 
       (send dialog show #t))))
 
+
 (define (get-text-width dc text [font #f])
   (call-with-values
      (λ () (send dc get-text-extent text font))
      (λ (width height baseline padding) width)))
+
 
 (define (add-name-fields dialog up-to next fields)
   (cond
@@ -336,6 +344,7 @@
                  (string-append "Player #"
                                 (number->string next))])
               fields))]))
+
 
 (define (game-container parent name [custom-draw #f] [initial-cards '()])
   (let*
@@ -362,15 +371,18 @@
     (when [not custom-draw] (update-score container 0))
     container))
 
+
 (define container-panel car)
 (define score-label cadr)
 (define card-canvas caddr)
 (define current-cards cadddr)
 
+
 (define (initial-grab game deck container player-id)
   (cond [(ready? (get-player game player-id)) game]
         [else (initial-grab (grab game deck container player-id)
                             deck container player-id)]))
+
 
 (define (grab game deck container player-id)
   (match (take-card game)
@@ -394,6 +406,7 @@
 
             game)]))
 
+
 (define (animate-deck-grab canvas remaining)
   (define (do-frame dc steps)
     (when [< steps 5]
@@ -410,6 +423,7 @@
   (let ([dc (send canvas get-dc)])
     (do-frame dc 0)))
 
+
 (define (shown-cards all-cards container player-id)
   (cond [(or (empty? all-cards)
              (not (eqv? player-id 'croupier))
@@ -419,18 +433,22 @@
 
         [else (cons 'hidden (cdr all-cards))]))
 
+
 (define (flip duration action)
   (play-sound (build-path assets-path "card-flip.wav") #t)
   (action)
   (sleep/yield duration))
 
+
 (define (update-score container score)
   (send (score-label container) set-label
         (string-append "Score: " (number->string score))))
 
+
 (define (update-cards container cards)
   ((current-cards container) cards)
   (send (card-canvas container) refresh-now))
+
 
 (define (draw-stack canvas dc cards)
   (letrec 
@@ -464,6 +482,7 @@
 
     (draw-stack base-offset cards)))
 
+
 (define (draw-deck canvas dc count [swipe-factor 0])
   (when [> count 0]
     (let* ([many-cards (card-bitmap 'large-stack)]
@@ -494,8 +513,10 @@
         (when [not (zero? swipe-factor)]
           (draw-hidden (* swipe-factor swipe-unit)))))))
 
+
 (define (fitting-scale canvas bitmap)
   (/ (send canvas get-height) (send bitmap get-height)))
+
 
 (define (card-bitmap card)
   (cond
@@ -522,10 +543,13 @@
         (hash-set! loaded-bitmaps card bitmap)
         bitmap)]))
 
+
 (define (load-bitmap path)
   (read-bitmap (build-path assets-path (path-add-extension path ".png")) 'png))
 
+
 (define loaded-bitmaps (make-hash))
+
 
 (define (preload-bitmaps [gauge #f])
   (letrec
@@ -550,6 +574,7 @@
 
     (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
                                         '(pikes hearts clovers diamonds)))))
+
 
 (define (progress gauge)
   (when gauge
