@@ -1120,11 +1120,14 @@ Editorial Tecnológica de Costa Rica.
 Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_[Videojuego]. Disponible en: 
 https://www.arkadium.com/games/blackjack/
 
-Flatt M., Findler R., Clements J. (s.f). _The Racket Graphical Interface Toolkit_.Obtenido de:
+Flatt M., Findler R., Clements J. (s.f). _The Racket Graphical Interface Toolkit_.
 Obtenido de: https://docs.racket-lang.org/gui/
 
-Flatt M., Findler R., Clements J. (s.f). _The Racket Drawing Toolkit_.Obtenido de:
-Obtenido de: https://docs.racket-lang.org/gui/
+Flatt M., Findler R., Clements J. (s.f). _The Racket Drawing Toolkit_.
+Obtenido de: https://docs.racket-lang.org/draw/
+
+Flatt M., Findler R., Clements J. (s.f). _raco: Racket Command Line Tools_.
+Obtenido de: https://docs.racket-lang.org/raco/
 
 
 ## Recursos gráficos

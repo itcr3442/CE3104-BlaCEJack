@@ -13,3 +13,6 @@ compiled/
 
 # Dependency tracking files
 *.dep
+
+build/
+dist/

@@ -1,9 +1,11 @@
 #lang racket/base
 
-(require racket/gui)
+(require racket/gui racket/runtime-path)
 (require "logic.rkt")
 
 (provide bCEj start-game)
+
+(define-runtime-path assets-path "../assets")
 
 (define (bCEj X)
   (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
@@ -418,7 +420,7 @@
         [else (cons 'hidden (cdr all-cards))]))
 
 (define (flip duration action)
-  (play-sound "../assets/card-flip.wav" #t)
+  (play-sound (build-path assets-path "card-flip.wav") #t)
   (action)
   (sleep/yield duration))
 
@@ -521,7 +523,7 @@
         bitmap)]))
 
 (define (load-bitmap path)
-  (read-bitmap (string-append "../assets/" path ".png") 'png))
+  (read-bitmap (build-path assets-path (path-add-extension path ".png")) 'png))
 
 (define loaded-bitmaps (make-hash))
 
