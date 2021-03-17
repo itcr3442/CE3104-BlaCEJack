@@ -90,7 +90,7 @@ Alternativamente se puede cargar el archivo ui.rkt en un programa como DrRacket 
 
 Ejecutado el comando, se mostrará una ventana inicial para ingresar los nombres de los jugadores a estar en la partida:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/startdialog.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/startdialog.png)
 
 
 # 2.5 Interfaz:
@@ -101,28 +101,28 @@ Mientras se cargan los recursos del programa, se muestra una pantalla con imáge
 
 Una vez cargado el juego se muestra la interfaz de juego:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/start-screen.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/start-screen.png)
 
 Los elementos de la misma se pueden dividir entre tres secciones. La primera sección es el tablero de información externa a los jugadores:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/croupier.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/croupier.png)
 
 En esa sección se muestra el mazo y el estado del croupier, el cuál inicia con una carta boca abajo y solo le da la vuelta hasta que haya llegado el turno del croupier.
 
 Seguidamente está el tablero de información para el jugador:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/cards.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/cards.png)
 
 En esta sección el o los jugadores pueden visualizar cuales cartas tienen en mano y cuál es su puntaje. Cuando un jugador se planta o se sobrepasa de 21, su nombre y puntaje son deshabilitados para mostrar que estos jugadores ya no se encuentran activos. 
 
 Por último, está la sección de control de usuario.
 En esta sección se muestra al jugador activo, y dos botones que le permiten decidir cual será su siguiente acción:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/player-actions.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/player-actions.png)
 
 El juego se desarrollará según lo especificado en la sección de reglas, hasta finalmente llegar a un estado final. El reporte de juego se presenta en una ventana de puntajes al finalizar una partida:
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/doc/game-end.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/game-end.png)
 
 Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Quit" cerrará el programa, mientras que "Restart" permitirá comenzar una partida adicional desde el inicio con los mismos jugadores. Si se desea iniciar con otro set de jugadores, se deberá cerrar el programa e iniciarlo de nuevo con el parámetro de cantidad de jugadores deseado (ver sección de "Inicio de Juego").
 
