@@ -396,7 +396,7 @@
 
              [cards-in-deck (- 52 (length (taken-cards game)))])
 
-            (flip 0.1
+            (flip 0.05
               (λ ()
                  (animate-deck-grab (card-canvas deck) cards-in-deck)
 
@@ -409,15 +409,15 @@
 
 (define (animate-deck-grab canvas remaining)
   (define (do-frame dc steps)
-    (when [< steps 5]
+    (when [< steps 3]
 
       (send dc suspend-flush)
       (send dc erase)
 
-      (draw-deck canvas dc remaining (* 0.1 (+ steps 1)))
+      (draw-deck canvas dc remaining (* 0.1 (+ steps 2)))
       (send dc resume-flush)
 
-      (sleep 0.025)
+      (sleep/yield 0.005)
       (do-frame dc (+ steps 1))))
 
   (let ([dc (send canvas get-dc)])

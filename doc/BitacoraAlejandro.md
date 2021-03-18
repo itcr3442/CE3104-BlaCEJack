@@ -147,3 +147,8 @@
 - Se automatiza la generación de ejecutables bajo plataformas Unix con un
   `Makefile`.
 - Se agregan pruebas unitarias basadas en ejemplos existentes.
+
+## 18 de marzo
+
+- Se acelera la animación de toma de carta. El equipo de trabajo evaluará
+  prontamente si este cambio mejora o no la experiencia de usuario.
