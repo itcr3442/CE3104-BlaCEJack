@@ -77,3 +77,4 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 - Se agregó la guía de compilado al manual de usuario.
 - Se agregaron algunas referencia faltantes a la documentación.
+- Se agregó la documentación referente a los atajos de teclado.
