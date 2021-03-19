@@ -98,8 +98,10 @@ Ejemplos de uso:
 - >(start-game '("Foo" "Bar" "Baz"))
 |#
 (define (start-game player-names)
-  (play-background-music)
-  (run-game player-names (splash-screen)))
+  (let ([music-custodian (play-background-music)])
+    (run-game player-names (splash-screen))
+    (yield 'wait)
+    (custodian-shutdown-all music-custodian)))
 
 
 #| Función splash-screen
@@ -706,18 +708,25 @@ Ejemplos de uso:
 #| Función play-background-music
 Descripción: Crea un hilo verde que reproduce música de fondo
              en bucle infinito.
-Salida: El hilo verde que custodia la reproducción de la
+Salida: El custodian dedicado para el hilo verde que reproduce la
         música de fondo.
 Ejemplos de uso:
 - >(play-background-music)
 |#
 (define (play-background-music)
-  (define (loop)
-    (play-sound (build-path assets-path "casino.wav") #f)
-    (loop))
+  (letrec
+    ([custodian (make-custodian)]
+     [loop
+       (λ ()
+          (play-sound (build-path assets-path "casino.wav") #f)
+          (loop))])
 
-  (parameterize ([current-subprocess-custodian-mode 'kill])
-    (thread loop)))
+    (parameterize ([current-subprocess-custodian-mode 'kill]
+                   [current-custodian custodian])
+
+      (thread loop))
+
+    custodian))
 
 
 #| Función flip

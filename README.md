@@ -1126,6 +1126,9 @@ Obtenido de: https://docs.racket-lang.org/gui/
 Flatt M., Findler R., Clements J. (s.f). _The Racket Drawing Toolkit_.
 Obtenido de: https://docs.racket-lang.org/draw/
 
+Flatt M., Findler R., Clements J. (s.f). _Custodians_.
+Obtenido de: <https://docs.racket-lang.org/reference/eval-model.html?q=thread#%28part._custodian-model%29>
+
 Flatt M., Findler R., Clements J. (s.f). _raco: Racket Command Line Tools_.
 Obtenido de: https://docs.racket-lang.org/raco/
 

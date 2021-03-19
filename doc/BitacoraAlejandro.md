@@ -181,3 +181,9 @@
   GNU/Linux, es que un proceso `aplay` se mantiene en ejecutándose en el fondo.
   Se encuentra la siguiente solución: <https://stackoverflow.com/a/39358912>.
 - A partir de lo anterior, se implementa un bucle de música de fondo.
+- El compañero de equipo encontró un problema con la reproducción de la música
+  de fondo. Específicamente, la misma seguía en pie tras cerrar la aplicación
+  si se ejecuta desde REPL. La solución fue estudiar el modelo de hilos verdes
+  y custodians de Racket, con lo cual se definió un custodian dedicado para el
+  hilo verde la música de fondo, el cual es forzosamente detenido al cerrar
+  todas las ventanas.
