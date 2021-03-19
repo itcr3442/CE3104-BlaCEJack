@@ -337,23 +337,6 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
     'diamonds
 ```
 
-### `(create-player name)`
-
-**Descripción:** crea una lista que representa el estado de un jugador a partir de un nombre dado.
-
-**Entradas:** 
-
-- name: nombre para el jugador a ser generado 
-  
-**Salida:** lista que representa el estado de un jugador con el nombre provisto.
-
-**Ejemplo de uso:** 
-
-```Scheme
-    >(create-player "Foo")
-    '("Foo" active ())
-```
-
 ### `(create-card value symbol)`
 
 **Descripción:** Crea un par que representa una carta a partir de un valor numérico y un símbolo dados.
@@ -372,6 +355,88 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
     '(2 hearts)
     >(create-card 11 'pikes)
     '(jack pikes)
+```
+
+### `(create-game-window)`
+
+**Descripción:** Crea, pero no muestra, la ventana principal y los principales contenedores dentro de la misma.
+
+**Salidas:**
+
+- La ventana principal, de tipo `frame%`.
+- El panel superior, donde se incluirán al croupier y al mazo.
+- La mesa de juego, donde se mostrarán a los jugadores y sus cartas.
+- El panel inferior, donde se muestra el jugador actual y botones de acción.
+
+**Ejemplos de uso:**
+
+```Scheme
+    >(create-game-window)
+```
+
+### `(create-player name)`
+
+**Descripción:** crea una lista que representa el estado de un jugador a partir de un nombre dado.
+
+**Entradas:** 
+
+- name: nombre para el jugador a ser generado 
+  
+**Salida:** lista que representa el estado de un jugador con el nombre provisto.
+
+**Ejemplo de uso:** 
+
+```Scheme
+    >(create-player "Foo")
+    '("Foo" active ())
+```
+
+### `(create-status-elements bottom-panel on-take-card on-stand player-names)`
+
+**Descripción:** Crea e inicializa los elementos del panel inferior.
+
+**Entradas:**
+
+- bottom-panel: El panel inferior, a como fue generado por `(create-game-window)`.
+- on-take-card: Un `(parameter?)` accesor que debe en todo momento contener una función de aridad nula que será ejecutada al presionar el botón para tomar una carta.
+- on-stand: Un `(parameter?)` accesor de iguales restricciones que el anterior, usado para plantarse.
+- player-names: Lista de nombres de los jugadores.
+
+**Salidas:**
+
+- La etiqueta que muestra el nombre del jugador actual.
+- El botón para tomar carta.
+- El botón para plantarwse.
+- Una función de aridad unitaria que acepta un parámetro booleano y devuelve `(void)`. El parámetro indica si deben habilitarse o deshabilitarse los botones de acción.
+
+**Ejemplos de uso:**
+
+```Scheme
+    >(create-status-elements bottom-panel on-take-card on-stand '("Foo "Bar" "Baz"))
+```
+
+### `(create-turn-function on-take-card on-stand deck player-containers current-player then-end)`
+
+**Descripción:** Genera una función que dirige la rotación de turnos.
+
+**Entradas:**
+
+- on-take-card: Un `(parameter?)` accesor que debe en todo momento contener una función de aridad nula que será ejecutada al presionar el botón para tomar una carta.
+- on-stand: Un `(parameter?)` accesor de iguales restricciones que el anterior, usado para plantarse.
+- deck: Marco contenedor del mazo.
+- player-containers: Lista de marcos contenedores de los jugadores.
+- current-player: Etiqueta de jugador actual, a como fue generada por `create-status-elements`.
+- then-end: Función de aridad unitaria, que acepta el estado de juego al momento de no quedar jugadores activos y rompe la cadena de turnos.
+
+**Salida:** Una función de aridad tres, llámese `do-turn`, que admite llamadas según el prototipo `(do-turn game player-id player)`, donde `game` es el estado de juego al punto de llamada, `player-id` es el índice de jugador y `player` es la lista que conforma el jugador. Llamar a `do-turn` prepara el tablero para darle un turno a este jugador. Cuando el turno termina, se sigue invocando a `do-turn` según la rotación respectiva. La cadena se rompe una vez no queden jugadores activos.
+
+**Ejemplos de uso:**
+
+```Scheme
+    >(create-turn-function
+     ...
+     (λ (game)
+        (display "No quedan jugadores activos")))
 ```
 
 ### `(croupier game)`
@@ -463,6 +528,24 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 ```Scheme
     >(end-of-game ... (λ (restart?) ...))
+```
+
+### `(fitting-scale canvas bitmap)`
+
+**Descripción:** Determina la escala correcta para que un bitmap coincida en altura con un canvas donde será dibujado.
+
+**Entradas:**
+
+- canvas: Lienzo donde se dibujará el bitmap.
+- bitmap: El bitmap que debe escalarse.
+  
+**Salida:** Una proporción real de escala que debe aplicarse al bitmap.
+
+**Ejemplos de uso:**
+
+```Scheme
+    >(fitting-scale canvas (card-bitmap '(5 pikes)))
+    0.232
 ```
 
 ### `(flip container duration action)`
@@ -955,7 +1038,7 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 **Ejemplos de uso:**
 
 ```Scheme
-    >(load-bitmaps)  ; Durará algunos segundos
+    >(preload-bitmaps)  ; Durará algunos segundos
 ```
 
 ### `(put-card game player card)`
