@@ -176,3 +176,8 @@
   escoge ya que es el único soportado por la función `(play-sound)` de
   `racket/gui` de manera fiable en todas las plataformas de interés.  El
   archivo `casino.wav` se agrega a `assets/`.
+- Tras buscar formas de evitar que un bucle de música persista tras haber
+  cerrado la aplicación, se identifica que el problema, al menos en sistemas
+  GNU/Linux, es que un proceso `aplay` se mantiene en ejecutándose en el fondo.
+  Se encuentra la siguiente solución: <https://stackoverflow.com/a/39358912>.
+- A partir de lo anterior, se implementa un bucle de música de fondo.

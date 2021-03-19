@@ -12,7 +12,7 @@ Alejandro José Soto Chacón - 2019008164
 _______________________________________________________|#
 
 
-(require racket/gui racket/runtime-path)
+(require racket/gui racket/runtime-path compiler/find-exe)
 (require "logic.rkt")
 
 (provide bCEj start-game ask-player-names)
@@ -98,6 +98,7 @@ Ejemplos de uso:
 - >(start-game '("Foo" "Bar" "Baz"))
 |#
 (define (start-game player-names)
+  (play-background-music)
   (run-game player-names (splash-screen)))
 
 
@@ -263,6 +264,7 @@ Ejemplos de uso:
                   (send bottom-panel show #f)
                   (end-of-game game deck croupier-container window
                                (λ (restart?)
+
                                   (send window show #f)
                                   (when restart? (run-game player-names))))]
 
@@ -284,8 +286,8 @@ Ejemplos de uso:
       (load-progress splash-gauge))
 
     (preload-bitmaps splash-gauge)
-
     (when splash-gauge (send (send splash-gauge get-top-level-window) show #f))
+
     (send window show #t)
 
     (sleep/yield 0.5)
@@ -699,6 +701,23 @@ Ejemplos de uso:
          all-cards]
 
         [else (cons 'hidden (cdr all-cards))]))
+
+
+#| Función play-background-music
+Descripción: Crea un hilo verde que reproduce música de fondo
+             en bucle infinito.
+Salida: El hilo verde que custodia la reproducción de la
+        música de fondo.
+Ejemplos de uso:
+- >(play-background-music)
+|#
+(define (play-background-music)
+  (define (loop)
+    (play-sound (build-path assets-path "casino.wav") #f)
+    (loop))
+
+  (parameterize ([current-subprocess-custodian-mode 'kill])
+    (thread loop)))
 
 
 #| Función flip
