@@ -1,5 +1,17 @@
 #lang racket/base
 
+#|______________________________________________________ 
+ui.rkt: Interfaz de usuario de BlaCEJack.
+
+Instituto Tecnológico de Costa Rica
+Área Académica de Ingeniería en Computadores
+Lenguajes, Compiladores e Intérpretes Grupo 02
+Profesor: Marco Rivera Meneses
+Estudiantes: José Fernando Morales Vargas - 2019024270
+Alejandro José Soto Chacón - 2019008164
+_______________________________________________________|#
+
+
 (require racket/gui racket/runtime-path)
 (require "logic.rkt")
 
@@ -8,13 +20,26 @@
 (define-runtime-path assets-path "../assets")
 
 
-(define (bCEj X)
-  (cond [(not (integer? X)) (raise "Expected an integer numbe rof players")]
-        [(or (< X 1) (> X 3)) (raise "There may only be one, two, or three players")])
+#| Función bCEj
+Descripción: Entrypoint de la aplicación, siendo player-count` es la cantidad
+             de jugadores. La descripción de esta función y su prototipo se incluye en la
+             especificación, por lo cual no debe modificarse.
+Entradas:
+- player-count: Número de jugadores, entero entre 1 y 3, ambos inclusive
+Salida: `(void)`
+Ejemplos de uso:
+- >(bCEj 3)  ; Aparece la interfaz de usuario
+|#
+(define (bCEj player-count)
+  (cond [(not (integer? player-count))
+         (raise "Expected an integer numbe rof players")]
+
+        [(or (< player-count 1) (> player-count 3))
+         (raise "There may only be one, two, or three players")])
 
   (let*
     ([names-dialog (new dialog% [label "Player names"])]
-     [name-fields (add-name-fields names-dialog X 1 empty)])
+     [name-fields (add-name-fields names-dialog player-count 1 empty)])
 
     (new button%
          [parent names-dialog]
@@ -32,10 +57,26 @@
     (send names-dialog show #t)))
 
 
+#| Función start-game
+Descripción: Inicia una instancia del juego, mostrando una pantalla de splash
+             mientras carga.
+Entradas:
+- player-names: Lista de al menos un nombre de jugador, debe ser una lista de cadenas.
+Salida: `(void)`
+Ejemplos de uso:
+- >(start-game '("Foo" "Bar" "Baz"))
+|#
 (define (start-game player-names)
   (run-game player-names (splash-screen)))
 
 
+#| Función splash-screen
+Descripción: Genera y muestra una pantalla de carga con un fondo aleatorio.
+Salida: El `gauge%` asociado a la barra de progreso, en un estado indefinido.
+        El caller es responsable de definirle un rango e incrementarlo.
+Ejemplos de uso:
+- >(splash-screen)  ; A partir de aquí la pantalla de carga es visible
+|#
 (define (splash-screen)
   (let* ([splashes '("aces" "honor_clubs" "honor_diamonds" "honor_hearts" "honor_spades")]
          [splash (load-bitmap
@@ -94,6 +135,23 @@
       gauge)))
 
 
+#| Función run-game
+Descripción: Ejecuta una nueva partida de juego. Muestra la ventana
+             principal de juego, coloca e inicializa elementos de interfaz,
+             provoca las acciones iniciales del juego y determina la
+             secuencia de desarrollo de la partida en función de subsecuentes
+             cambios de estado. Al terminar la secuencia, acciona los procesos
+             de puntaje y finalización/reinicio.
+Entradas:
+- player-names: Lista de al menos un nombre de jugador como cadenas de texto.
+- splash-gauge (opcional): Barra de progreso de carga, a incrementar
+                           conforme progresa la carga y cuya ventana
+                           será eliminada al terminar la carga.
+Salida: `(void)`
+Ejemplos de uso:
+- >(run-game '("Foo" "Bar" "Baz") (splash-screen))
+  ; Muestra un splash mientras se inicia una nueva partida
+|#
 (define (run-game player-names [splash-gauge #f])
   (letrec
     ([window
@@ -192,7 +250,7 @@
       || +52 for every other preloaded bitmap
       ||#
       (send splash-gauge set-range (+ 1 2 52))
-      (progress splash-gauge))
+      (load-progress splash-gauge))
 
     (preload-bitmaps splash-gauge)
 
@@ -219,6 +277,19 @@
     (send bottom-panel show #t)))
 
 
+#| Función end-of-game
+Descripción: Realiza acciones finales y termina una partida,
+             mostrando la tabla de puntuaciones.
+Entradas:
+- game: Estado de juego hasta este punto.
+- deck: Marco contenedor del mazo.
+- croupier-container: Marco contenedor de juego del croupier.
+- window: Ventana principal de juego.
+- then: Véase parámetro `then` de `show-score`.
+Salida: `(void)`
+Ejemplos de uso:
+- >(end-of-game ... (λ (restart?) ...))
+|#
 (define (end-of-game game deck croupier-container window then)
   (flip 0.25
     (λ ()
@@ -238,6 +309,18 @@
     (show-score (grab-last-croupier-cards game) window then)))
 
 
+#| Función show-score
+Descripción: Muestra la tabla de puntuaciones y determina
+             si el juego debe reiniciarse o finalizarse.
+Entradas:
+- game: Estado de juego hasta este punto.
+- window: Ventana principal de juego, a como fue generada por `new-game`.
+- then: Función que debe aceptar un único argumento booleano `restart?`,
+        el cual determina si la decisión fue reiniciar o finalizar.
+Salida: `(void)`
+Ejemplos de uso:
+- >(show-score game window (λ (restart?) #| acción posterior |#))
+|#
 (define (show-score game window then)
   (letrec
     ([dialog (new dialog%
@@ -324,12 +407,41 @@
       (send dialog show #t))))
 
 
+#| Función get-text-width
+Descripción: Determina el ancho que tendrá un fragmento de
+             texto cuando sea renderizado.
+Entradas:
+- dc: Contexto de dibujo, instancia de `dc%`.
+- text: Texto a medir, debe ser una cadena.
+- font (opcional): Fuente contra la cual medir, instancia de
+                   `font%`; por defecto se asume la fuente en uso
+                   activo para `dc`.
+Salida: Tamaño, medido en unidades base de dibujo, del texto cuando
+        sea renderizado con la fuente en cuestión.
+Ejemplos de uso:
+- >(get-text-width dc "Jack")
+  >>>52
+|#
 (define (get-text-width dc text [font #f])
   (call-with-values
      (λ () (send dc get-text-extent text font))
      (λ (width height baseline padding) width)))
 
 
+#| Función add-name-fields
+Descripción: Genera una lista de campos de texto para nombres de jugador
+             a utilizada por `start-game`.
+Entradas:
+- dialog: Diálogo, instancia `dialog%`, al cual se agregarán los campos 
+- up-to: Máximo número de jugador a incluir, entero positivo.
+- next: Número del siguiente jugador por campo, inicialmente debe ser 1.
+- fields: Campos ya generados, en orden inverso, para uso recursivo.
+Salida: Los campos de texto insertados en respectivo orden, siendo
+        cada uno instancia de `text-field%`.
+Ejemplos de uso:
+- >(add-name-fields dialog 3 1 empty)
+  >>> (list #| tres campos de texto |#)
+|#
 (define (add-name-fields dialog up-to next fields)
   (cond
     [(> next up-to) (reverse fields)]
@@ -346,6 +458,31 @@
               fields))]))
 
 
+#| Función game-container
+Descripción: Crea un marco contenedor para un participante.
+Entradas:
+- parent: Elemento gráfico padre.
+- name: Nombre del participante.
+- custom-draw (opcional): Función que debe admitir llamadas de la
+                          forma `(custom-draw canvas dc current-cards)`,
+                          donde `canvas` y `dc` son los objetos típicamente
+                          asociados a ambos nombres, y `current-cards`
+                          es el estado actual en ese punto del parámetro
+                          variable de cartas actuales. Si no se especifica
+                          se asume `draw-stack`.
+- initial-cards (opcional): Cartas iniciales bajo control de este
+                            marco; se asume '() si no se especifica.
+                            Puede ser un objeto arbitrario en caso
+                            de presentarse `custom-draw`, de lo contrario
+                            debe ser una lista de cartas.
+Salida: Un marco contenedor visible bajo `parent`,
+        manipulable a través de `container-label`,
+        `score-label`, `card-canvas` y `current-cards`.
+        Si no se especificó `custom-draw`, se colocará
+        una etiqueta con puntuación nula automáticamente.
+Ejemplos de uso:
+- >(game-container window "Foo")
+|#
 (define (game-container parent name [custom-draw #f] [initial-cards '()])
   (let*
     ([panel (new vertical-panel% [parent parent])]
@@ -372,18 +509,89 @@
     container))
 
 
+#| Función container-panel
+Descripción: Obtiene el panel que engloba un marco contenedor.
+Entradas:
+- container (implícita): Marco contenedor.
+Salida: Instancia de `vertical-panel%` padre de todo el marco.
+Ejemplos de uso:
+- >(container-panel croupier-container)
+|#
 (define container-panel car)
+
+
+#| Función score-label
+Descripción: Obtiene la etiqueta de puntaje de un marco contenedor.
+Entradas:
+- container (implícita): Marco contenedor.
+Salida: Instancia de `message%` que muestra la puntuación actual.
+Ejemplos de uso:
+- >(score-label croupier-container)
+|#
 (define score-label cadr)
+
+
+#| Función score-label
+Descripción: Obtiene el lienzo de un marco contenedor donde se
+             dibujan las cartas del participante.
+Entradas:
+- container (implícita): Marco contenedor.
+Salida: Instancia de `canvas%`.
+Ejemplos de uso:
+- >(card-canvas croupier-container)
+|#
 (define card-canvas caddr)
+
+
+#| Función current-cards
+Descripción: Obtiene el parámetro variable de cartas de un
+             marco contenedor.
+Entradas:
+- container (implícita): Marco contenedor.
+Salida: Función que al llamarse con aridad cero se comporta
+        como un getter de cartas actuales, y al invocarse
+        con un argumento se comporta como setter.
+Ejemplos de uso:
+- >((current-cards croupier-container) '((5 hearts) (9 diamonds)))
+|#
 (define current-cards cadddr)
 
 
+#| Función initial-grab
+Descripción: Toma cartas para un participante hasta que las reglas
+             de juego indiquen que está listo para iniciar.
+Entradas:
+- game: Estado de juego hasta el momento.
+- deck: Marco contenedor del mazo.
+- container: Marco contenedor del participante.
+- player-id: Índice de jugador, o `'croupier`.
+Salida: El estado de juego una vez tomadas las cartas iniciales del participantes.
+Ejemplos de uso:
+- >(length
+     (taken-cards
+       (croupier (initial-grab (new-game "Foo") deck croupier-container 'croupier))))
+  >>> 2
+|#
 (define (initial-grab game deck container player-id)
   (cond [(ready? (get-player game player-id)) game]
         [else (initial-grab (grab game deck container player-id)
                             deck container player-id)]))
 
 
+#| Función grab
+Descripción: Transfiere una carta del mazo hacia un participante,
+             realizando las acciones, animaciones y efectos de
+             interfaz que esto implique.
+Entradas:
+- game: Estado de juego hasta el momento.
+- deck: Marco contenedor del mazo.
+- container: Marco contenedor del participante.
+- player-id: Índice del jugador participante, o `'croupier`.
+Salida: Nuevo estado de juego
+Ejemplos de uso:
+- >(grab game deck croupier-container 'croupier)
+  ; El croupier adquiere una carta más en su mano
+|#
 (define (grab game deck container player-id)
   (match (take-card game)
          [(cons card game)
@@ -407,6 +615,19 @@
             game)]))
 
 
+#| Función animate-deck-grab
+Descripción: Dibuja rápidamente varias versiones del mazo
+             en donde la última carta se desplaza progresivamente
+             a la derecha, otorgando una impresión de movimiento.
+Entradas:
+- canvas: Lienzo de dibujo del mazo.
+- remaining: Lista de cartas que sobrarán una vez que la última
+             carta ya no sea visible.
+Salida: `(void)`
+Ejemplos de uso:
+- >(animate-deck-grab deck 51)
+  ; Sale la carta superior de un mazo completo
+|#
 (define (animate-deck-grab canvas remaining)
   (define (do-frame dc steps)
     (when [< steps 3]
@@ -424,6 +645,21 @@
     (do-frame dc 0)))
 
 
+#| Función shown-cards
+Descripción: Transforma una lista de cartas de participante
+             en una lista de cartas a mostrar, posiblemente
+             reemplazando la primera con lo que gráficamente
+             es una carta oculta.
+Entradas:
+- all-cards: Todas las cartas del participante descubiertas.
+- container: Marco contenedor del participante.
+- player-id: Índice del jugador participante, o `'croupier`.
+Salida: Una lista de cartas, donde si alguna carta fue
+        ocultada será reemplaza con `'hidden`.
+Ejemplos de uso:
+- >(shown-cards (cards (croupier game)) croupier-container 'croupier)
+  >>>'('hidden ...)
+|#
 (define (shown-cards all-cards container player-id)
   (cond [(or (empty? all-cards)
              (not (eqv? player-id 'croupier))
@@ -434,22 +670,69 @@
         [else (cons 'hidden (cdr all-cards))]))
 
 
+#| Función flip
+Descripción: Reproduce asíncronamente un efecto de toma de
+             carta mientras ejecuta una acción con un tiempo
+             de retardo final.
+Entradas:
+- container: Marco contenedor del participante.
+- duration: Duración de retardo, real positivo.
+- action: Una función de aridad cero.
+Salida: `(action)`
+Ejemplos de uso:
+- >(flip 0.25 (λ () ...))
+  ; Se actualiza visualmente la puntuación
+|#
 (define (flip duration action)
   (play-sound (build-path assets-path "card-flip.wav") #t)
-  (action)
-  (sleep/yield duration))
+  (let ([output (action)])
+    (sleep/yield duration)
+    output))
 
 
+#| Función update-score
+Descripción: Actualiza los elementos gráficos asociados a la
+             puntuación de un participante de juego.
+Entradas:
+- container: Marco contenedor del participante.
+- score: Nueva puntuación, entero no negativo.
+Salida: `(void)`
+Ejemplos de uso:
+- >(update-score croupier-container 17)
+  ; Se actualiza visualmente la puntuación
+|#
 (define (update-score container score)
   (send (score-label container) set-label
         (string-append "Score: " (number->string score))))
 
 
+#| Función update-cards
+Descripción: Actualiza las cartas actuales de un marco contenedor.
+Entradas:
+- container: Marco contenedor para el que se actualizarán sus cartas.
+- cards: Nuevas cartas, aceptando el tipo esperado por la función
+         responsable de dibujar este marco en cuestión, por lo cual
+         no necesariamente es una lista de cartas (véase el parámetro
+         `custom-draw` de la función `game-container`).
+Salida: `(void)`
+Ejemplos de uso:
+- >(update-cards container (taken-cards (car (players game))))
+|#
 (define (update-cards container cards)
   ((current-cards container) cards)
   (send (card-canvas container) refresh-now))
 
 
+#| Función draw-stack
+Descripción: Dibuja las cartas en manos de un participante.
+Entradas:
+- canvas: Lienzo de dibujo.
+- dc: Contexto de dibujo.
+- cards: Lista de cartas a dibujar.
+Salida: `(void)`
+Ejemplos de uso:
+- >(draw-stack canvas dc '((5 hearts) (9 pikes)))
+|#
 (define (draw-stack canvas dc cards)
   (letrec 
     ([spacing (λ (bitmap) (quotient (send bitmap get-width) 4))]
@@ -483,6 +766,21 @@
     (draw-stack base-offset cards)))
 
 
+#| Función draw-deck
+Descripción: Dibuja el mazo, posiblemente con un corrimiento de animación.
+Entradas:
+- canvas: Lienzo de dibujo.
+- dc: Contexto de dibujo.
+- count: Número de cartas en el mazo, sin contar la desplazada.
+- swipe-factor (opcional): Fracción que indica qué tanto debe
+                           mostrarse desplazada la última carta
+                           del mazo, medida en unidades del
+                           ancho de una carta.
+Salida: `(void)`
+Ejemplos de uso:
+- >(draw-deck canvas dc 52)      ; Dibuja un mazo completo
+- >(draw-deck canvas dc 51 0.5)  ; Igual, pero desplaza la última carta
+|#
 (define (draw-deck canvas dc count [swipe-factor 0])
   (when [> count 0]
     (let* ([many-cards (card-bitmap 'large-stack)]
@@ -514,10 +812,34 @@
           (draw-hidden (* swipe-factor swipe-unit)))))))
 
 
+#| Función card-bitmap
+Descripción: Asocia una carta con su bitmap. Si la carta se encuentra
+             cargada, la operación será inmediata. De lo contrario,
+             ocurrirá una carga de almacenamiento secundario y un
+             proceso de decodificación de duración corta pero notable.
+Entradas:
+- card: Carta para la cual se busca un bitmap.
+Salida: De tener éxito, una instancia de `bitmap%`.
+Ejemplos de uso:
+- >(card-bitmap '(queen pikes))
+  >>> #| bitmap de una reina de espadas |#
+|#
 (define (fitting-scale canvas bitmap)
   (/ (send canvas get-height) (send bitmap get-height)))
 
 
+#| Función card-bitmap
+Descripción: Asocia una carta con su bitmap. Si la carta se encuentra
+             cargada, la operación será inmediata. De lo contrario,
+             ocurrirá una carga de almacenamiento secundario y un
+             proceso de decodificación de duración corta pero notable.
+Entradas:
+- card: Carta para la cual se busca un bitmap.
+Salida: De tener éxito, una instancia de `bitmap%`.
+Ejemplos de uso:
+- >(card-bitmap '(queen pikes))
+  >>> #| bitmap de una reina de espadas |#
+|#
 (define (card-bitmap card)
   (cond
     [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
@@ -544,13 +866,34 @@
         bitmap)]))
 
 
+#| Función load-bitmap
+Descripción: Carga y decodifica un bitmap a partir del directorio de recursos.
+Entradas:
+- path: Ruta al bitmap, relativa a la raíz de recursos, sin extensión.
+Salida: De tener éxito, una instancia de `bitmap%`.
+Ejemplos de uso:
+- >(load-bitmap "cards/5D")
+  >>> #| bitmap de un 5 de rombos |#
+|#
 (define (load-bitmap path)
   (read-bitmap (build-path assets-path (path-add-extension path ".png")) 'png))
 
 
+; Bitmaps que ya han sido cargados en memoria
 (define loaded-bitmaps (make-hash))
 
 
+#| Función preload-bitmaps
+Descripción: Precarga en memoria y decodifica los bitmaps que
+             la aplicación requerirá, con tal de evitar pausas
+             durante la ejecución mientras estos se cargan.
+Entradas:
+- gauge (opcional): Barra de progreso a incrementar mientras
+                    se procesan bitmaps.
+Salida: `(void)`.
+Ejemplos de uso:
+- >(load-bitmaps)  ; Durará algunos segundos
+|#
 (define (preload-bitmaps [gauge #f])
   (letrec
     ([special-bitmap
@@ -558,7 +901,7 @@
           (when [not (hash-has-key? loaded-bitmaps key)]
             (hash-set! loaded-bitmaps key (load-bitmap asset)))
 
-          (progress gauge))]
+          (load-progress gauge))]
 
      [preload-bitmaps
        (λ (cards)
@@ -566,7 +909,7 @@
             (yield)
             (card-bitmap (car cards))
 
-            (progress gauge)
+            (load-progress gauge)
             (preload-bitmaps (cdr cards))))])
 
     (special-bitmap 'hidden "cards/red_back")
@@ -576,6 +919,15 @@
                                         '(pikes hearts clovers diamonds)))))
 
 
-(define (progress gauge)
+#| Función load-progress
+Descripción: Incrementa una barra de progreso de carga.
+Entradas:
+- gauge: Barra de progreso, o `#f`; en el último caso no se realiza acción.
+Salida: `(void)`.
+Ejemplos de uso:
+- >(load-progress gauge)
+  ; Visualmente, la barra de progreso avanza en una unidad
+|#
+(define (load-progress gauge)
   (when gauge
     (send gauge set-value (min (+ 1 (send gauge get-value)) (send gauge get-range)))))
