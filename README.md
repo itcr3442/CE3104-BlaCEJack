@@ -1,25 +1,23 @@
 ---
 title: Instituto Tecnológico de Costa Rica\endgraf\bigskip \endgraf\bigskip\bigskip\
  Tarea Corta 1 - BlaCEJack \endgraf\bigskip\bigskip\bigskip\bigskip
-
-
 author: 
 - José Morales Vargas 
 - Alejandro Soto Chacón
-  
 date: \bigskip\bigskip\bigskip\bigskip Area Académica de\endgraf Ingeniería en Computadores \endgraf\bigskip\bigskip\ Lenguajes, Compiladores \endgraf e intérpretes (CE3104) \endgraf\bigskip\bigskip Profesor Marco Rivera Meneses \endgraf\vfill  Semestre I
 header-includes:
 - \setlength\parindent{24pt}
-
 lang: es-ES
 papersize: letter
 classoption: fleqn
 geometry: margin=1in
-fontfamily: noto
+mainfont: Arial
+sansfont: Arial
+monofont: DejaVuSansMono.ttf 
+mathfont: texgyredejavu-math.otf 
 fontsize: 12pt
 linestretch: 1.5
 ...
-
 
 \maketitle
 \thispagestyle{empty}
@@ -29,8 +27,6 @@ linestretch: 1.5
 \clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
-
-
 
 # CE3104-BlaCEJack
 
@@ -44,7 +40,7 @@ El algoritmo de resolución del programa se encuentra descrito en el siguiente d
 
 Como se puede observar, inicialmente se realizan algunas tareas que forman parte de una rutina de preparación para entrar en el *game loop* en sí. Funciones como `run-game` se encargan del cargado inicial de la interfaz, y `initial-grab` prepara la mesa de juego en sí.
 
-Por defecto, el jugador uno es el primero en comenzar su turno. Si el jugador decide plantarse, el juego cambia su estado a uno inactivo y pasa a calcular cual es el jugador cuyo turno es el siguiente. Si el jugador decide tomar carta, suceden una serie de verificaciones varias, algunas son omitidas en el diagrama para ofrecer una mayor claridad del flujo del programa. 
+Por defecto, el jugador uno es el primero en comenzar su turno. Si el jugador decide plantarse, el juego cambia su estado a uno inactivo y pasa a calcular cual es el jugador cuyo turno es el siguiente. Si el jugador decide tomar carta, suceden una serie de verificaciones varias, algunas son omitidas en el diagrama para ofrecer una mayor claridad del flujo del programa.
 
 Si bien se omiten algunas funciones de verificación de estado, es importante remarcar otras unidades funcionales las cuales se omitieron del diagrama para la solución general puesto que su desarrollo podía dificultar la legibilidad del diagrama.
 
@@ -68,7 +64,7 @@ Por último, otro algoritmo a tomar en cuenta es el utilizado para modelar la in
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/Diagrama-try-changing-aces.png)
 
-Al igual que otras implementaciones de blackjack como videojuego, el programa hecho tiene una rutina que busca un as en la mano del jugador solo si el mismo se encuentra en una situación de sobrepaso. De encontrar un as o varios, cambia la cantidad de ases necesarios para evitar un sobrepaso, ni más ni menos. 
+Al igual que otras implementaciones de blackjack como videojuego, el programa hecho tiene una rutina que busca un as en la mano del jugador solo si el mismo se encuentra en una situación de sobrepaso. De encontrar un as o varios, cambia la cantidad de ases necesarios para evitar un sobrepaso, ni más ni menos.
 
 
 ## 1.2. Funciones implementadas
@@ -85,33 +81,33 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(bCEj 3)  ; Aparece la interfaz de usuario
+```Scheme
+    >(bCEj 3)  ; Aparece la interfaz de usuario
 ```
 
 ### `(list-get list position)`
 
 **Descripción:** Obtiene el elemento de una lista ubicado en el índice dado.
 
-**Entradas:** 
+**Entradas:**
 
 - list: Lista de la cuál se extrae el elemento.
 - position: Índice en el cual se encuentra el elemento que se busca.
 
-**Salida:** Si la lista tiene un elemento dicho índice, retorna el elemento, de lo contrario emite un mensaje de error que indica que los parámetros son erróneos. 
+**Salida:** Si la lista tiene un elemento dicho índice, retorna el elemento, de lo contrario emite un mensaje de error que indica que los parámetros son erróneos.
 
-**Ejemplo de uso:** 
+**Ejemplo de uso:**
 
-```scheme
->(list-get '(1 2 3 4) 2) 
-3
+```Scheme
+    >(list-get '(1 2 3 4) 2) 
+    3
 ```
 
 ### `(qs-minor ilist predicate pivot olist)`
 
 **Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado false serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
-**Entradas:** 
+**Entradas:**
 
 - ilist: Lista de entrada.
 - predicate: Es una función que toma dos elementos de la lista y determina si el primero se debe ordenar como menor que el segundo.
@@ -121,18 +117,18 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada.
 
-**Ejemplo de uso:** 
+**Ejemplo de uso:**
 
-```scheme
->(qs-minor '(8 4 2 3 1 6 7) > 4 '())
-(7 6 8)
+```Scheme
+    >(qs-minor '(8 4 2 3 1 6 7) > 4 '())
+    (7 6 8)
 ```
 
 ### `(qs-major ilist predicate pivot olist)`
 
 **Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
-**Entradas:** 
+**Entradas:**
 
 - ilist: Lista de entrada.
 - predicate: Es una función que toma dos elementos de la lista y determina si el primero se debe ordenar como menor que el segundo.
@@ -143,16 +139,16 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(qs-major '(8 4 2 3 1 6 7) > 4 '())
-(1 3 2)
+```Scheme
+    >(qs-major '(8 4 2 3 1 6 7) > 4 '())
+    (1 3 2)
 ```
 
 ### `(qs-equal ilist predicate pivot olist)`
 
 **Descripción:** Compara cada elemento de una lista contra un pivote para verificar si sus valores son iguales. Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
-**Entradas:** 
+**Entradas:**
 
 - ilist: Lista de entrada.
 - pivot: Elemento a compararse contra cada elemento de la lista dada. 
@@ -160,33 +156,33 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada.
 
-**Ejemplo de uso:** 
+**Ejemplo de uso:**
 
-```scheme
->(qs-equal '(2 8 4 2 3 4 5 4 1 6 7 4) > 4 '())
-(4 4 4 4)
+```Scheme
+    >(qs-equal '(2 8 4 2 3 4 5 4 1 6 7 4) > 4 '())
+    (4 4 4 4)
 ```
 
 ### `(quicksort ilist predicate)`
 
 **Descripción:** Ordena una lista dada utilizando una implementación de quicksort.
 
-**Entradas:** 
+**Entradas:**
 
 - ilist: Lista a ordenar usando quicksort.
 - predicate: Función que toma dos elementos y determina si el primero se debe ordenar como menor que el segundo.
 
 **Salida:** Lista de entrada ordenada.
 
-**Ejemplo de uso:** 
+**Ejemplo de uso:**
 
-```scheme
->(quicksort '(2 3 4 1 1 2 5) <) 
-'(1 1 2 2 3 4 5)
->(quicksort '(2 3 4 1 1 2 5) >) 
-'(5 4 3 2 2 1 1)
->(define game ...) (quicksort (players game) (lambda (a b) (> (score a) (score b))))
-'(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
+```Scheme
+    >(quicksort '(2 3 4 1 1 2 5) <) 
+    '(1 1 2 2 3 4 5)
+    >(quicksort '(2 3 4 1 1 2 5) >) 
+    '(5 4 3 2 2 1 1)
+    >(define game ...) (quicksort (players game) (lambda (a b) (> (score a) (score b))))
+    '(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
 ```
 
 
@@ -203,11 +199,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(create-card 2 'hearts)
-'(2 hearts)
->(create-card 11 'pikes)
-'(jack pikes)
+```Scheme
+    >(create-card 2 'hearts)
+    '(2 hearts)
+    >(create-card 11 'pikes)
+    '(jack pikes)
 ```
 
 ### `(card-value card)`
@@ -222,9 +218,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(card-value '(queen diamonds))
-'queen
+```Scheme
+    >(card-value '(queen diamonds))
+    'queen
 ```
 
 ### `(card-symbol card)`
@@ -239,9 +235,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(card-symbol '(queen diamonds))
-'diamonds
+```Scheme
+    >(card-symbol '(queen diamonds))
+    'diamonds
 ```
 
 ### `(code-symbol card)`
@@ -256,9 +252,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(code-symbol 2)
-'diamonds
+```Scheme
+    >(code-symbol 2)
+    'diamonds
 ```
 
 ### `(random-card)`
@@ -269,9 +265,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
- ```scheme
->(random-card)
-'(10 pikes)
+ ```Scheme
+    >(random-card)
+    '(10 pikes)
 ```
 
 ### `(high-ace card)`
@@ -286,9 +282,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(high-ace '(1 pikes))
-'(11 pikes)
+```Scheme
+    >(high-ace '(1 pikes))
+    '(11 pikes)
 ```
 
 ### `(taken-cards  game)`
@@ -303,9 +299,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game ...)(taken-cards game)
-'((1 hearts)(5 diamonds)(11 pikes))
+```Scheme
+    >(define game ...)(taken-cards game)
+    '((1 hearts)(5 diamonds)(11 pikes))
 ```
 
 ### `(in-list? element ilist)`
@@ -321,11 +317,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(in-list? 3 '(2 3 5))
-#t
->(in-list? 3 '(2 4 5))
-#f
+```Scheme
+    >(in-list? 3 '(2 3 5))
+    #t
+    >(in-list? 3 '(2 4 5))
+    #f
 ```
 
 ### `(add-taken-card game card)`
@@ -341,9 +337,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
- ```scheme
->(define game ...) (add-taken-card game (3 clovers)) 
-'(((Foo...)(Bar...)(Baz...))(croupier...)((3 clovers)...))
+ ```Scheme
+    >(define game ...) (add-taken-card game (3 clovers)) 
+    '(((Foo...)(Bar...)(Baz...))(croupier...)((3 clovers)...))
 ```
 
 ### `(take-card-aux game card)`
@@ -359,9 +355,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(take-card-aux game '(6 clovers)) 
-'((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
+```Scheme
+    >(take-card-aux game '(6 clovers)) 
+    '((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
 ```
 
 ### `(take-card game)`
@@ -376,9 +372,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(take-card game) 
-'((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
+```Scheme
+    >(take-card game) 
+    '((6 clovers)((Foo...)(Bar...)(Baz...))(croupier...)((6 clovers)...))
 ```
 
 ### `(create-player name)`
@@ -393,9 +389,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(create-player "Foo")
-'("Foo" active ())
+```Scheme
+    >(create-player "Foo")
+    '("Foo" active ())
 ```
 
 ### `(name player)`
@@ -410,9 +406,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(name '("Foo" active ((3 clovers)(5 diamonds))))
-"Foo"
+```Scheme
+    >(name '("Foo" active ((3 clovers)(5 diamonds))))
+    "Foo"
 ```
 
 ### `(player-state player)`
@@ -427,9 +423,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(player-state '("Foo" active ((3 clovers)(5 diamonds))))
-'active
+```Scheme
+    >(player-state '("Foo" active ((3 clovers)(5 diamonds))))
+    'active
 ```
 
 ### `(held-cards player)`
@@ -444,9 +440,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(held-cards '("Foo" active ((3 clovers)(5 diamonds))))
-'((3 clovers)(5 diamonds))
+```Scheme
+    >(held-cards '("Foo" active ((3 clovers)(5 diamonds))))
+    '((3 clovers)(5 diamonds))
 ```
 
 ### `(update-player-hand player new-hand)`
@@ -462,9 +458,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(update-player-hand '("Foo" active ()) '((11 clovers)(3 pikes)))
-'("Foo" active ((11 clovers)(3 pikes)))
+```Scheme
+    >(update-player-hand '("Foo" active ()) '((11 clovers)(3 pikes)))
+    '("Foo" active ((11 clovers)(3 pikes)))
 ```
 
 ### `(active? player)`
@@ -479,11 +475,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(active? ("Foo" active '()))
-#t
->(active? '("Bar" stood '()))
-#f
+```Scheme
+    >(active? ("Foo" active '()))
+    #t
+    >(active? '("Bar" stood '()))
+    #f
 ```
 
 ### `(lost? player)`
@@ -498,11 +494,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(lost? ("Foo" lost '()))
-#t
->(lost? '("Bar" active '()))
-#f
+```Scheme
+    >(lost? ("Foo" lost '()))
+    #t
+    >(lost? '("Bar" active '()))
+    #f
 ```
 
 ### `(has-stood? player)`
@@ -517,11 +513,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(has-stood? ("Foo" stood '()))
-#t
->(has-stood? '("Bar" active '()))
-#f
+```Scheme
+    >(has-stood? ("Foo" stood '()))
+    #t
+    >(has-stood? '("Bar" active '()))
+    #f
 ```
 
 ### `(ready? player)`
@@ -536,11 +532,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(ready? '("Foo" active '()))
-#f
->(ready? '("Foo" active '((4 clovers) (3 hearts))))
-#t
+```Scheme
+    >(ready? '("Foo" active '()))
+    #f
+    >(ready? '("Foo" active '((4 clovers) (3 hearts))))
+    #t
 ```
 
 ### `(players game)`
@@ -555,9 +551,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game ...)(players game)
-'(("Foo"...)("Bar"...)("Baz"...))
+```Scheme
+    >(define game ...)(players game)
+    '(("Foo"...)("Bar"...)("Baz"...))
 ```
 
 ### `(get-player game id)`
@@ -573,11 +569,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game ...)(get-player game 1)
-'("Foo" stood (...))
->(get-player game 'croupier)
-'(croupier active (...))
+```Scheme
+    >(define game ...)(get-player game 1)
+    '("Foo" stood (...))
+    >(get-player game 'croupier)
+    '(croupier active (...))
 ```
 
 ### `(active-players-aux players id olist)` 
@@ -594,9 +590,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(active-players-aux '(("Foo" active ())("Bar" stood (king clovers))("Baz" active ())) 0 '()) 
-'((0 "Foo" active ())(2 "Baz" active ()))
+```Scheme
+    >(active-players-aux '(("Foo" active ())("Bar" stood (king clovers))("Baz" active ())) 0 '()) 
+    '((0 "Foo" active ())(2 "Baz" active ()))
 ```
 
 ### `(active-players game)`
@@ -611,9 +607,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game (new-game '("Foo" "Baz")))(active-players game)
-'((0 "Foo" active ())(1 "Baz" active ()))
+```Scheme
+    >(define game (new-game '("Foo" "Baz")))(active-players game)
+    '((0 "Foo" active ())(1 "Baz" active ()))
 ```
 
 ### `(player-count game)`
@@ -628,9 +624,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game (new-game '("Foo" "Baz")))(player-count game)
-2
+```Scheme
+    >(define game (new-game '("Foo" "Baz")))(player-count game)
+    2
 ```
 
 ### `(croupier game)`
@@ -645,9 +641,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game (new-game '("Foo" "Baz")))(croupier game)
-'(croupier active ())
+```Scheme
+    >(define game (new-game '("Foo" "Baz")))(croupier game)
+    '(croupier active ())
 ```
 
 ### `(accept-card player card)`
@@ -663,9 +659,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(accept-card '("Foo" active ()) '(5 clovers))
-'("Foo" active ((5 clovers)))
+```Scheme
+    >(accept-card '("Foo" active ()) '(5 clovers))
+    '("Foo" active ((5 clovers)))
 ```
 
 ### `(maybe-stand-croupier player)`
@@ -680,9 +676,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(maybe-stand-croupier '(croupier active ((11 hearts) (9 pikes))))
-'(croupier stood (...))
+```Scheme
+    >(maybe-stand-croupier '(croupier active ((11 hearts) (9 pikes))))
+    '(croupier stood (...))
 ```
 
 ### `(maybe-lost player)`
@@ -697,11 +693,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(maybe-lost '("Foo" active ()))
-'("Foo" active ())
->(maybe-lost '("Foo" active ((10 jack) (10 jack) (10 jack))))
-'("Foo" lost (...))
+```Scheme
+    >(maybe-lost '("Foo" active ()))
+    '("Foo" active ())
+    >(maybe-lost '("Foo" active ((10 jack) (10 jack) (10 jack))))
+    '("Foo" lost (...))
 ```
 
 ### `(set-stood player)`
@@ -716,9 +712,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(set-stood '("Foo" active ()))
-'("Foo" stood ())
+```Scheme
+    >(set-stood '("Foo" active ()))
+    '("Foo" stood ())
 ```
 
 ### `(update-player predicate index updated)`
@@ -735,9 +731,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define game (new-game '("Foo" "Bar")))(update-player set-stood (players game) 0 '()) 
-'(("Foo" stood ()) ("Bar" active ()))
+```Scheme
+    >(define game (new-game '("Foo" "Bar")))(update-player set-stood (players game) 0 '()) 
+    '(("Foo" stood ()) ("Bar" active ()))
 ```
 
 ### `(score-aux cards previous-sum score-sum limit-to-21?)`
@@ -755,9 +751,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(score-aux '((3 clovers)(5 diamonds)) 0 0)
-8
+```Scheme
+    >(score-aux '((3 clovers)(5 diamonds)) 0 0)
+    8
 ```
 
 ### `(score player)`
@@ -772,12 +768,12 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds))))
-12
+```Scheme
+    >(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds))))
+    12
 ```
 
- ### `(raw-score player)`
+### `(raw-score player)`
 
 **Descripción:** Equivalente a `score`, pero no ignora cartas que exceden el puntaje más allá 21.
 
@@ -789,9 +785,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds))))
-12
+```Scheme
+    >(score '("Foo" active ((3 pikes)(4 hearts)(5 diamonds))))
+    12
 ```
 
 ### `(stand player)`
@@ -807,16 +803,16 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define game(new-game '("Foo" "Bar" "Baz")))
->(stand game 0) 
-'((("Foo" stood ()) ("Bar" active ()) ("Baz" active ()))(croupier active ())())
->(stand game 1)
-'((("Foo" active ()) ("Bar" stood ()) ("Baz" active ()))(croupier active ())())
->(stand game 2)
-'((("Foo" active ()) ("Bar" active ()) ("Baz" stood ()))(croupier active ())())
->(stand game 'croupier)
-'((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))(croupier stood ())())
+```Scheme
+    >(define game(new-game '("Foo" "Bar" "Baz")))
+    >(stand game 0) 
+    '((("Foo" stood ()) ("Bar" active ()) ("Baz" active ()))(croupier active ())())
+    >(stand game 1)
+    '((("Foo" active ()) ("Bar" stood ()) ("Baz" active ()))(croupier active ())())
+    >(stand game 2)
+    '((("Foo" active ()) ("Bar" active ()) ("Baz" stood ()))(croupier active ())())
+    >(stand game 'croupier)
+    '((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))(croupier stood ())())
 ```
 
 ### `(put-card game player card)`
@@ -833,10 +829,10 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define game(new-game '("Foo" "Bar" "Baz")))
->(put-card game 'croupier '(3 clovers)) 
-'((("Foo"...)) ("Bar"...) ("Baz"...))(croupier active ((3 clovers)))())
+```Scheme
+    >(define game(new-game '("Foo" "Bar" "Baz")))
+    >(put-card game 'croupier '(3 clovers)) 
+    '((("Foo"...)) ("Bar"...) ("Baz"...))(croupier active ((3 clovers)))())
 ```
 
 ### `(next-turn-aux playing last-player)`
@@ -852,10 +848,10 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define game(new-game '("Foo" "Bar" "Baz")))
->(next-turn-aux (active-players game) 0) 
-'(1 "Bar" active ())
+```Scheme
+    >(define game(new-game '("Foo" "Bar" "Baz")))
+    >(next-turn-aux (active-players game) 0) 
+    '(1 "Bar" active ())
 ```
 
 ### `(next-turn game last-player)`
@@ -871,9 +867,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define game(new-game '("Foo" "Bar" "Baz")))(next-turn game 1)
-'(2 "Baz" active ())
+```Scheme
+    >(define game(new-game '("Foo" "Bar" "Baz")))(next-turn game 1)
+    '(2 "Baz" active ())
 - 
 ```
 
@@ -889,11 +885,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(has-aces '((3 pikes)(11 hearts)(11 clovers)))
-#t
->(has-aces '((3 pikes)(5 hearts)(10 clovers)))
-#f
+```Scheme
+    >(has-aces '((3 pikes)(11 hearts)(11 clovers)))
+    #t
+    >(has-aces '((3 pikes)(5 hearts)(10 clovers)))
+    #f
 ```
 
 ### `(change-one-ace ilist olist)`
@@ -909,9 +905,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(change-one-ace '((3 pikes)(11 hearts)(11 clovers)) '()) 
-'((3 pikes) (1 hearts) (11 clovers))
+```Scheme
+    >(change-one-ace '((3 pikes)(11 hearts)(11 clovers)) '()) 
+    '((3 pikes) (1 hearts) (11 clovers))
 ```
 
 ### `(try-changing-aces player)`
@@ -926,9 +922,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(try-changing-aces '(Foo active ((11 pikes)(2 hearts)(jack diamonds))) 
-'(Foo active ((2 hearts) (jack diamonds) (1 pikes)))
+```Scheme
+    >(try-changing-aces '(Foo active ((11 pikes)(2 hearts)(jack diamonds))) 
+    '(Foo active ((2 hearts) (jack diamonds) (1 pikes)))
 ```
 
 ### `(new-game-aux player-names player-list)`
@@ -945,9 +941,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(new-game-aux '("Foo" "Bar"))
-'((Foo active ())(Bar active ()))
+```Scheme
+    >(new-game-aux '("Foo" "Bar"))
+    '((Foo active ())(Bar active ()))
 ```
 
 ### `(new-game player-names)`
@@ -962,9 +958,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:**
 
-```scheme
->(define new-game '("Foo" "Bar")) 
-'(((Foo active ())(Bar active ()))(croupier active ())()) 
+```Scheme
+    >(define new-game '("Foo" "Bar")) 
+    '(((Foo active ())(Bar active ()))(croupier active ())()) 
 ```
 
 ### `(game-finished? game)`
@@ -979,10 +975,10 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplo de uso:** 
 
-```scheme
->(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))(croupier 'lost)(...)))
->(game-finished? game)
-#t
+```Scheme
+    >(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))(croupier 'lost)(...)))
+    >(game-finished? game)
+    #t
 ```
 
 ### `(ask-player-names up-to then allow-blanks)`
@@ -999,8 +995,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(ask-player-names 3 start-game)
+```Scheme
+    >(ask-player-names 3 start-game)
 ```
 
 ### `(start-game player-names)`
@@ -1015,8 +1011,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(start-game '("Foo" "Bar" "Baz"))
+```Scheme
+    >(start-game '("Foo" "Bar" "Baz"))
 ```
 
 ### `(splash-screen)`
@@ -1027,8 +1023,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(splash-screen)  ; A partir de aquí la pantalla de carga es visible
+```Scheme
+    >(splash-screen)  ; A partir de aquí la pantalla de carga es visible
 ```
 
 ### `(run-game player-names splash-gauge)`
@@ -1044,8 +1040,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(run-game '("Foo" "Bar" "Baz") (splash-screen))
+```Scheme
+    >(run-game '("Foo" "Bar" "Baz") (splash-screen))
 ; Muestra un splash mientras se inicia una nueva partida
 ```
 
@@ -1065,8 +1061,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(end-of-game ... (λ (restart?) ...))
+```Scheme
+    >(end-of-game ... (λ (restart?) ...))
 ```
 
 ### `(show-score game window then)`
@@ -1083,8 +1079,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(show-score game window (λ (restart?) #| acción posterior |#))
+```Scheme
+    >(show-score game window (λ (restart?) #| acción posterior |#))
 ```
 
 ### `(get-text-width dc text font)`
@@ -1101,9 +1097,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(get-text-width dc "Jack")
-52
+```Scheme
+    >(get-text-width dc "Jack")
+    52
 ```
 
 ### `(add-name-fields dialog up-to next fields)`
@@ -1121,9 +1117,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(add-name-fields dialog 3 1 empty)
-(list #| tres campos de texto |#)
+```Scheme
+    >(add-name-fields dialog 3 1 empty)
+    (list #| tres campos de texto |#)
 ```
 
 ### `(game-container parent name custom-draw initial-cards)`
@@ -1141,8 +1137,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(game-container window "Foo")
+```Scheme
+    >(game-container window "Foo")
 ```
 
 ### `(container-panel container)`
@@ -1157,8 +1153,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(container-panel croupier-container)
+```Scheme
+    >(container-panel croupier-container)
 ```
 
 ### `(score-label container)`
@@ -1173,11 +1169,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(score-label croupier-container)
+```Scheme
+    >(score-label croupier-container)
 ```
 
-### `(score-label container)`
+### `(card-canvas container)`
 
 **Descripción:** Obtiene el lienzo de un marco contenedor donde se dibujan las cartas del participante.
 
@@ -1189,8 +1185,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(card-canvas croupier-container)
+```Scheme
+    >(card-canvas croupier-container)
 ```
 
 ### `(current-cards container)`
@@ -1205,8 +1201,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->((current-cards croupier-container) '((5 hearts) (9 diamonds)))
+```Scheme
+    >((current-cards croupier-container) '((5 hearts) (9 diamonds)))
 ```
 
 ### `(initial-grab game deck container player-id)`
@@ -1224,11 +1220,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(length
-     (taken-cards
-       (croupier (initial-grab (new-game "Foo") deck croupier-container 'croupier))))
-2
+```Scheme
+    >(length
+        (taken-cards
+          (croupier (initial-grab (new-game "Foo") deck croupier-container 'croupier))))
+    2
 ```
 
 ### `(grab game deck container player-id)`
@@ -1246,9 +1242,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(grab game deck croupier-container 'croupier)
-  ; El croupier adquiere una carta más en su mano
+```Scheme
+    >(grab game deck croupier-container 'croupier)
+      ; El croupier adquiere una carta más en su mano
 ```
 
 ### `(animate-deck-grab canvas remaining)`
@@ -1264,9 +1260,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(animate-deck-grab deck 51)
-  ; Sale la carta superior de un mazo completo
+```Scheme
+    >(animate-deck-grab deck 51)
+      ; Sale la carta superior de un mazo completo
 ```
 
 ### `(shown-cards all-cards container player-id)`
@@ -1283,9 +1279,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(shown-cards (cards (croupier game)) croupier-container 'croupier)
-'('hidden ...)
+```Scheme
+    >(shown-cards (cards (croupier game)) croupier-container 'croupier)
+    '('hidden ...)
 ```
 
 ### `(play-background-music)`
@@ -1296,8 +1292,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(play-background-music)
+```Scheme
+    >(play-background-music)
 ```
 
 ### `(flip container duration action)`
@@ -1314,9 +1310,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(flip 0.25 (λ () ...))
-  ; Se actualiza visualmente la puntuación
+```Scheme
+    >(flip 0.25 (λ () ...))
+     ; Se actualiza visualmente la puntuación
 ```
 
 ### `(update-score container score)`
@@ -1332,9 +1328,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(update-score croupier-container 17)
-  ; Se actualiza visualmente la puntuación
+```Scheme
+    >(update-score croupier-container 17)
+     ; Se actualiza visualmente la puntuación
 ```
 
 ### `(update-cards container cards)`
@@ -1350,8 +1346,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(update-cards container (taken-cards (car (players game))))
+```Scheme
+    >(update-cards container (taken-cards (car (players game))))
 ```
 
 ### `(draw-stack canvas dc cards)`
@@ -1368,8 +1364,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(draw-stack canvas dc '((5 hearts) (9 pikes)))
+```Scheme
+    >(draw-stack canvas dc '((5 hearts) (9 pikes)))
 ```
 
 ### `(draw-deck canvas dc count swipe-factor)`
@@ -1387,9 +1383,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(draw-deck canvas dc 52)      ; Dibuja un mazo completo
-- >(draw-deck canvas dc 51 0.5)  ; Igual, pero desplaza la última carta
+```Scheme
+    >(draw-deck canvas dc 52)      ; Dibuja un mazo completo
+    >(draw-deck canvas dc 51 0.5)  ; Igual, pero desplaza la última carta
 ```
 
 ### `(card-bitmap card)`
@@ -1404,26 +1400,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(card-bitmap '(queen pikes))
-#| bitmap de una reina de espadas |#
-```
-
-### `(card-bitmap card)`
-
-**Descripción:** Asocia una carta con su bitmap. Si la carta se encuentra cargada, la operación será inmediata. De lo contrario, ocurrirá una carga de almacenamiento secundario y un proceso de decodificación de duración corta pero notable.
-
-**Entradas:**
-
-- card: Carta para la cual se busca un bitmap.
-
-**Salida:** De tener éxito, una instancia de `bitmap%`.
-
-**Ejemplos de uso:**
-
-```scheme
->(card-bitmap '(queen pikes))
-#| bitmap de una reina de espadas |#
+```Scheme
+    >(card-bitmap '(queen pikes))
+    #| bitmap de una reina de espadas |#
 ```
 
 ### `(load-bitmap path)`
@@ -1438,9 +1417,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(load-bitmap "cards/5D")
-#| bitmap de un 5 de rombos |#
+```Scheme
+    >(load-bitmap "cards/5D")
+    #| bitmap de un 5 de rombos |#
 ```
 
 ### `(preload-bitmaps gauge)`
@@ -1455,8 +1434,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(load-bitmaps)  ; Durará algunos segundos
+```Scheme
+    >(load-bitmaps)  ; Durará algunos segundos
 ```
 
 ### `(load-progress gauge)`
@@ -1471,9 +1450,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 **Ejemplos de uso:**
 
-```scheme
->(load-progress gauge)
-  ; Visualmente, la barra de progreso avanza en una unidad
+```Scheme
+    >(load-progress gauge)
+      ; Visualmente, la barra de progreso avanza en una unidad
 ```
 
 
@@ -1485,7 +1464,7 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 Es conjunto de pares implementado con listas de racket. En una lista de cartas, ninguna carta puede estar repetida. La representación se muestra a continuación.
 
-```scheme
+```Scheme
 '((valor símbolo)(valor símbolo)(valor símbolo))
 ```
 
@@ -1550,7 +1529,7 @@ Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguien
 
 ## 1.4 Problemas no solucionados
 
-No se encontraron problemas que no se hayan resolvido. 
+No se encontraron problemas que no se hayan resolvido.
 
 ## 1.5. Problemas encontrados y solucionados
 
@@ -1597,57 +1576,54 @@ Seguidamente, se incluyen las capturas del plan:
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/actividades3.PNG)
 
-
-
-## 1.7. Conclusiones.
+## 1.7. Conclusiones
 
 - Se implementó de manera exitosa un programa de funcionalidad compleja en un lenguaje funcional, de esta manera se demostró que la capacidad de implementar un programa es independiente del paradigma de un lenguaje de programación, lo que puede variar es la dificultad, pero no la posibilidad.
-- Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores. 
-- Los problemas experimentados demuestran que es fundamental listar por adelantado todas las posibles excepciones a reglas generales de un programa (los llamados _corner cases_). Si bien con los problemas descritos la dificultad de resolución no fue mayor, no se podría afirmar que en todo caso que se de una situación similar la dificultad de resolución sería la misma. 
-- Se comprueba la utilidad de los mecanismos de manejo de funciones de alto orden provistos por racket, puesto que poder recibir funciones como argumento de una función permite desarrollar algortimos sin necesidad de definir varios detalles de casos específicos, es decir, propicia la reutilizacipon de código y evita el problema de verse forzado en hacer implementaciones varias de un mismo algoritmo por diferencias menores entre los datos siendo procesados. 
+- Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores.
+- Los problemas experimentados demuestran que es fundamental listar por adelantado todas las posibles excepciones a reglas generales de un programa (los llamados _corner cases_). Si bien con los problemas descritos la dificultad de resolución no fue mayor, no se podría afirmar que en todo caso que se de una situación similar la dificultad de resolución sería la misma.
+- Se comprueba la utilidad de los mecanismos de manejo de funciones de alto orden provistos por racket, puesto que poder recibir funciones como argumento de una función permite desarrollar algortimos sin necesidad de definir varios detalles de casos específicos, es decir, propicia la reutilizacipon de código y evita el problema de verse forzado en hacer implementaciones varias de un mismo algoritmo por diferencias menores entre los datos siendo procesados.
 
 
-## 1.8. Recomendaciones.
+## 1.8. Recomendaciones
 
 - Si bien como ejercicio propio de programación puede ser útil, el desarrollo de aplicaciones de interfaz gráfica en el lenguaje racket es algo deficiente en comparación a lenguajes más dominantes.
 - Racket es un lenguaje algo ineficiente con el uso de memoria. De ser esta una limitante para una implementación, se recomienda evitar el uso de este lenguaje en estos casos.
 - Para evitar un uso de memoria desmedido al renderizar elementos gráficos es deseable recurrir a efectos visuales que den la apariencia de ser más complejos de lo que de verdad son.
-- Para trabajos de programación que integran a varios colaboradores se recomienda propiciar una buena comunicación y coordinación, no solo respecto a horarios y fechas de trabajo, pero también respecto a las tareas técnicas desarrolladas por cada miembro, esto porque es particularmente útil cuando surgen problemas en las secciones del proyecto en las cuales hay interacción entre las lógicas desarrolladas por los distintos colaboradores. 
+- Para trabajos de programación que integran a varios colaboradores se recomienda propiciar una buena comunicación y coordinación, no solo respecto a horarios y fechas de trabajo, pero también respecto a las tareas técnicas desarrolladas por cada miembro, esto porque es particularmente útil cuando surgen problemas en las secciones del proyecto en las cuales hay interacción entre las lógicas desarrolladas por los distintos colaboradores.
 
 ## 1.9. Bibliografía consultada en todo el proyecto
 
 Guzman, J. E. (2006). Introducción a la programación con Scheme. Cartago:
 Editorial Tecnológica de Costa Rica.
 
-Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_[Videojuego]. Disponible en: 
-https://www.arkadium.com/games/blackjack/
+Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_$\text{[videojuego]}$. Disponible en:
+<https://www.arkadium.com/games/blackjack/>
 
 Flatt M., Findler R., Clements J. (s.f). _The Racket Graphical Interface Toolkit_.
-Obtenido de: https://docs.racket-lang.org/gui/
+Obtenido de: <https://docs.racket-lang.org/gui/>
 
 Flatt M., Findler R., Clements J. (s.f). _The Racket Drawing Toolkit_.
-Obtenido de: https://docs.racket-lang.org/draw/
+Obtenido de: <https://docs.racket-lang.org/draw/>
 
 Flatt M., Findler R., Clements J. (s.f). _Custodians_.
 Obtenido de: <https://docs.racket-lang.org/reference/eval-model.html?q=thread#%28part._custodian-model%29>
 
 Flatt M., Findler R., Clements J. (s.f). _raco: Racket Command Line Tools_.
-Obtenido de: https://docs.racket-lang.org/raco/
+Obtenido de: <https://docs.racket-lang.org/raco/>
 
- Andersen. L. (2016). _Subproccesses remain alive after Racket program halts_. 
- Obtenido de: https://stackoverflow.com/questions/39358725/subproccesses-remain-alive-after-racket-program-halts/39358912#39358912
-
+ Andersen. L. (2016). _Subproccesses remain alive after Racket program halts_.
+ Obtenido de: <https://stackoverflow.com/questions/39358725/subproccesses-remain-alive-after-racket-program-halts/39358912#39358912>
 
 ## Recursos gráficos
 
 Escape One. (2014, 30 de noviembre). _Las Vegas Casino Music Video: For Night Game of Poker, Blackjack, Roulette Wheel & Slots_
-[video]. YouTube. https://youtu.be/GKtlRchHpx8
+$\text{[video]}$. YouTube. <https://youtu.be/GKtlRchHpx8>
 
-American Contract Bridge League. (s.f.). _52 Playing Cards_[Imágenes]. Obtenido de:
-https://acbl.mybigcommerce.com/52-playing-cards/
+American Contract Bridge League. (s.f.). _52 Playing Cards_$\text{[imágenes]}$. Obtenido de:
+<https://acbl.mybigcommerce.com/52-playing-cards/>
 
-Orange Free Sounds. (2018). _Card Flip Sound Effect_[Audio]. Obtenido de:
-https://orangefreesounds.com/card-flip-sound-effect/
+Orange Free Sounds. (2018). _Card Flip Sound Effect_$\text{[audio]}$. Obtenido de:
+<https://orangefreesounds.com/card-flip-sound-effect/>
 
 
 
