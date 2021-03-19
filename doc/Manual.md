@@ -55,6 +55,9 @@ linestretch: 1.5
 
 # 2.4. Inicio de Juego:
 
+
+## Método 1: REPL
+
 Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cuál indica la cantidad de jugadores que se desean tener en la partida.
 
 Si se desea empezar el juego desde consola powershell en Windows:
@@ -93,6 +96,8 @@ Ejecutado el comando, se mostrará una ventana inicial para ingresar los nombres
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/startdialog.PNG)
 
 
+## Método alternativo: ejecutable
+
 # 2.5. Interfaz:
 
 Mientras se cargan los recursos del programa, se muestra una pantalla con imágenes conjuntos de carta que varían al azar con cada inicio de juego.
@@ -126,3 +131,27 @@ El juego se desarrollará según lo especificado en la sección de reglas, hasta
 
 Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Quit" cerrará el programa, mientras que "Restart" permitirá comenzar una partida adicional desde el inicio con los mismos jugadores. Si se desea iniciar con otro set de jugadores, se deberá cerrar el programa e iniciarlo de nuevo con el parámetro de cantidad de jugadores deseado (ver sección de "Inicio de Juego").
 
+# Anexo: Guía de compilación de ejecutable
+
+## Windows
+
+Para generar un ejecutable en windows es necesario tener disponible make en el sistema. Si bien hay varias maneras de conseguir make, en esta guía solo se cubrirá el uso de chocolatey.
+
+1. Abrir una consola de PowerShell con permisos de administrador
+2. Si `Get-ExecutionPolicy` retorna `Restricted`, ejecutar `Set-ExecutionPolicy Bypass -Scope Process`
+3. Instalar chocolatey usando el siguiente comando:
+
+```Powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+
+4. Al finalizar la instalación de chocolatey, debe cerrar la consola creada anteriormente y abrir una nueva (otra vez con permisos de administrador).
+5. Ejecutar:
+
+```Powershell
+choco install make
+```
+
+
+
+## Linux
