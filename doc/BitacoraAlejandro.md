@@ -187,3 +187,10 @@
   y custodians de Racket, con lo cual se definió un custodian dedicado para el
   hilo verde la música de fondo, el cual es forzosamente detenido al cerrar
   todas las ventanas.
+
+
+## 19 de marzo
+
+- Se discuten aspectos finales, ya que hoy es el día de entrega.
+- Se divide `run-game`, la función más grande de `ui.rkt`, en funciones más
+  pequeñas.

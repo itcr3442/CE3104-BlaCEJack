@@ -187,103 +187,41 @@ Ejemplos de uso:
   ; Muestra un splash mientras se inicia una nueva partida
 |#
 (define (run-game player-names [splash-gauge #f])
-  (letrec
-    ([window
-       (new frame%
-            [label "BlaCEJack"]
-            [width 800]
-            [height 600]
-            [alignment '(center top)])]
+  (let*-values
+    ([(window top-panel game-table bottom-panel)
+      (create-game-window)]
 
-     [top-row (new horizontal-panel% [parent window])]
-     [game-table (new horizontal-panel% [parent window])]
-     [bottom-panel (new horizontal-panel%
-                        [parent window]
-                        [alignment '(center center)])]
+     [(croupier-container) (game-container top-panel "Croupier")]
+     [(deck) (game-container top-panel "Deck" draw-deck 52)]
+     [(player-containers) (map (curry game-container game-table) player-names)]
 
-     [croupier-container (game-container top-row "Croupier")]
-     [deck (game-container top-row "Deck" draw-deck 52)]
+     [(on-stand) (make-parameter #f)]
+     [(on-take-card) (make-parameter 0)]
+     [(current-player take-card-button stand-button enable-buttons)
+      (create-status-elements bottom-panel on-take-card on-stand player-names)]
 
-     [player-containers (map (curry game-container game-table) player-names)]
-     [current-player
-       (new message%
-            [parent
-              (new horizontal-pane%
-                   [parent bottom-panel]
-                   [alignment '(center center)])]
+     [(do-turn)
+      (create-turn-function
+        on-take-card on-stand enable-buttons
+        deck player-containers current-player
+        (λ (game)
 
-            [label (cdar (quicksort (map (λ (name) (cons (string-length name) name))
-                                         player-names)
-                                    (λ (a b) (> (car a) (car b)))))]
+           (send bottom-panel show #f)
+           (end-of-game
+             game deck croupier-container window
+             (λ (restart?)
 
-            [font (send the-font-list find-or-create-font 30 'default 'normal 'bold)])]
-
-     [action-pane
-       (new vertical-pane%
-            [parent bottom-panel]
-            [alignment '(left center)])]
-
-     [action-button
-       (λ (parameter label)
-          (new button%
-               [parent action-pane]
-               [label label]
-               [callback
-                 (λ (button event)
-                    (enable-action-buttons #f)
-                    ((parameter)))]))]
-
-     [on-stand-up (make-parameter #f)]
-     [on-take-card (make-parameter 0)]
-
-     [take-card-button (action-button on-take-card "&Take card")]
-     [stand-up-button (action-button on-stand-up "&Stand")]
-
-     [enable-action-buttons
-       (λ (enable?)
-          (send take-card-button enable enable?)
-          (send stand-up-button enable enable?))]
-
-     [do-turn
-       (λ (game player-id player)
-          (on-stand-up (λ () (rotate-player (stand game player-id) player-id)))
-          (on-take-card
-            (λ ()
-               (rotate-player
-                 (grab game deck (list-get player-containers player-id) player-id)
-                 player-id)))
-
-          (send current-player set-label (name player)))]
-
-     [rotate-player
-       (λ (game player-id)
-          (when [not (active? (get-player game player-id))]
-            (send (container-panel (list-get player-containers player-id)) enable #f))
-
-          (match (next-turn game player-id)
-                 [(list) ; No active players are left
-
-                  (send bottom-panel show #f)
-                  (end-of-game game deck croupier-container window
-                               (λ (restart?)
-
-                                  (send window show #f)
-                                  (when restart? (run-game player-names))))]
-
-                 [(cons next-id next)
-
-                  (enable-action-buttons #t)
-                  (do-turn game next-id next)]))])
+                (send window show #f)
+                (when restart? (run-game player-names))))))])
 
     (send (container-panel croupier-container) enable #f)
     (send (score-label croupier-container) show #f)
     (send bottom-panel show #f)
 
     (when splash-gauge
-      #| +1 for all operations that go before bitmap loading
-      || +2 for 'hidden and 'large-stack
-      || +52 for every other preloaded bitmap
-      ||#
+      ; +1 por las operaciones que ocurre antes de la carga de bitmaps
+      ; +2 por 'hidden y 'large-stack
+      ; +52 por cada bitmap precargado
       (send splash-gauge set-range (+ 1 2 52))
       (load-progress splash-gauge))
 
@@ -291,7 +229,6 @@ Ejemplos de uso:
     (when splash-gauge (send (send splash-gauge get-top-level-window) show #f))
 
     (send window show #t)
-
     (sleep/yield 0.5)
 
     (letrec
@@ -310,6 +247,157 @@ Ejemplos de uso:
       (do-turn game 0 (car (players game))))
 
     (send bottom-panel show #t)))
+
+
+#| Función create-game-window
+Descripción: Crea, pero no muestra, la ventana principal y los principales
+             contenedores dentro de la misma.
+Salidas:
+- La ventana principal, de tipo `frame%`.
+- El panel superior, donde se incluirán al croupier y al mazo.
+- La mesa de juego, donde se mostrarán a los jugadores y sus cartas.
+- El panel inferior, donde se muestra el jugador actual y botones de acción.
+Ejemplos de uso:
+- >(create-game-window)
+|#
+(define (create-game-window)
+  (let*
+    ([window
+       (new frame%
+            [label "BlaCEJack"]
+            [width 800]
+            [height 600]
+            [alignment '(center top)])]
+
+     [top-panel (new horizontal-panel% [parent window])]
+     [game-table (new horizontal-panel% [parent window])]
+     [bottom-panel (new horizontal-panel%
+                        [parent window]
+                        [alignment '(center center)])])
+
+    (values window top-panel game-table bottom-panel)))
+
+
+#| Función create-status-elements
+Descripción: Crea e inicializa los elementos del panel inferior.
+Entradas:
+- bottom-panel: El panel inferior, a como fue generado por `(create-game-window)`.
+- on-take-card: Un `(parameter?)` accesor que debe en todo momento contener
+                una función de aridad nula que será ejecutada al presionar el
+                botón para tomar una carta.
+- on-stand: Un `(parameter?)` accesor de iguales restricciones que el anterior,
+            usado para plantarse.
+- player-names: Lista de nombres de los jugadores.
+Salidas:
+- La etiqueta que muestra el nombre del jugador actual.
+- El botón para tomar carta.
+- El botón para plantarwse.
+- Una función de aridad unitaria que acepta un parámetro booleano y
+  devuelve `(void)`. El parámetro indica si deben habilitarse o
+  deshabilitarse los botones de acción.
+Ejemplos de uso:
+- >(create-status-elements bottom-panel on-take-card on-stand '("Foo "Bar" "Baz"))
+|#
+(define (create-status-elements bottom-panel on-take-card on-stand player-names)
+  (letrec
+    ([current-player
+       (new message%
+            [parent
+              (new horizontal-pane%
+                   [parent bottom-panel]
+                   [alignment '(center center)])]
+
+            [label (cdar (quicksort (map (λ (name) (cons (string-length name) name))
+                                         player-names)
+
+                                    (λ (a b) (> (car a) (car b)))))]
+
+            [font (send the-font-list find-or-create-font 30 'default 'normal 'bold)])]
+
+     [action-pane
+       (new vertical-pane%
+            [parent bottom-panel]
+            [alignment '(left center)])]
+
+     [action-button
+       (λ (parameter label)
+          (new button%
+               [parent action-pane]
+               [label label]
+               [callback
+                 (λ (button event)
+                    (enable-buttons #f)
+                    ((parameter)))]))]
+
+     [take-card-button (action-button on-take-card "&Take card")]
+     [stand-button (action-button on-stand "&Stand")]
+
+     [enable-buttons
+       (λ (enable?)
+          (send take-card-button enable enable?)
+          (send stand-button enable enable?))])
+
+    (values current-player take-card-button stand-button enable-buttons)))
+
+
+#| Función create-turn-function
+Descripción: Genera una función que dirige la rotación de turnos.
+Entradas:
+- on-take-card: Un `(parameter?)` accesor que debe en todo momento contener
+                una función de aridad nula que será ejecutada al presionar el
+                botón para tomar una carta.
+- on-stand: Un `(parameter?)` accesor de iguales restricciones que el anterior,
+            usado para plantarse.
+- deck: Marco contenedor del mazo.
+- player-containers: Lista de marcos contenedores de los jugadores.
+- current-player: Etiqueta de jugador actual, a como fue generada
+                  por `create-status-elements`.
+- then-end: Función de aridad unitaria, que acepta el estado de juego
+            al momento de no quedar jugadores activos y rompe la
+            cadena de turnos.
+Salida: Una función de aridad tres, llámese `do-turn`, que admite
+        llamadas según el prototipo `(do-turn game player-id player)`,
+        donde `game` es el estado de juego al punto de llamada,
+        `player-id` es el índice de jugador y `player` es la lista
+        que conforma el jugador. Llamar a `do-turn` prepara el
+        tablero para darle un turno a este jugador. Cuando el turno
+        termina, se sigue invocando a `do-turn` según la rotación
+        respectiva. La cadena se rompe una vez no queden jugadores activos.
+Ejemplos de uso:
+- >(create-turn-function
+     ...
+     (λ (game)
+        (display "No quedan jugadores activos")))
+|#
+(define (create-turn-function on-take-card on-stand enable-buttons deck
+                              player-containers current-player then-end)
+  (letrec
+    ([do-turn
+       (λ (game player-id player)
+          (on-stand (λ () (rotate-player (stand game player-id) player-id)))
+          (on-take-card
+            (λ ()
+               (rotate-player
+                 (grab game deck (list-get player-containers player-id) player-id)
+                 player-id)))
+
+          (send current-player set-label (name player)))]
+
+     [rotate-player
+       (λ (game player-id)
+          (unless [active? (get-player game player-id)]
+            (send (container-panel (list-get player-containers player-id)) enable #f))
+
+          (match (next-turn game player-id)
+                 [(list) ; No quedan jugadores activos
+                  (then-end game)]
+
+                 [(cons next-id next)
+
+                  (enable-buttons #t)
+                  (do-turn game next-id next)]))])
+
+    do-turn))
 
 
 #| Función end-of-game
@@ -398,7 +486,7 @@ Ejemplos de uso:
 
      [draw-cell
        (λ (dc rows widths all-widths x-offset y-offset)
-          (when [not (empty? rows)]
+          (unless [empty? rows]
             (cond [(empty? (car rows))
                    (draw-cell dc (cdr rows) all-widths all-widths 0 (+ y-offset 15))]
 
@@ -540,7 +628,7 @@ Ejemplos de uso:
 
      [container (list panel score-label card-canvas current-cards)])
 
-    (when [not custom-draw] (update-score container 0))
+    (unless custom-draw (update-score container 0))
     container))
 
 
@@ -797,7 +885,7 @@ Ejemplos de uso:
     ([spacing (λ (bitmap) (quotient (send bitmap get-width) 4))]
      [draw-stack
        (λ (offset cards)
-          (when [not (empty? cards)]
+          (unless [empty? cards]
             (let*
               ([bitmap (card-bitmap (car cards))]
                [scale (fitting-scale canvas bitmap)])
@@ -814,7 +902,7 @@ Ejemplos de uso:
      ||             = (real-canvas-width/scale - (n + 3) * card-spacing)/2
      |#
      [base-offset
-       (when [not (empty? cards)]
+       (unless [empty? cards]
          (/ (- (/ (send canvas get-width)
                   (fitting-scale canvas (card-bitmap (car cards))))
 
@@ -867,7 +955,7 @@ Ejemplos de uso:
               (send dc draw-bitmap hidden (+ crop-width joint displacement) 0))])
 
         (draw-hidden 0)
-        (when [not (zero? swipe-factor)]
+        (unless [zero? swipe-factor]
           (draw-hidden (* swipe-factor swipe-unit)))))))
 
 
@@ -957,14 +1045,14 @@ Ejemplos de uso:
   (letrec
     ([special-bitmap
        (λ (key asset)
-          (when [not (hash-has-key? loaded-bitmaps key)]
+          (unless [hash-has-key? loaded-bitmaps key]
             (hash-set! loaded-bitmaps key (load-bitmap asset)))
 
           (load-progress gauge))]
 
      [preload-bitmaps
        (λ (cards)
-          (when [not (empty? cards)]
+          (unless [empty? cards]
             (yield)
             (card-bitmap (car cards))
 
