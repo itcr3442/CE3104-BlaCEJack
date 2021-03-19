@@ -194,5 +194,7 @@
 - Se discuten aspectos finales, ya que hoy es el día de entrega.
 - Se divide `run-game`, la función más grande de `ui.rkt`, en funciones más
   pequeñas.
-- La especificación dice que `bCEj` debe tomar la lista de nombres de jugadores,
-  no la lista de jugadores. Se arregla esto.
+- La especificación dice que `bCEj` debe tomar la lista de nombres de
+  jugadores, no la lista de jugadores. Se arregla esto.
+- Se arregla la documentación de `fitting-scale`, la cual por error de el autor
+  de esta bitácora era una copia de la de otra función.

@@ -164,7 +164,7 @@ Ejemplos de uso:
     (let ([gauge (new gauge%
                       [parent pane]
                       [label "Loading... "]
-                      ; The real range will be set later
+                      ; El rango real se colocará más adelante
                       [range 1])])
 
       (send screen show #t)
@@ -457,7 +457,7 @@ Ejemplos de uso:
        (append
          (list
            '("No." "Name" "Score" "Outcome")
-           '("" "" "" "") ; Fake padding
+           '("" "" "" "") ; Espaciado
 
            (list "" "Croupier"
                  (number->string (score (croupier game)))
@@ -898,12 +898,11 @@ Ejemplos de uso:
 
               (draw-stack (+ offset (spacing bitmap)) (cdr cards)))))]
 
-     #| We want a centered card stack, therefore:
-     || base-offset = canvas-width/2 - stack-width/2
-     ||             = (canvas-width - ((n - 1) * card-spacing + card-width))/2
-     ||             = (canvas-width - ((n - 1) * card-spacing + card-spacing * 4))/2
-     ||             = (real-canvas-width/scale - (n + 3) * card-spacing)/2
-     |#
+     ; Se desea una pila de cartas centrada, por lo tanto:
+     ; base-offset = canvas-width/2 - stack-width/2
+     ;             = (canvas-width - ((n - 1) * card-spacing + card-width))/2
+     ;             = (canvas-width - ((n - 1) * card-spacing + card-spacing * 4))/2
+     ;             = (real-canvas-width/scale - (n + 3) * card-spacing)/2
      [base-offset
        (unless [empty? cards]
          (/ (- (/ (send canvas get-width)
@@ -938,7 +937,7 @@ Ejemplos de uso:
 
            [width (send many-cards get-width)]
            [height (send many-cards get-height)]
-           ; Should be the same for 'hidden
+           ; Debe ser igual para 'hidden
            [scale (fitting-scale canvas many-cards)]
 
            [swipe-unit (send hidden get-width)]
@@ -962,17 +961,16 @@ Ejemplos de uso:
           (draw-hidden (* swipe-factor swipe-unit)))))))
 
 
-#| Función card-bitmap
-Descripción: Asocia una carta con su bitmap. Si la carta se encuentra
-             cargada, la operación será inmediata. De lo contrario,
-             ocurrirá una carga de almacenamiento secundario y un
-             proceso de decodificación de duración corta pero notable.
+#| Función fitting-scale
+Descripción: Determina la escala correcta para que un bitmap
+             coincida en altura con un canvas donde será dibujado.
 Entradas:
-- card: Carta para la cual se busca un bitmap.
-Salida: De tener éxito, una instancia de `bitmap%`.
+- canvas: Lienzo donde se dibujará el bitmap.
+- bitmap: El bitmap que debe escalarse.
+Salida: Una proporción real de escala que debe aplicarse al bitmap.
 Ejemplos de uso:
-- >(card-bitmap '(queen pikes))
-  >>> #| bitmap de una reina de espadas |#
+- >(fitting-scale canvas (card-bitmap '(5 pikes)))
+  >>> 0.232
 |#
 (define (fitting-scale canvas bitmap)
   (/ (send canvas get-height) (send bitmap get-height)))
@@ -1042,7 +1040,7 @@ Entradas:
                     se procesan bitmaps.
 Salida: `(void)`.
 Ejemplos de uso:
-- >(load-bitmaps)  ; Durará algunos segundos
+- >(preload-bitmaps)  ; Durará algunos segundos
 |#
 (define (preload-bitmaps [gauge #f])
   (letrec
