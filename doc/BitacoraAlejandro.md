@@ -152,3 +152,6 @@
 
 - Se acelera la animación de toma de carta. El equipo de trabajo evaluará
   prontamente si este cambio mejora o no la experiencia de usuario.
+- Se documenta la mayoría de `ui.rkt`.
+- Se agrega soporte para ingresar nombres de jugador desde el ejecutable final,
+  permitiendo una cantidad variable de jugadores.

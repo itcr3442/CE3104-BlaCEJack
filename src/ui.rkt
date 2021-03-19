@@ -15,7 +15,7 @@ _______________________________________________________|#
 (require racket/gui racket/runtime-path)
 (require "logic.rkt")
 
-(provide bCEj start-game)
+(provide bCEj start-game ask-player-names)
 
 (define-runtime-path assets-path "../assets")
 
@@ -37,22 +37,53 @@ Ejemplos de uso:
         [(or (< player-count 1) (> player-count 3))
          (raise "There may only be one, two, or three players")])
 
-  (let*
-    ([names-dialog (new dialog% [label "Player names"])]
-     [name-fields (add-name-fields names-dialog player-count 1 empty)])
+  (ask-player-names player-count start-game))
 
-    (new button%
-         [parent names-dialog]
-         [label "Play"]
-         [callback
-           (λ (button event)
-              (let ([player-names
-                      (map (λ (field) (string-trim (send field get-value)))
-                           name-fields)])
 
-                (when [empty? (filter (compose not non-empty-string?) player-names)]
-                  (send names-dialog show #f)
-                  (start-game player-names))))])
+#| Función ask-player-names
+Descripción: Pregunta al usuario por nombres de jugadores para un
+             nuevo juego en un cuadro de diálogo.
+Entradas:
+- up-to: Número máximo de jugadores, entero positivo.
+- then: Función que admita un único argumento con la lista de nombres
+- allow-blanks (opcional): Si se indica `#t`, entonces se aceptarán
+                           nombres en blanco. La lista pasada a `then`
+                           estará filtrada de nombres en blanco. La
+                           única restricción será que haya al menos
+                           un nombre no vacío.
+Salida: `(void)`
+Ejemplos de uso:
+- >(ask-player-names 3 start-game)
+|#
+(define (ask-player-names up-to then [allow-blanks #t])
+  (let ([names-dialog (new dialog% [label "Player names"])])
+    (when allow-blanks
+      (new message%
+           [parent names-dialog]
+           [label "Players with blank names are ignored."]))
+
+    (let ([name-fields (add-name-fields names-dialog up-to 1 empty)])
+      (new button%
+           [parent names-dialog]
+           [label "Play"]
+           [callback
+             (λ (button event)
+                (let*-values
+                  ([(player-names)
+                    (map (λ (field) (string-trim (send field get-value))) name-fields)]
+
+                   [(player-names blanks)
+                    (cond [allow-blanks
+                            (values (filter non-empty-string? player-names)
+                                    empty)]
+
+                          [else (values player-names
+                                        (filter (compose not non-empty-string?)
+                                                player-names))])])
+
+                  (when [and (empty? blanks) (not (empty? player-names))]
+                    (send names-dialog show #f)
+                    (start-game player-names))))]))
 
     (send names-dialog show #t)))
 
