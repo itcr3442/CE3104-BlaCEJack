@@ -272,10 +272,25 @@ Ejemplos de uso:
             [height 600]
             [alignment '(center top)])]
 
-     [top-panel (new horizontal-panel% [parent window])]
-     [game-table (new horizontal-panel% [parent window])]
+     [toplevel (new pane% [parent window])]
+     [background
+       (new canvas%
+            [parent toplevel]
+            [style '(transparent)]
+            [paint-callback
+              (λ (canvas dc)
+                 (let*-values
+                   ([(bitmap) (asset-bitmap 'background)]
+                    [(x-scale y-scale) (fitting-asymmetric-scale canvas bitmap)])
+
+                   (send dc set-scale x-scale y-scale)
+                   (send dc draw-bitmap bitmap 0 0)))])]
+
+     [content (new vertical-pane% [parent toplevel])]
+     [top-panel (new horizontal-panel% [parent content])]
+     [game-table (new horizontal-panel% [parent content])]
      [bottom-panel (new horizontal-panel%
-                        [parent window]
+                        [parent content]
                         [alignment '(center center)])])
 
     (values window top-panel game-table bottom-panel)))
@@ -890,7 +905,7 @@ Ejemplos de uso:
        (λ (offset cards)
           (unless [empty? cards]
             (let*
-              ([bitmap (card-bitmap (car cards))]
+              ([bitmap (asset-bitmap (car cards))]
                [scale (fitting-scale canvas bitmap)])
 
               (send dc set-scale scale scale)
@@ -906,10 +921,10 @@ Ejemplos de uso:
      [base-offset
        (unless [empty? cards]
          (/ (- (/ (send canvas get-width)
-                  (fitting-scale canvas (card-bitmap (car cards))))
+                  (fitting-scale canvas (asset-bitmap (car cards))))
 
                (* (+ (length cards) 3)
-                  (spacing (card-bitmap (car cards)))))
+                  (spacing (asset-bitmap (car cards)))))
             2))])
 
     (draw-stack base-offset cards)))
@@ -932,8 +947,8 @@ Ejemplos de uso:
 |#
 (define (draw-deck canvas dc count [swipe-factor 0])
   (when [> count 0]
-    (let* ([many-cards (card-bitmap 'large-stack)]
-           [hidden (card-bitmap 'hidden)]
+    (let* ([many-cards (asset-bitmap 'large-stack)]
+           [hidden (asset-bitmap 'hidden)]
 
            [width (send many-cards get-width)]
            [height (send many-cards get-height)]
@@ -962,33 +977,55 @@ Ejemplos de uso:
 
 
 #| Función fitting-scale
-Descripción: Determina la escala correcta para que un bitmap
+Descripción: Determina la escala simétrica correcta para que un bitmap
              coincida en altura con un canvas donde será dibujado.
 Entradas:
 - canvas: Lienzo donde se dibujará el bitmap.
 - bitmap: El bitmap que debe escalarse.
 Salida: Una proporción real de escala que debe aplicarse al bitmap.
 Ejemplos de uso:
-- >(fitting-scale canvas (card-bitmap '(5 pikes)))
+- >(fitting-scale canvas (asset-bitmap '(5 pikes)))
   >>> 0.232
 |#
 (define (fitting-scale canvas bitmap)
-  (/ (send canvas get-height) (send bitmap get-height)))
+  (let-values ([(x-scale y-scale) (fitting-asymmetric-scale canvas bitmap)])
+    y-scale))
 
 
-#| Función card-bitmap
-Descripción: Asocia una carta con su bitmap. Si la carta se encuentra
+#| Función fitting-asymmetric-scale
+Descripción: Determina la escala correcta para que un bitmap
+             coincida completamente dentro de un canvas.
+Entradas:
+- canvas: Lienzo donde se dibujará el bitmap.
+- bitmap: El bitmap que debe escalarse.
+Salidas:
+- Escala horizontal
+- Escala vertical
+Ejemplos de uso:
+- >(fitting-asymmetric-scale canvas (asset-bitmap '(5 pikes)))
+  >>> 0.353
+  >>> 0.232
+|#
+(define (fitting-asymmetric-scale canvas bitmap)
+  (values
+    (/ (send canvas get-width) (send bitmap get-width))
+    (/ (send canvas get-height) (send bitmap get-height))))
+
+
+#| Función asset-bitmap
+Descripción: Asocia una llave con un bitmap. Si la llave se encuentra
              cargada, la operación será inmediata. De lo contrario,
-             ocurrirá una carga de almacenamiento secundario y un
-             proceso de decodificación de duración corta pero notable.
+             ocurrirá una carga de almacenamiento secundario, donde se
+             asume que la llave es una carta, y un proceso de
+             decodificación de duración corta pero notable.
 Entradas:
 - card: Carta para la cual se busca un bitmap.
 Salida: De tener éxito, una instancia de `bitmap%`.
 Ejemplos de uso:
-- >(card-bitmap '(queen pikes))
+- >(asset-bitmap '(queen pikes))
   >>> #| bitmap de una reina de espadas |#
 |#
-(define (card-bitmap card)
+(define (asset-bitmap card)
   (cond
     [(hash-has-key? loaded-bitmaps card) (hash-ref loaded-bitmaps card)]
     [else
@@ -1055,13 +1092,14 @@ Ejemplos de uso:
        (λ (cards)
           (unless [empty? cards]
             (yield)
-            (card-bitmap (car cards))
+            (asset-bitmap (car cards))
 
             (load-progress gauge)
             (preload-bitmaps (cdr cards))))])
 
     (special-bitmap 'hidden "cards/red_back")
     (special-bitmap 'large-stack "cards/many")
+    (special-bitmap 'background "background")
 
     (preload-bitmaps (cartesian-product '(1 2 3 4 5 6 7 8 9 10 jack queen king 11)
                                         '(pikes hearts clovers diamonds)))))

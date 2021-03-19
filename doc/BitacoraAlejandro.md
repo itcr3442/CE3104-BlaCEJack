@@ -201,3 +201,21 @@
 - Se agrega a los recursos una imagen de fondo tomada de
   <https://wallpapercave.com/wp/wp4477752.jpg>, a sugerencia del compañero de
   equipo.
+- Se encuentra que `racket/gui` no es capaz de proveer un fondo sin involucrar
+  un lienzo de alguna u otra forma. Tras algunas horas de búsqueda, se
+  encuentra la siguiente lista de correos donde se discute justamente esta
+  limitación:
+  <https://users.racket-lang.narkive.com/4hYl2c4R/racket-gui-changing-the-background-color>.
+  La información importarte de estos mensajes es que, según indican, un
+  `panel%` (y por tanto un `pane%`) puede colocar elementos uno encima de otro.
+  Esta conclusión no es intuitiva, ya que sus subclases `horizontal-panel%` y
+  `vertical-panel%` no son capaces de ello. Por comprobación se encuentra que
+  la documentación de Racket lee lo siguiente para `panel%`:
+  > A panel% object has a degenerate placement strategy for managing its
+  > children: it places each child as if it was the only child of the panel.
+  A partir de esto se concluye que la solución más viable es colocar un `pane%`
+  como único elemento hijo de la ventana, y por debajo de este primero un
+  `canvas%` que ocupe toda la ventana y en el que solo se dibuja el fondo, y
+  finalmente superpuesto a este un `vertical-pane%` que cumple el mismo rol
+  para los demás elementos gráficos que antes tenía la ventana misma.
+- Se implementa la solución anterior y se comprueba que funciona.
