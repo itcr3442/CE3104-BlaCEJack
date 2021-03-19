@@ -59,6 +59,15 @@ Ejemplos de uso:
 - >(ask-player-names 3 start-game)
 |#
 (define (ask-player-names up-to then [allow-blanks #f])
+  (cond [(not (or (integer? up-to) (positive? up-to)))
+         (raise "'up-to' must be a positive integer")]
+
+        [(not (procedure? then))
+         (raise "'then' must be a procedure")]
+
+        [(not (boolean? allow-blanks))
+         (raise "'allow-blanks' must be a boolean")])
+
   (let ([names-dialog (new dialog% [label "Player names"])])
     (when allow-blanks
       (new message%
@@ -101,6 +110,12 @@ Ejemplos de uso:
 - >(start-game '("Foo" "Bar" "Baz"))
 |#
 (define (start-game player-names)
+  (cond [(not (list? player-names))
+         (raise "Expected a list of player names")]
+
+        [(ormap (compose not string?) player-names)
+         (raise "All player names must be strings")])
+
   (let ([music-custodian (play-background-music)])
     (run-game player-names (splash-screen))
     (yield 'wait)

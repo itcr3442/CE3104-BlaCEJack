@@ -219,3 +219,4 @@
   finalmente superpuesto a este un `vertical-pane%` que cumple el mismo rol
   para los demás elementos gráficos que antes tenía la ventana misma.
 - Se implementa la solución anterior y se comprueba que funciona.
+- Se agregan verificaciones de entrada en funciones públicas de `ui.rkt`.
