@@ -21,23 +21,26 @@ _______________________________________________________|#
 
 
 #| Función bCEj
-Descripción: Entrypoint de la aplicación, siendo player-count` es la cantidad
-             de jugadores. La descripción de esta función y su prototipo se incluye en la
-             especificación, por lo cual no debe modificarse.
+Descripción: Entrypoint de la aplicación. La descripción de esta función
+             y su prototipo se incluye en la especificación, por lo cual
+             no debe modificarse.
 Entradas:
-- player-count: Número de jugadores, entero entre 1 y 3, ambos inclusive
+- player-names: Lista de jugadores, de entre 1 y 3 cadenas, ambos inclusive.
 Salida: `(void)`
 Ejemplos de uso:
-- >(bCEj 3)  ; Aparece la interfaz de usuario
+- >(bCEj '("Foo" "Bar" "Baz"))  ; Aparece la interfaz de usuario
 |#
-(define (bCEj player-count)
-  (cond [(not (integer? player-count))
-         (raise "Expected an integer numbe rof players")]
+(define (bCEj player-names)
+  (cond [(not (list? player-names))
+         (raise "Expected a list of player names")]
 
-        [(or (< player-count 1) (> player-count 3))
-         (raise "There may only be one, two, or three players")])
+        [(or (< (length player-names) 1) (> (length player-names) 3))
+         (raise "There may only be one, two, or three players")]
 
-  (ask-player-names player-count start-game))
+        [(ormap (compose not string?) player-names)
+         (raise "All player names must be strings")])
+
+  (start-game player-names))
 
 
 #| Función ask-player-names

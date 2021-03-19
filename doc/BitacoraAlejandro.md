@@ -194,3 +194,5 @@
 - Se discuten aspectos finales, ya que hoy es el día de entrega.
 - Se divide `run-game`, la función más grande de `ui.rkt`, en funciones más
   pequeñas.
+- La especificación dice que `bCEj` debe tomar la lista de nombres de jugadores,
+  no la lista de jugadores. Se arregla esto.
