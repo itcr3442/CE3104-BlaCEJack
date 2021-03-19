@@ -131,11 +131,16 @@ El juego se desarrollará según lo especificado en la sección de reglas, hasta
 
 Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Quit" cerrará el programa, mientras que "Restart" permitirá comenzar una partida adicional desde el inicio con los mismos jugadores. Si se desea iniciar con otro set de jugadores, se deberá cerrar el programa e iniciarlo de nuevo con el parámetro de cantidad de jugadores deseado (ver sección de "Inicio de Juego").
 
+## Atajos del teclado
+
+
+
+
 # Anexo: Guía de compilación de ejecutable
 
 ## Windows
 
-Para generar un ejecutable en windows es necesario tener disponible make en el sistema. Si bien hay varias maneras de conseguir make, en esta guía solo se cubrirá el uso de chocolatey.
+Para generar un ejecutable en windows es necesario tener disponible `make` en el sistema. Si bien hay varias maneras de conseguir `make`, en esta guía solo se cubrirá el uso de chocolatey. Se asume que el usuario ya tiene disponible la herramienta de git en sus sistema, de lo contrario, favor descargar git en el siguiente link antes de continuar: <https://git-scm.com/downloads>
 
 1. Abrir una consola de PowerShell con permisos de administrador
 2. Si `Get-ExecutionPolicy` retorna `Restricted`, ejecutar `Set-ExecutionPolicy Bypass -Scope Process`
@@ -151,7 +156,62 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ```Powershell
 choco install make
 ```
+6. Diríjase a una carpeta de su preferencia, haga `shift+click derecho` y seleccione "abrir ventana de powershell aquí".
+7. Ejecute los siguientes comandos en la consola de Powershell:
 
+```Bash
+git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
+```
+
+```Bash
+cd CE3104-BlaCEJack
+```
+
+```Bash
+make -p build
+```
+
+El ejecutable se debería encontrar listo para su uso dentro de la carpeta "build" en el directorio del repositorio clonado.  
 
 
 ## Linux
+
+Dependiendo de la distribución y configuración inicial, es posible que ya `make` se encuentre instalado, para confirmar esto, ejecute el comando:
+
+```Bash
+make -v
+```
+
+Si el comando anterior da error o no comunica ninguna salida, debe instalar make primero, de manera general:
+
+```bash
+sudo [administrador de paquetes] install make
+```
+
+En vez de "administrador de paquetes" debe escribir
+* `apt` si su sistema está basado en Ubuntu
+* `dnf` si es de la familia de sistemas de Fedora/Red Hat
+* `pamac` si es manjaro
+
+En Arch (y distros basadas en Arch como Manjaro), para conseguir make el comando cambia un poco:
+
+```bash
+sudo pacman -S make
+```
+
+Una vez que tenga make en su sistema, busque la carpeta en la que quiere clonar el repositorio, abra una consola en ella y ejecute:
+
+```Bash
+git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
+```
+
+```Bash
+cd CE3104-BlaCEJack
+```
+
+```Bash
+make -p build
+```
+
+
+El ejecutable se debería encontrar listo para su uso dentro de la carpeta "build" en el directorio del repositorio clonado. 
