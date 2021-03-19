@@ -55,7 +55,7 @@ Salida: `(void)`
 Ejemplos de uso:
 - >(ask-player-names 3 start-game)
 |#
-(define (ask-player-names up-to then [allow-blanks #t])
+(define (ask-player-names up-to then [allow-blanks #f])
   (let ([names-dialog (new dialog% [label "Player names"])])
     (when allow-blanks
       (new message%
