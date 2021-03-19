@@ -181,7 +181,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
     '(1 1 2 2 3 4 5)
     >(quicksort '(2 3 4 1 1 2 5) >) 
     '(5 4 3 2 2 1 1)
-    >(define game ...) (quicksort (players game) (lambda (a b) (> (score a) (score b))))
+    >(define game ...) 
+    >(quicksort (players game) 
+                (lambda (a b) (> (score a) (score b))))
     '(("Bar" #f 21) ("Foo" #f 18) ("Baz" #f 11))
 ```
 
@@ -591,7 +593,9 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 **Ejemplo de uso:** 
 
 ```Scheme
-    >(active-players-aux '(("Foo" active ())("Bar" stood (king clovers))("Baz" active ())) 0 '()) 
+    >(active-players-aux '(("Foo" active ())
+                           ("Bar" stood (king clovers))
+                           ("Baz" active ())) 0 '()) 
     '((0 "Foo" active ())(2 "Baz" active ()))
 ```
 
@@ -732,7 +736,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 **Ejemplo de uso:**
 
 ```Scheme
-    >(define game (new-game '("Foo" "Bar")))(update-player set-stood (players game) 0 '()) 
+    >(define game (new-game '("Foo" "Bar")))
+    >(update-player set-stood (players game) 0 '()) 
     '(("Foo" stood ()) ("Bar" active ()))
 ```
 
@@ -806,13 +811,17 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 ```Scheme
     >(define game(new-game '("Foo" "Bar" "Baz")))
     >(stand game 0) 
-    '((("Foo" stood ()) ("Bar" active ()) ("Baz" active ()))(croupier active ())())
+    '((("Foo" stood ()) ("Bar" active ()) ("Baz" active ()))
+      (croupier active ())())
     >(stand game 1)
-    '((("Foo" active ()) ("Bar" stood ()) ("Baz" active ()))(croupier active ())())
+    '((("Foo" active ()) ("Bar" stood ()) ("Baz" active ()))
+      (croupier active ())())
     >(stand game 2)
-    '((("Foo" active ()) ("Bar" active ()) ("Baz" stood ()))(croupier active ())())
+    '((("Foo" active ()) ("Bar" active ()) ("Baz" stood ()))
+      (croupier active ())())
     >(stand game 'croupier)
-    '((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))(croupier stood ())())
+    '((("Foo" active ()) ("Bar" active ()) ("Baz" active ()))
+      (croupier stood ())())
 ```
 
 ### `(put-card game player card)`
@@ -976,7 +985,8 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 **Ejemplo de uso:** 
 
 ```Scheme
-    >(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))(croupier 'lost)(...)))
+    >(define game '(((Foo 'stood (...))(Bar 'stood (...))(Baz 'lost (...)))
+                    (croupier 'lost)(...)))
     >(game-finished? game)
     #t
 ```
@@ -1223,7 +1233,11 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 ```Scheme
     >(length
         (taken-cards
-          (croupier (initial-grab (new-game "Foo") deck croupier-container 'croupier))))
+          (croupier (initial-grab 
+                    (new-game "Foo") 
+                    deck 
+                    croupier-container 
+                    'croupier))))
     2
 ```
 
@@ -1524,7 +1538,12 @@ El tercer átomo es la lista de cartas, cuya implementación ya se cubrió anter
 Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguiente manera:
 
 ```Scheme
-'(((jose active ((10 hearts)(8 pikes)))(maria active ((5 hearts)(2 diamonds)))(pedro active ((jack pikes)(2 clovers)))),(croupier active ((11 clovers)(3 hearts))),((10 hearts)(8 pikes)(5 hearts)(2 diamonds)(jack pikes)(2 clovers)(11 clovers)(3 hearts)))
+'(((jose active ((10 hearts)(8 pikes)))
+   (maria active ((5 hearts)(2 diamonds)))
+   (pedro active ((jack pikes)(2 clovers)))),
+  (croupier active ((11 clovers)(3 hearts))),
+  ((10 hearts)(8 pikes)(5 hearts)(2 diamonds)
+   (jack pikes)(2 clovers)(11 clovers)(3 hearts)))
 ```
 
 ## 1.4 Problemas no solucionados

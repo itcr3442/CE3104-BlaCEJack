@@ -13,9 +13,11 @@ header-includes:
 
 lang: es-ES
 papersize: letter
-classoption: fleqn
 geometry: margin=1in
-fontfamily: noto
+mainfont: Arial
+sansfont: Arial
+monofont: DejaVuSansMono.ttf 
+mathfont: texgyredejavu-math.otf 
 fontsize: 12pt
 linestretch: 1.5
 ...
@@ -73,7 +75,7 @@ Si se desea empezar el juego desde consola powershell en Windows:
 ```
 
 En Linux el proceso difiere poco:
-```Bash
+```Console
 >export blackcejack=[carpeta del proyecto]
 >$blackcejack$>cd src
 >$blackcejack$/src>racket
@@ -97,6 +99,8 @@ Ejecutado el comando, se mostrará una ventana inicial para ingresar los nombres
 
 
 ## Método alternativo: ejecutable
+
+Un ejecutable puede compilarse de los archivos fuente. Puede solicitar el mismo a los colaboradores del proyecto, o compilar el ejecutable usted mismo. Las instrucciones para el proceso de compilado se encuentran en la sección de anexos.
 
 # 2.5. Interfaz:
 
@@ -135,10 +139,10 @@ Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Qui
 
 Para disposición del jugador se habilitaron algunos atajos del teclado:
 
-* Alt+T: Tomar carta
-* Alt+S: Plantarse
-* Alt+R: Restart
-* Alt+Q: Quit
+* **Alt+T**: Tomar carta
+* **Alt+S**: Plantarse
+* **Alt+R**: Restart
+* **Alt+Q**: Quit
 
 Estos atajos permiten facilitar las multipartidas pues se puede utilizar para para evitar que todos los jugadores deban usar los mismos controles. 
 
@@ -157,32 +161,27 @@ Con la ayuda de un microcontrolador con capacidades USB-HID podrían hacerse con
 Para generar un ejecutable en windows es necesario tener disponible `make` en el sistema. Si bien hay varias maneras de conseguir `make`, en esta guía solo se cubrirá el uso de chocolatey. Se asume que el usuario ya tiene disponible la herramienta de git en sus sistema, de lo contrario, favor descargar git en el siguiente link antes de continuar: <https://git-scm.com/downloads>
 
 1. Abrir una consola de PowerShell con permisos de administrador
-2. Si `Get-ExecutionPolicy` retorna `Restricted`, ejecutar `Set-ExecutionPolicy Bypass -Scope Process`
-3. Instalar chocolatey usando el siguiente comando:
+2. Seguir los pasos indicados en <https://chocolatey.org/install>
+3. Al finalizar la instalación de chocolatey, debe cerrar la consola creada anteriormente y abrir una nueva (otra vez con permisos de administrador).
+4. Ejecutar:
 
 ```Powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+>choco install make
 ```
 
-4. Al finalizar la instalación de chocolatey, debe cerrar la consola creada anteriormente y abrir una nueva (otra vez con permisos de administrador).
-5. Ejecutar:
+5. Diríjase a una carpeta de su preferencia, haga `shift+click derecho` y seleccione "abrir ventana de powershell aquí".
+6. Ejecute los siguientes comandos en la consola de Powershell:
 
-```Powershell
-choco install make
-```
-6. Diríjase a una carpeta de su preferencia, haga `shift+click derecho` y seleccione "abrir ventana de powershell aquí".
-7. Ejecute los siguientes comandos en la consola de Powershell:
-
-```Bash
-git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
+```Console
+>git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
 ```
 
-```Bash
-cd CE3104-BlaCEJack
+```Console
+>cd CE3104-BlaCEJack
 ```
 
-```Bash
-make -p build
+```Console
+>make -p build
 ```
 
 El ejecutable se debería encontrar listo para su uso dentro de la carpeta "build" en el directorio del repositorio clonado.  
@@ -192,14 +191,14 @@ El ejecutable se debería encontrar listo para su uso dentro de la carpeta "buil
 
 Dependiendo de la distribución y configuración inicial, es posible que ya `make` se encuentre instalado, para confirmar esto, ejecute el comando:
 
-```Bash
-make -v
+```Console
+>make -v
 ```
 
 Si el comando anterior da error o no comunica ninguna salida, debe instalar make primero, de manera general:
 
-```bash
-sudo [administrador de paquetes] install make
+```Console
+>sudo [administrador de paquetes] install make
 ```
 
 En vez de "administrador de paquetes" debe escribir
@@ -209,22 +208,22 @@ En vez de "administrador de paquetes" debe escribir
 
 En Arch (y distros basadas en Arch como Manjaro), para conseguir make el comando cambia un poco:
 
-```bash
-sudo pacman -S make
+```Console
+>sudo pacman -S make
 ```
 
 Una vez que tenga make en su sistema, busque la carpeta en la que quiere clonar el repositorio, abra una consola en ella y ejecute:
 
-```Bash
-git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
+```Console
+>git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
 ```
 
-```Bash
-cd CE3104-BlaCEJack
+```Console
+>cd CE3104-BlaCEJack
 ```
 
-```Bash
-make -p build
+```Console
+>make -p build
 ```
 
 
