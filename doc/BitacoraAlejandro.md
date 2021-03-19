@@ -198,3 +198,6 @@
   jugadores, no la lista de jugadores. Se arregla esto.
 - Se arregla la documentación de `fitting-scale`, la cual por error de el autor
   de esta bitácora era una copia de la de otra función.
+- Se agrega a los recursos una imagen de fondo tomada de
+  <https://wallpapercave.com/wp/wp4477752.jpg>, a sugerencia del compañero de
+  equipo.
