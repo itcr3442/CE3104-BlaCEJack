@@ -155,3 +155,8 @@
 - Se documenta la mayoría de `ui.rkt`.
 - Se agrega soporte para ingresar nombres de jugador desde el ejecutable final,
   permitiendo una cantidad variable de jugadores.
+- Se agregan atajos de teclado para las cuatro operaciones comunes:
+  - Alt+T: Tomar carta
+  - Alt+S: Plantarse
+  - Alt+R: Reiniciar
+  - Alt+Q: Salir

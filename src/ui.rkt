@@ -233,8 +233,8 @@ Ejemplos de uso:
      [on-stand-up (make-parameter #f)]
      [on-take-card (make-parameter 0)]
 
-     [take-card-button (action-button on-take-card "Take card")]
-     [stand-up-button (action-button on-stand-up "Stand")]
+     [take-card-button (action-button on-take-card "&Take card")]
+     [stand-up-button (action-button on-stand-up "&Stand")]
 
      [enable-action-buttons
        (λ (enable?)
@@ -432,8 +432,8 @@ Ejemplos de uso:
                       (send dialog show #f)
                       (then restart?))]))])
 
-      (final-action "Restart" #t)
-      (final-action "Quit" #f)
+      (final-action "&Restart" #t)
+      (final-action "&Quit" #f)
 
       (send dialog show #t))))
 
