@@ -73,13 +73,21 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 
 ## 1.2. Funciones implementadas
 
-### `(bCEj X)`
+### `(bCEj player-count)`
 
-Entrypoint de la aplicación, siendo `X` es la cantidad de
-jugadores. La descripción de esta función y su prototipo se
-incluye en la especificación, por lo cual no debe modificarse.
+**Descripción:** Entrypoint de la aplicación, siendo player-count` es la cantidad de jugadores. La descripción de esta función y su prototipo se incluye en la especificación, por lo cual no debe modificarse.
 
-Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
+**Entradas:**
+
+- player-count: Número de jugadores, entero entre 1 y 3, ambos inclusive.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(bCEj 3)  ; Aparece la interfaz de usuario
+```
 
 ### `(list-get list position)`
 
@@ -101,17 +109,17 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(qs-minor ilist predicate pivot olist)`
 
-**Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado false serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada
+**Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado false serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
 **Entradas:** 
 
-- ilist: Lista de entrada 
+- ilist: Lista de entrada.
 - predicate: Es una función que toma dos elementos de la lista y determina si el primero se debe ordenar como menor que el segundo.
-- pivot: Elemento a compararse contra cada elemento de la lista dada 
-- olist: Lista en la que se guardan aquellos elementos cuya comparación contra el pivote usando la función "predicate" de como resultado #f. Debe ser inicializada en '() para uso de la función
+- pivot: Elemento a compararse contra cada elemento de la lista dada.
+- olist: Lista en la que se guardan aquellos elementos cuya comparación contra el pivote usando la función "predicate" de como resultado #f. Debe ser inicializada en '() para uso de la función.
 
 
-**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada
+**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada.
 
 **Ejemplo de uso:** 
 
@@ -122,18 +130,18 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(qs-major ilist predicate pivot olist)`
 
-**Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada
+**Descripción:** Compara cada elemento de una lista contra un pivote utilizando la función parámetro de comparación "predicate". Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
 **Entradas:** 
 
-- ilist: Lista de entrada 
+- ilist: Lista de entrada.
 - predicate: Es una función que toma dos elementos de la lista y determina si el primero se debe ordenar como menor que el segundo.
-- pivot: Elemento a compararse contra cada elemento de la lista dada 
-- olist: Lista en la que se guardan aquellos elementos cuya comparación contra el pivote usando la función "predicate" de como resultado #t. Debe ser inicializada en '() para uso de la función
+- pivot: Elemento a compararse contra cada elemento de la lista dada.
+- olist: Lista en la que se guardan aquellos elementos cuya comparación contra el pivote usando la función "predicate" de como resultado #t. Debe ser inicializada en '() para uso de la función.
   
-**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada
+**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada.
 
-**Ejemplo de uso:** 
+**Ejemplo de uso:**
 
 ```scheme
 >(qs-major '(8 4 2 3 1 6 7) > 4 '())
@@ -142,15 +150,15 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(qs-equal ilist predicate pivot olist)`
 
-**Descripción:** Compara cada elemento de una lista contra un pivote para verificar si sus valores son iguales. Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada
+**Descripción:** Compara cada elemento de una lista contra un pivote para verificar si sus valores son iguales. Los elementos que al ser comparados con el pivote den un resultado true serán agregados a una lista que se da como resultado de la función al finalizar de procesar la lista de entrada.
 
 **Entradas:** 
 
-- ilist: Lista de entrada 
-- pivot: Elemento a compararse contra cada elemento de la lista dada 
-- olist: Lista en la que se guardan aquellos elementos de igual valor que el pivote. Debe ser inicializada en '() para uso de la función
+- ilist: Lista de entrada.
+- pivot: Elemento a compararse contra cada elemento de la lista dada. 
+- olist: Lista en la que se guardan aquellos elementos de igual valor que el pivote. Debe ser inicializada en '() para uso de la función.
 
-**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada
+**Salida:** Contenido final de olist al finalizar el recorrido por la lista de entrada.
 
 **Ejemplo de uso:** 
 
@@ -161,14 +169,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(quicksort ilist predicate)`
 
-**Descripción:** Ordena una lista dada utilizando una implementación de quicksort
+**Descripción:** Ordena una lista dada utilizando una implementación de quicksort.
 
 **Entradas:** 
 
-- ilist: Lista a ordenar usando quicksort
+- ilist: Lista a ordenar usando quicksort.
 - predicate: Función que toma dos elementos y determina si el primero se debe ordenar como menor que el segundo.
 
-**Salida:** Lista de entrada ordenada
+**Salida:** Lista de entrada ordenada.
 
 **Ejemplo de uso:** 
 
@@ -184,12 +192,12 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(create-card value symbol)`
 
-**Descripción:** Crea un par que representa una carta a partir de un valor numérico y un símbolo dados
+**Descripción:** Crea un par que representa una carta a partir de un valor numérico y un símbolo dados.
 
 **Entradas:** 
 
-- value: Orden de la carta en un conjunto de cartas de un símbolo
-- symbol: símbolo del conjunto de cartas a la que pertenece la carta a crear
+- value: Orden de la carta en un conjunto de cartas de un símbolo.
+- symbol: símbolo del conjunto de cartas a la que pertenece la carta a crear.
 
 **Salida:** Un par (valor símbolo) que representa una carta. De tener el parámetro value un valor de 11,12 o 13, en la posición respectiva al valor de la carta se cambiará el valor por 'jack, 'queen y 'king respectivamente.
 
@@ -204,13 +212,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(card-value card)`
 
-**Descripción:** Dado un par que representa una carta, obtiene el primer elemento el cual representa su valor
+**Descripción:** Dado un par que representa una carta, obtiene el primer elemento el cual representa su valor.
 
 **Entradas:** 
 
-- card: carta cuyo valor se quiere conocer
+- card: carta cuyo valor se quiere conocer.
   
-**Salida:** valor de la carta
+**Salida:** valor de la carta.
 
 **Ejemplo de uso:** 
 
@@ -221,13 +229,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(card-symbol card)`
 
-**Descripción:** Dado un par que representa una carta, obtiene el segundo elemento
-             el cual representa su símbolo
+**Descripción:** Dado un par que representa una carta, obtiene el segundo elemento el cual representa su símbolo.
+
 **Entradas:** 
 
-- card: Carta de la cual se quiere extraer el símbolo
+- card: Carta de la cual se quiere extraer el símbolo.
 
-**Salida:** Símbolo de la carta dada
+**Salida:** Símbolo de la carta dada.
 
 **Ejemplo de uso:** 
 
@@ -238,12 +246,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(code-symbol card)`
 
-**Descripción:** Identifica un símbolo de carta basado en un valor numérico (usado para generación aleatoria de cartas)
+**Descripción:** Identifica un símbolo de carta basado en un valor numérico (usado para generación aleatoria de cartas).
+
 **Entradas:** 
 
-- code: número que representa uno de los símbolos de un mazo de cartas
+- code: número que representa uno de los símbolos de un mazo de cartas.
 
-**Salida:** Valor de símbolo correspondiente al número dado
+**Salida:** Valor de símbolo correspondiente al número dado.
 
 **Ejemplo de uso:** 
 
@@ -254,9 +263,9 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(random-card)`
 
-**Descripción:** Genera un par que representa una carta de un mazo de manera aleatoria
+**Descripción:** Genera un par que representa una carta de un mazo de manera aleatoria.
 
-**Salida:** Par carta generada de forma aleatoria
+**Salida:** Par carta generada de forma aleatoria.
 
 **Ejemplo de uso:**
 
@@ -267,13 +276,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(high-ace card)`
 
-**Descripción:** toma un as con valor de 1 y lo convierte en un as de valor 11
+**Descripción:** toma un as con valor de 1 y lo convierte en un as de valor 11.
 
 **Entradas:** 
 
-- card: as cuyo valor será aumentado
+- card: as cuyo valor será aumentado.
 
-**Salida:** Si la entrada es un as de valor uno, la salida será un as con valor de 11, de lo contrario solo se retorna la carta dada
+**Salida:** Si la entrada es un as de valor uno, la salida será un as con valor de 11, de lo contrario solo se retorna la carta dada.
 
 **Ejemplo de uso:** 
 
@@ -284,13 +293,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(taken-cards  game)`
 
-**Descripción:** Obtiene la lista de cartas que han sido tomadas del mazo y se encuentran en juego
+**Descripción:** Obtiene la lista de cartas que han sido tomadas del mazo y se encuentran en juego.
 
 **Entradas:** 
 
-- game: Estado de juego del cual se quieren saber las cartas usadas
+- game: Estado de juego del cual se quieren saber las cartas usadas.
 
-**Salida:** Lista de cartas en juego de la partida dada
+**Salida:** Lista de cartas en juego de la partida dada.
 
 **Ejemplo de uso:** 
 
@@ -301,14 +310,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(in-list? element ilist)`
 
-**Descripción:** Verifica si un elemento dado se encuentra dentro de una lista 
+**Descripción:** Verifica si un elemento dado se encuentra dentro de una lista.
 
 **Entradas:** 
 
-- element: valor a buscar en la lista
-- ilist: lista en la que se buscará element
+- element: valor a buscar en la lista.
+- ilist: lista en la que se buscará element.
 
-**Salida:** Valor booleano que indica si el elemento dado efectivamente es miembro de la lista dada
+**Salida:** Valor booleano que indica si el elemento dado efectivamente es miembro de la lista dada.
 
 **Ejemplo de uso:** 
 
@@ -321,14 +330,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(add-taken-card game card)`
 
-**Descripción:** Agrega una carta a la lista de cartas en uso de un juego
+**Descripción:** Agrega una carta a la lista de cartas en uso de un juego.
 
 **Entradas:** 
 
-- game: Juego cuya lista de cartas tomadas será modificada
-- card: Carta a agregar a la lista de cartas tomadas de "game"
-- 
-**Salida:** Estado resultante de "game" al agregar la carta "card"
+- game: Juego cuya lista de cartas tomadas será modificada.
+- card: Carta a agregar a la lista de cartas tomadas de "game".
+  
+**Salida:** Estado resultante de "game" al agregar la carta "card".
 
 **Ejemplo de uso:**
 
@@ -339,14 +348,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(take-card-aux game card)`
 
-**Descripción:** Ayuda a la función take-card a agregar la carta dada al estado de juego a ser devuelto
+**Descripción:** Ayuda a la función take-card a agregar la carta dada al estado de juego a ser devuelto.
 
 **Entradas:** 
 
-- game: Juego al que se quiere agregar una carta tomada
-- card: Carta que se quiere registrar como tomada
-- 
-**Salida:** Un par que tiene de primer elemento la carta tomada, y de segundo elemento el nuevo estado de juego de "game" en el que "card" se encuentra en la lista decartas tomadas.
+- game: Juego al que se quiere agregar una carta tomada.
+- card: Carta que se quiere registrar como tomada.
+  
+**Salida:** Un par que tiene de primer elemento la carta tomada, y de segundo elemento el nuevo estado de juego de "game" en el que "card" se encuentra en la lista de cartas tomadas.
 
 **Ejemplo de uso:** 
 
@@ -357,13 +366,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(take-card game)`
 
-**Descripción:** Dado un estado de juego, agrega una carta a la lista de cartas tomadas y comunica la carta tomada junto con el nuevo estado de juego
+**Descripción:** Dado un estado de juego, agrega una carta a la lista de cartas tomadas y comunica la carta tomada junto con el nuevo estado de juego.
 
 **Entradas:** 
 
-- game: Juego al cual se quiere agregar una carta en uso
+- game: Juego al cual se quiere agregar una carta en uso.
 
-**Salida:** Par que contiene la carta tomada y el nuevo estado de juego que lista dicha carta como usada
+**Salida:** Par que contiene la carta tomada y el nuevo estado de juego que lista dicha carta como usada.
 
 **Ejemplo de uso:** 
 
@@ -374,13 +383,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(create-player name)`
 
-**Descripción:** crea una lista que representa el estado de un jugador a partir de un nombre dado
+**Descripción:** crea una lista que representa el estado de un jugador a partir de un nombre dado.
 
 **Entradas:** 
 
 - name: nombre para el jugador a ser generado 
-- 
-**Salida:** lista que representa el estado de un jugador con el nombre provisto
+  
+**Salida:** lista que representa el estado de un jugador con el nombre provisto.
 
 **Ejemplo de uso:** 
 
@@ -391,13 +400,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(name player)`
 
-**Descripción:** Dado un par que representa un jugador, retorna el nombre del mismo
+**Descripción:** Dado un par que representa un jugador, retorna el nombre del mismo.
 
 **Entradas:** 
 
-- player: lista que representa al jugador del cual se quiere obtener el nombre del jugador
+- player: lista que representa al jugador del cual se quiere obtener el nombre del jugador.
 
-**Salida:** Nombre del jugador correspondiente al estado de jugador dado
+**Salida:** Nombre del jugador correspondiente al estado de jugador dado.
 
 **Ejemplo de uso:** 
 
@@ -408,13 +417,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(player-state player)`
 
-**Descripción:** Dado un par que representa un jugador, retorna el estado  (active, stood, lost) del mismo
+**Descripción:** Dado un par que representa un jugador, retorna el estado  (active, stood, lost) del mismo.
 
 **Entradas:** 
 
-- player: lista que representa al jugador del cual se quiere saber el estado
+- player: lista que representa al jugador del cual se quiere saber el estado.
 
-**Salida:** Retorna si el jugador tiene como estado active,stood o lost
+**Salida:** Retorna si el jugador tiene como estado active,stood o lost.
 
 **Ejemplo de uso:** 
 
@@ -429,9 +438,9 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- player: lista que representa al jugador del cual se quiere saber su lista de cartas
+- player: lista que representa al jugador del cual se quiere saber su lista de cartas.
 
-**Salida:** Lista de cartas en posesión del jugador
+**Salida:** Lista de cartas en posesión del jugador.
 
 **Ejemplo de uso:** 
 
@@ -442,14 +451,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(update-player-hand player new-hand)`
 
-**Descripción:** Reemplaza la mano del un jugador por una nueva mano representada como una lista de cartas
+**Descripción:** Reemplaza la mano del un jugador por una nueva mano representada como una lista de cartas.
 
 **Entradas:** 
 
-- player: Jugador cuya mano se quiere cambiar
-- new-hand: Nueva lista de cartas para el jugador 
+- player: Jugador cuya mano se quiere cambiar.
+- new-hand: Nueva lista de cartas para el jugador.
 
-**Salida:** Estado del jugador luego de cambiar su mano
+**Salida:** Estado del jugador luego de cambiar su mano.
 
 **Ejemplo de uso:** 
 
@@ -460,13 +469,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(active? player)`
 
-**Descripción:** Dado un jugador, retorna si el mismo se encuentra activo o no
+**Descripción:** Dado un jugador, retorna si el mismo se encuentra activo o no.
 
 **Entradas:** 
 
--  player: jugador del cual se quiere saber si se encuentra activo
+-  player: jugador del cual se quiere saber si se encuentra activo.
 
-**Salida:** #t si el jugador está activo, #f de lo contrario
+**Salida:** #t si el jugador está activo, #f de lo contrario.
 
 **Ejemplo de uso:** 
 
@@ -479,13 +488,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(lost? player)`
 
-**Descripción:** Dado un jugador, retorna si el mismo ya perdió
+**Descripción:** Dado un jugador, retorna si el mismo ya perdió.
 
 **Entradas:** 
 
--  player: jugador del cual se quiere saber si perdió
+-  player: jugador del cual se quiere saber si perdió.
 
-**Salida:** #t si el jugador perdió, #f de lo contrario
+**Salida:** #t si el jugador perdió, #f de lo contrario.
 
 **Ejemplo de uso:** 
 
@@ -498,13 +507,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(has-stood? player)`
 
-**Descripción:** Dado un jugador, retorna si el mismo se encuentra plantado o no
+**Descripción:** Dado un jugador, retorna si el mismo se encuentra plantado o no.
 
 **Entradas:** 
 
--  player: jugador del cual se quiere saber si se encuentra plantado
+-  player: jugador del cual se quiere saber si se encuentra plantado.
 
-**Salida:** #t si el jugador está plantado, #f de lo contrario
+**Salida:** #t si el jugador está plantado, #f de lo contrario.
 
 **Ejemplo de uso:** 
 
@@ -517,13 +526,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(ready? player)`
 
-**Descripción:** Determina si un participante ha tomado suficientes cartas para iniciar
+**Descripción:** Determina si un participante ha tomado suficientes cartas para iniciar.
 
 **Entradas:** 
 
-- player: jugador del cual se quiere saber si ha tomado suficientes cartas
+- player: jugador del cual se quiere saber si ha tomado suficientes cartas.
 
-**Salida:** #t si el jugador ha tomado al menos dos cartas, #f de lo contrario
+**Salida:** #t si el jugador ha tomado al menos dos cartas, #f de lo contrario.
 
 **Ejemplo de uso:** 
 
@@ -536,13 +545,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(players game)`
 
-**Descripción:** Obtiene la lista de jugadores de un estado de juego dado
+**Descripción:** Obtiene la lista de jugadores de un estado de juego dado.
 
 **Entradas:** 
 
-- game: Estado de juego del cual se quiere obtener la lista de jugadores
+- game: Estado de juego del cual se quiere obtener la lista de jugadores.
 
-**Salida:** Lista de jugadores del estado de juego "game"
+**Salida:** Lista de jugadores del estado de juego "game".
 
 **Ejemplo de uso:** 
 
@@ -553,14 +562,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(get-player game id)`
 
-**Descripción:** Conveniencia para obtener sea un jugador o el croupier
+**Descripción:** Conveniencia para obtener sea un jugador o el croupier.
 
 **Entradas:** 
 
-- game: Estado de juego del cual se quiere obtener un jugador
-- id: 'croupier, o un identificador de jugador válido
+- game: Estado de juego del cual se quiere obtener un jugador.
+- id: 'croupier, o un identificador de jugador válido.
 
-**Salida:** Participante según identificador
+**Salida:** Participante según identificador.
 
 **Ejemplo de uso:** 
 
@@ -573,15 +582,15 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(active-players-aux players id olist)` 
 
-**Descripción:** Recorre una lista de jugadores y crea otra lista con los jugadores activos de la primera, asegurándose de que el identificador asignado sea congruente con la posición del jugador en el juego
+**Descripción:** Recorre una lista de jugadores y crea otra lista con los jugadores activos de la primera, asegurándose de que el identificador asignado sea congruente con la posición del jugador en el juego.
 
 **Entradas:** 
 
-- players: lista de jugadores a ser recorrida
-- id: debe inicializarse en 0
-- olist: Deber ser inicializada en '(). En esta lista se van agragando todos los jugadores activos de una partida
+- players: lista de jugadores a ser recorrida.
+- id: debe inicializarse en 0.
+- olist: Deber ser inicializada en '(). En esta lista se van agragando todos los jugadores activos de una partida.
 
-**Salida:** Lista de jugadores activos con sus respectivos identificadores como primer elemento
+**Salida:** Lista de jugadores activos con sus respectivos identificadores como primer elemento.
 
 **Ejemplo de uso:** 
 
@@ -596,9 +605,9 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- game: Juego del que se quieren obtener los jugadores activos
+- game: Juego del que se quieren obtener los jugadores activos.
 
-**Salida:** lista de jugadores activos de la partida "game"
+**Salida:** lista de jugadores activos de la partida "game".
 
 **Ejemplo de uso:** 
 
@@ -609,13 +618,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(player-count game)`
 
-**Descripción:** Retorna la cantidad de jugadores en el juego
+**Descripción:** Retorna la cantidad de jugadores en el juego.
 
 **Entradas:** 
 
-- game: Juego cuya cantidad de jugadores quiere conocerse
+- game: Juego cuya cantidad de jugadores quiere conocerse.
 
-**Salida:** cantidad de jugadores en "game"
+**Salida:** cantidad de jugadores en "game".
 
 **Ejemplo de uso:** 
 
@@ -626,15 +635,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(croupier game)`
 
-**Descripción:** Obtiene la lista que representa el estado del croupier
+**Descripción:** Obtiene la lista que representa el estado del croupier.
 
 **Entradas:** 
 
-- game: Juego del cual se quiere obtener el estado del croupier
+- game: Juego del cual se quiere obtener el estado del croupier.
 
+**Salida:** Lista que representa estado del croupier.
 
-
-**Salida:** Lista que representa estado del croupier
 **Ejemplo de uso:** 
 
 ```scheme
@@ -644,14 +652,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(accept-card player card)`
 
-**Descripción:** Agrega una nueva carta a la mano de un jugador
+**Descripción:** Agrega una nueva carta a la mano de un jugador.
 
 **Entradas:** 
 
-- player: lista de estado del jugador al que se le quiere agregar una carta en su mazo
-- card: Carta a agregar al mazo del jugador
+- player: lista de estado del jugador al que se le quiere agregar una carta en su mazo.
+- card: Carta a agregar al mazo del jugador.
 
-**Salida:** Nuevo estado de jugador ahora con la carta dada incluída en su mano
+**Salida:** Nuevo estado de jugador ahora con la carta dada incluída en su mano.
 
 **Ejemplo de uso:** 
 
@@ -666,9 +674,9 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- player: Jugador que posiblemente es el croupier en estado final
+- player: Jugador que posiblemente es el croupier en estado final.
 
-**Salida:** Lista de nuevo estado de jugador
+**Salida:** Lista de nuevo estado de jugador.
 
 **Ejemplo de uso:** 
 
@@ -679,13 +687,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(maybe-lost player)`
 
-**Descripción:** Modifica una lista de estado de jugador para representar que el mismo ha perdido en caso de que su puntuación exceda 21
+**Descripción:** Modifica una lista de estado de jugador para representar que el mismo ha perdido en caso de que su puntuación exceda 21.
 
 **Entradas:** 
 
-- player: Jugador que puede haber perdido
+- player: Jugador que puede haber perdido.
 
-**Salida:** Lista de nuevo estado de jugador
+**Salida:** Lista de nuevo estado de jugador.
 
 **Ejemplo de uso:** 
 
@@ -698,11 +706,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(set-stood player)`
 
-**Descripción:** Modifica una lista de estado de jugador para representar que el mismo
-             se encuentra plantado
+**Descripción:** Modifica una lista de estado de jugador para representar que el mismo se encuentra plantado.
+
 **Entradas:** 
-- player: Jugador que se quiere indicar que se plantó
-**Salida:** Lista de nuevo estado de jugador
+
+- player: Jugador que se quiere indicar que se plantó.
+
+**Salida:** Lista de nuevo estado de jugador.
+
 **Ejemplo de uso:** 
 
 ```scheme
@@ -712,15 +723,15 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(update-player predicate index updated)`
 
-**Descripción:** Aplica una función modificador a un jugador de una lista identificado por un índice. Obtiene la nueva lista de jugadores con el jugador del índice especificado con su estado actualizado
+**Descripción:** Aplica una función modificador a un jugador de una lista identificado por un índice. Obtiene la nueva lista de jugadores con el jugador del índice especificado con su estado actualizado.
 
 **Entradas:** 
 
-- predicate: es la operación modificadora a aplicar a cada jugador 
-- index: índice de la lista en el que se encuentra el jugador. Empieza desde 0 y en un juego de 3 el máximo es 2
-- updated: Debe inicializarse en '(). Almacena la lista de jugadores ya procesados
+- predicate: es la operación modificadora a aplicar a cada jugador.
+- index: índice de la lista en el que se encuentra el jugador. Empieza desde 0 y en un juego de 3 el máximo es 2.
+- updated: Debe inicializarse en '(). Almacena la lista de jugadores ya procesados.
 
-**Salida:** Lista de jugadores con el estado del jugador especificado actualizada
+**Salida:** Lista de jugadores con el estado del jugador especificado actualizada.
 
 **Ejemplo de uso:**
 
@@ -735,12 +746,12 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- cards: Lista de cartas cuyo puntaje quiere sumarse
-- previous-sum: suma de puntaje justo antes de sumada la última carta en el valor contenido en `score-sum`
-- score-sum: valor numérico que contiene el puntaje que se suma conforme se recorre la lista de cartas. Debe inicializarse en 0 
-- limit-to-21?: indica si deben ignorarse cartas que provoquen que el puntaje se sobrepase de 21 o no
+- cards: Lista de cartas cuyo puntaje quiere sumarse.
+- previous-sum: suma de puntaje justo antes de sumada la última carta en el valor contenido en `score-sum`.
+- score-sum: valor numérico que contiene el puntaje que se suma conforme se recorre la lista de cartas. Debe inicializarse en 0.
+- limit-to-21?: indica si deben ignorarse cartas que provoquen que el puntaje se sobrepase de 21 o no.
 
-**Salida:** Puntaje que suma la lista de cartas dada
+**Salida:** Puntaje que suma la lista de cartas dada.
 
 **Ejemplo de uso:**
 
@@ -751,13 +762,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(score player)`
 
-**Descripción:** Toma una lista de estado de un jugador y calcula el puntaje que suman las cartas en su mano
+**Descripción:** Toma una lista de estado de un jugador y calcula el puntaje que suman las cartas en su mano.
 
 **Entradas:** 
 
-- player: jugador cuyo puntaje se quiere obtener
+- player: jugador cuyo puntaje se quiere obtener.
 
-**Salida:** Puntaje que suman las cartas en posesión del jugador
+**Salida:** Puntaje que suman las cartas en posesión del jugador.
 
 **Ejemplo de uso:**
 
@@ -768,13 +779,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
  ### `(raw-score player)`
 
-**Descripción:** Equivalente a `score`, pero no ignora cartas que exceden el puntaje más allá 21
+**Descripción:** Equivalente a `score`, pero no ignora cartas que exceden el puntaje más allá 21.
 
 **Entradas:** 
 
-- player: jugador cuyo puntaje se quiere obtener
+- player: jugador cuyo puntaje se quiere obtener.
 
-**Salida:** Puntaje que suman las cartas en posesión del jugador
+**Salida:** Puntaje que suman las cartas en posesión del jugador.
 
 **Ejemplo de uso:**
 
@@ -789,10 +800,10 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- game: Juego al que pertenece el jugador que quiere indicarse como plantado
-- player: identificador del jugador (croupier inclusive) a ser indicado como plantado
+- game: Juego al que pertenece el jugador que quiere indicarse como plantado.
+- player: identificador del jugador (croupier inclusive) a ser indicado como plantado.
 
-**Salida:** Nuevo estado de juego con lista de jugadores actualizada para mostrar el cambio en el estado del jugador plantado
+**Salida:** Nuevo estado de juego con lista de jugadores actualizada para mostrar el cambio en el estado del jugador plantado.
 
 **Ejemplo de uso:**
 
@@ -810,16 +821,15 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(put-card game player card)`
 
-**Descripción:** Agrega una carta al mazo de un jugador que se encuentra activo en una partida. No agrega la carta a la lista de cartas tomadas de juego, puesto que durante la generación de la carta dicha tarea ya se lleva a cabo
+**Descripción:** Agrega una carta al mazo de un jugador que se encuentra activo en una partida. No agrega la carta a la lista de cartas tomadas de juego, puesto que durante la generación de la carta dicha tarea ya se lleva a cabo.
 
 **Entradas:** 
 
-- game: Juego en que se encuentra el jugador al que se le quiere agregar una carta 
-- player: Es un entero que identifica a un jugador por orden, o el átomo 'croupier.
-              Debe ser igual a 0, o menor que la cantidad de jugadores o 'croupier
-- card: Carta que se quiere agregar al mazo del jugador
+- game: Juego en que se encuentra el jugador al que se le quiere agregar una carta.
+- player: Es un entero que identifica a un jugador por orden, o el átomo 'croupier. Debe ser igual a 0, o menor que la cantidad de jugadores o 'croupier.
+- card: Carta que se quiere agregar al mazo del jugador.
 
-**Salida:** Estado de juego con el mazo del jugador que se indicó actualizado con la nueva carta en su mazo
+**Salida:** Estado de juego con el mazo del jugador que se indicó actualizado con la nueva carta en su mazo.
 
 **Ejemplo de uso:**
 
@@ -831,14 +841,14 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(next-turn-aux playing last-player)`
 
-**Descripción:** Recorre una lista de jugadores y decide a cuál le toca tomar turno, dado el identificador del último jugador que tomó turno. Para eso compara primero si hay jugadores de mayor id activo, luego busca un jugador de menor id, si no encuentra otro jugador, verifica si el último jugador sigue activo y le permite repetir turno, de lo contrario, retorna '()
+**Descripción:** Recorre una lista de jugadores y decide a cuál le toca tomar turno, dado el identificador del último jugador que tomó turno. Para eso compara primero si hay jugadores de mayor id activo, luego busca un jugador de menor id, si no encuentra otro jugador, verifica si el último jugador sigue activo y le permite repetir turno, de lo contrario, retorna '().
 
 **Entradas:** 
 
-- playing: lista de estados de jugadores activos de una partida con sus id's como primer elemento (obtenido de la función (active-players))
-- last-player: identificador de último jugador en tomar su turno
+- playing: lista de estados de jugadores activos de una partida con sus id's como primer elemento (obtenido de la función (active-players)).
+- last-player: identificador de último jugador en tomar su turno.
 
-**Salida:** Siguiente jugador a tomar turno, o '() si ningún jugador puede tomar turno
+**Salida:** Siguiente jugador a tomar turno, o '() si ningún jugador puede tomar turno.
 
 **Ejemplo de uso:**
 
@@ -850,12 +860,12 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(next-turn game last-player)`
 
-**Descripción:** Si existe algun jugador activo, basado en el índice que representa al último jugador en terminar su turno, decide por medio de round-robin cuál es el siguiente jugador 
+**Descripción:** Si existe algun jugador activo, basado en el índice que representa al último jugador en terminar su turno, decide por medio de round-robin cuál es el siguiente jugador.
 
 **Entradas:** 
 
-- game: Juego en el cuál se quiere buscar cuál es el siguiente jugador en tomar su turno 
-- last-player: índice identificador del último jugador en tomar su turno
+- game: Juego en el cuál se quiere buscar cuál es el siguiente jugador en tomar su turno.
+- last-player: índice identificador del último jugador en tomar su turno.
 
 **Salida:** 
 
@@ -869,13 +879,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(has-aces ilist)`
 
-**Descripción:** Verifica si una lista de cartas dada contiene un as de valor 11
+**Descripción:** Verifica si una lista de cartas dada contiene un as de valor 11.
 
 **Entradas:** 
 
-- ilist: lista de entrada que contiene el conjunto a verificar
+- ilist: lista de entrada que contiene el conjunto a verificar.
 
-**Salida:** #t si el conjunto dado tiene un as de valor 11, #f de lo contrario
+**Salida:** #t si el conjunto dado tiene un as de valor 11, #f de lo contrario.
 
 **Ejemplo de uso:**
 
@@ -892,10 +902,10 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- ilist: lista de cartas de entrada
-- olist: inicializada en '(). Almacena las cartas procesadas que no han sido ases de valor 11
+- ilist: lista de cartas de entrada.
+- olist: inicializada en '(). Almacena las cartas procesadas que no han sido ases de valor 11.
 
-**Salida:** Si la lista original tenía un as de valor 11, retorna la lista con ese as cambiado a un as de valor 1, de lo contrario, retorna la misma lista de entrada
+**Salida:** Si la lista original tenía un as de valor 11, retorna la lista con ese as cambiado a un as de valor 1, de lo contrario, retorna la misma lista de entrada.
 
 **Ejemplo de uso:**
 
@@ -910,9 +920,9 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 **Entradas:** 
 
-- player: jugador cuyo puntaje se quiere mejorar
+- player: jugador cuyo puntaje se quiere mejorar.
 
-**Salida:** Mejor combinación posible de valores que el jugador puede tener con su mano actual
+**Salida:** Mejor combinación posible de valores que el jugador puede tener con su mano actual.
 
 **Ejemplo de uso:**
 
@@ -923,15 +933,15 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(new-game-aux player-names player-list)`
 
-**Descripción:** Se encarga de la elaboración de una lista de estados de jugadores a partir de una lista de nombres dada para que la función "new-game" pueda crear unnuevo estado de juego
+**Descripción:** Se encarga de la elaboración de una lista de estados de jugadores a partir de una lista de nombres dada para que la función "new-game" pueda crear unnuevo estado de juego.
 
 **Entradas:** 
 
-- player-names: lista de nombres de jugadores a ser asignados un estado de juego
+- player-names: lista de nombres de jugadores a ser asignados un estado de juego.
 
-- player-list: lista almacena los estados de juego que se han ido generando
+- player-list: lista almacena los estados de juego que se han ido generando.
 
-**Salida:** Lista de estados de juego para los diferentes nombres provistos
+**Salida:** Lista de estados de juego para los diferentes nombres provistos.
 
 **Ejemplo de uso:**
 
@@ -942,13 +952,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(new-game player-names)`
 
-**Descripción:** Genera un nuevo estado de juego a partir de nombres de jugadores
+**Descripción:** Genera un nuevo estado de juego a partir de nombres de jugadores.
 
 **Entradas:** 
 
-- player-names: nombres de los jugadores presentes en la partida
+- player-names: nombres de los jugadores presentes en la partida.
 
-**Salida:** Estado del juego nuevo que incluye los nombres dados como jugadores, este estado es de forma ((estados jugadores)(estado croupier)(cartas tomadas del mazo))
+**Salida:** Estado del juego nuevo que incluye los nombres dados como jugadores, este estado es de forma ((estados jugadores)(estado croupier)(cartas tomadas del mazo)).
 
 **Ejemplo de uso:**
 
@@ -959,13 +969,13 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 
 ### `(game-finished? game)`
 
-**Descripción:** Determina si el estado de juego dado es un estado final
+**Descripción:** Determina si el estado de juego dado es un estado final.
 
 **Entradas:** 
 
-- game: Juego cuyo estado quiere verificars
+- game: Juego cuyo estado quiere verificars.
 
-**Salida:** Booleano que indica si el juego ya terminó o no
+**Salida:** Booleano que indica si el juego ya terminó o no.
 
 **Ejemplo de uso:** 
 
@@ -974,6 +984,498 @@ Precondiciones: `X` se encuentra entre 1 y 3, ambos inclusive.
 >(game-finished? game)
 #t
 ```
+
+### `(ask-player-names up-to then allow-blanks)`
+
+**Descripción:** Pregunta al usuario por nombres de jugadores para un nuevo juego en un cuadro de diálogo.
+
+**Entradas:**
+
+- up-to: Número máximo de jugadores, entero positivo.
+- then: Función que admita un único argumento con la lista de nombres.
+- allow-blanks (opcional): Si se indica `#t`, entonces se aceptarán nombres en blanco. La lista pasada a `then`  estará filtrada de nombres en blanco. La única restricción será que haya al menos un nombre no vacío.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(ask-player-names 3 start-game)
+```
+
+### `(start-game player-names)`
+
+**Descripción:** Inicia una instancia del juego, mostrando una pantalla de splash mientras carga.
+
+**Entradas:**
+
+- player-names: Lista de al menos un nombre de jugador, debe ser una lista de cadenas.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(start-game '("Foo" "Bar" "Baz"))
+```
+
+### `(splash-screen)`
+
+**Descripción:** Genera y muestra una pantalla de carga con un fondo aleatorio.
+
+**Salida:** El `gauge%` asociado a la barra de progreso, en un estado indefinido. El caller es responsable de definirle un rango e incrementarlo.
+
+**Ejemplos de uso:**
+
+```scheme
+>(splash-screen)  ; A partir de aquí la pantalla de carga es visible
+```
+
+### `(run-game player-names splash-gauge)`
+
+**Descripción:** Ejecuta una nueva partida de juego. Muestra la ventana principal de juego, coloca e inicializa elementos de interfaz, provoca las acciones iniciales del juego y determina la secuencia de desarrollo de la partida en función de subsecuentes cambios de estado. Al terminar la secuencia, acciona los procesos de puntaje y finalización/reinicio.
+
+**Entradas:**
+
+- player-names: Lista de al menos un nombre de jugador como cadenas de texto.
+- splash-gauge (opcional): Barra de progreso de carga, a incrementar conforme progresa la carga y cuya ventana será eliminada al terminar la carga.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(run-game '("Foo" "Bar" "Baz") (splash-screen))
+; Muestra un splash mientras se inicia una nueva partida
+```
+
+### `(end-of-game game deck croupier window then)`
+
+**Descripción:** Realiza acciones finales y termina una partida, mostrando la tabla de puntuaciones.
+
+**Entradas:**
+
+- game: Estado de juego hasta este punto.
+- deck: Marco contenedor del mazo.
+- croupier-container: Marco contenedor de juego del croupier.
+- window: Ventana principal de juego.
+- then: Véase parámetro `then` de `show-score`.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(end-of-game ... (λ (restart?) ...))
+```
+
+### `(show-score game window then)`
+
+**Descripción:** Muestra la tabla de puntuaciones y determina si el juego debe reiniciarse o finalizarse.
+
+**Entradas:**
+
+- game: Estado de juego hasta este punto.
+- window: Ventana principal de juego, a como fue generada por `new-game`.
+- then: Función que debe aceptar un único argumento booleano `restart?`, el cual determina si la decisión fue reiniciar o finalizar.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(show-score game window (λ (restart?) #| acción posterior |#))
+```
+
+### `(get-text-width dc text font)`
+
+**Descripción:** Determina el ancho que tendrá un fragmento de texto cuando sea renderizado.
+
+**Entradas:**
+
+- dc: Contexto de dibujo, instancia de `dc%`.
+- text: Texto a medir, debe ser una cadena.
+- font (opcional): Fuente contra la cual medir, instancia de `font%`; por defecto se asume la fuente en uso activo para `dc`.
+
+**Salida:** Tamaño, medido en unidades base de dibujo, del texto cuando sea renderizado con la fuente en cuestión.
+
+**Ejemplos de uso:**
+
+```scheme
+>(get-text-width dc "Jack")
+52
+```
+
+### `(add-name-fields dialog up-to next fields)`
+
+**Descripción:** Genera una lista de campos de texto para nombres de jugador a utilizada por `start-game`.
+
+**Entradas:**
+
+- dialog: Diálogo, instancia `dialog%`, al cual se agregarán los campos 
+- up-to: Máximo número de jugador a incluir, entero positivo.
+- next: Número del siguiente jugador por campo, inicialmente debe ser 1.
+- fields: Campos ya generados, en orden inverso, para uso recursivo.
+
+**Salida:** Los campos de texto insertados en respectivo orden, siendo cada uno instancia de `text-field%`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(add-name-fields dialog 3 1 empty)
+(list #| tres campos de texto |#)
+```
+
+### `(game-container parent name custom-draw initial-cards)`
+
+**Descripción:** Crea un marco contenedor para un participante.
+
+**Entradas:**
+
+- parent: Elemento gráfico padre.
+- name: Nombre del participante.
+- custom-draw (opcional): Función que debe admitir llamadas de laforma `(custom-draw canvas dc current-cards)`, donde `canvas` y `dc` son los objetos típicamente asociados a ambos nombres, y `current-cards` es el estado actual en ese punto del parámetro variable de cartas actuales. Si no se especifica se asume `draw-stack`.
+- initial-cards (opcional): Cartas iniciales bajo control de este marco; se asume '() si no se especifica.   Puede ser un objeto arbitrario en caso de presentarse `custom-draw`, de lo contrario debe ser una lista de cartas.
+
+**Salida:** Un marco contenedor visible bajo `parent`, manipulable a través de `container-label`, `score-label`, `card-canvas` y `current-cards`. Si no se especificó `custom-draw`, se colocará una etiqueta con puntuación nula automáticamente.
+
+**Ejemplos de uso:**
+
+```scheme
+>(game-container window "Foo")
+```
+
+### `(container-panel container)`
+
+**Descripción:** Obtiene el panel que engloba un marco contenedor.
+
+**Entradas:**
+
+- container (implícita): Marco contenedor.
+
+**Salida:** Instancia de `vertical-panel%` padre de todo el marco.
+
+**Ejemplos de uso:**
+
+```scheme
+>(container-panel croupier-container)
+```
+
+### `(score-label container)`
+
+**Descripción:** Obtiene la etiqueta de puntaje de un marco contenedor.
+
+**Entradas:**
+
+- container (implícita): Marco contenedor.
+
+**Salida:** Instancia de `message%` que muestra la puntuación actual.
+
+**Ejemplos de uso:**
+
+```scheme
+>(score-label croupier-container)
+```
+
+### `(score-label container)`
+
+**Descripción:** Obtiene el lienzo de un marco contenedor donde se dibujan las cartas del participante.
+
+**Entradas:**
+
+- container (implícita): Marco contenedor.
+
+**Salida:** Instancia de `canvas%`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(card-canvas croupier-container)
+```
+
+### `(current-cards container)`
+
+**Descripción:** Obtiene el parámetro variable de cartas de un marco contenedor.
+
+**Entradas:**
+
+- container (implícita): Marco contenedor.
+
+**Salida:** Función que al llamarse con aridad cero se comporta como un getter de cartas actuales, y al invocarse con un argumento se comporta como setter.
+
+**Ejemplos de uso:**
+
+```scheme
+>((current-cards croupier-container) '((5 hearts) (9 diamonds)))
+```
+
+### `(initial-grab game deck container player-id)`
+
+**Descripción:** Toma cartas para un participante hasta que las reglas de juego indiquen que está listo para iniciar.
+
+**Entradas:**
+
+- game: Estado de juego hasta el momento.
+- deck: Marco contenedor del mazo.
+- container: Marco contenedor del participante.
+- player-id: Índice de jugador, o `'croupier`.
+
+**Salida:** El estado de juego una vez tomadas las cartas iniciales del participantes.
+
+**Ejemplos de uso:**
+
+```scheme
+>(length
+     (taken-cards
+       (croupier (initial-grab (new-game "Foo") deck croupier-container 'croupier))))
+2
+```
+
+### `(grab game deck container player-id)`
+
+**Descripción:** Transfiere una carta del mazo hacia un participante, realizando las acciones, animaciones y efectos de interfaz que esto implique.
+
+**Entradas:**
+
+- game: Estado de juego hasta el momento.
+- deck: Marco contenedor del mazo.
+- container: Marco contenedor del participante.
+- player-id: Índice del jugador participante, o `'croupier`.
+
+**Salida:** Nuevo estado de juego
+
+**Ejemplos de uso:**
+
+```scheme
+>(grab game deck croupier-container 'croupier)
+  ; El croupier adquiere una carta más en su mano
+```
+
+### `(animate-deck-grab canvas remaining)`
+
+**Descripción:** Dibuja rápidamente varias versiones del mazo en donde la última carta se desplaza progresivamente a la derecha, otorgando una impresión de movimiento.
+
+**Entradas:**
+
+- canvas: Lienzo de dibujo del mazo.
+- remaining: Lista de cartas que sobrarán una vez que la última carta ya no sea visible.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(animate-deck-grab deck 51)
+  ; Sale la carta superior de un mazo completo
+```
+
+### `(shown-cards all-cards container player-id)`
+
+**Descripción:** Transforma una lista de cartas de participante en una lista de cartas a mostrar, posiblemente reemplazando la primera con lo que gráficamente es una carta oculta.
+
+**Entradas:**
+
+- all-cards: Todas las cartas del participante descubiertas.
+- container: Marco contenedor del participante.
+- player-id: Índice del jugador participante, o `'croupier`.
+
+**Salida:** Una lista de cartas, donde si alguna carta fue ocultada será reemplaza con `'hidden`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(shown-cards (cards (croupier game)) croupier-container 'croupier)
+'('hidden ...)
+```
+
+### `(play-background-music)`
+
+**Descripción:** Crea un hilo verde que reproduce música de fondo en bucle infinito.
+
+**Salida:** El custodian dedicado para el hilo verde que reproduce la música de fondo.
+
+**Ejemplos de uso:**
+
+```scheme
+>(play-background-music)
+```
+
+### `(flip container duration action)`
+
+**Descripción:** Reproduce asíncronamente un efecto de toma de carta mientras ejecuta una acción con un tiempo de retardo final.
+
+**Entradas:**
+
+- container: Marco contenedor del participante.
+- duration: Duración de retardo, real positivo.
+- action: Una función de aridad cero.
+
+**Salida:** `(action)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(flip 0.25 (λ () ...))
+  ; Se actualiza visualmente la puntuación
+```
+
+### `(update-score container score)`
+
+**Descripción:** Actualiza los elementos gráficos asociados a la puntuación de un participante de juego.
+
+**Entradas:**
+
+- container: Marco contenedor del participante.
+- score: Nueva puntuación, entero no negativo.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(update-score croupier-container 17)
+  ; Se actualiza visualmente la puntuación
+```
+
+### `(update-cards container cards)`
+
+**Descripción:** Actualiza las cartas actuales de un marco contenedor.
+
+**Entradas:**
+
+- container: Marco contenedor para el que se actualizarán sus cartas.
+- cards: Nuevas cartas, aceptando el tipo esperado por la función responsable de dibujar este marco en cuestión, por lo cual no necesariamente es una lista de cartas (véase el parámetro `custom-draw` de la función `game-container`).
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(update-cards container (taken-cards (car (players game))))
+```
+
+### `(draw-stack canvas dc cards)`
+
+**Descripción:** Dibuja las cartas en manos de un participante.
+
+**Entradas:**
+
+- canvas: Lienzo de dibujo.
+- dc: Contexto de dibujo.
+- cards: Lista de cartas a dibujar.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(draw-stack canvas dc '((5 hearts) (9 pikes)))
+```
+
+### `(draw-deck canvas dc count swipe-factor)`
+
+**Descripción:** Dibuja el mazo, posiblemente con un corrimiento de animación.
+
+**Entradas:**
+
+- canvas: Lienzo de dibujo.
+- dc: Contexto de dibujo.
+- count: Número de cartas en el mazo, sin contar la desplazada.
+- swipe-factor (opcional): Fracción que indica qué tanto debe mostrarse desplazada la última carta del mazo, medida en unidades del ancho de una carta.
+
+**Salida:** `(void)`
+
+**Ejemplos de uso:**
+
+```scheme
+>(draw-deck canvas dc 52)      ; Dibuja un mazo completo
+- >(draw-deck canvas dc 51 0.5)  ; Igual, pero desplaza la última carta
+```
+
+### `(card-bitmap card)`
+
+**Descripción:** Asocia una carta con su bitmap. Si la carta se encuentra cargada, la operación será inmediata. De lo contrario, ocurrirá una carga de almacenamiento secundario y un proceso de decodificación de duración corta pero notable.
+
+**Entradas:**
+
+- card: Carta para la cual se busca un bitmap.
+
+**Salida:** De tener éxito, una instancia de `bitmap%`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(card-bitmap '(queen pikes))
+#| bitmap de una reina de espadas |#
+```
+
+### `(card-bitmap card)`
+
+**Descripción:** Asocia una carta con su bitmap. Si la carta se encuentra cargada, la operación será inmediata. De lo contrario, ocurrirá una carga de almacenamiento secundario y un proceso de decodificación de duración corta pero notable.
+
+**Entradas:**
+
+- card: Carta para la cual se busca un bitmap.
+
+**Salida:** De tener éxito, una instancia de `bitmap%`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(card-bitmap '(queen pikes))
+#| bitmap de una reina de espadas |#
+```
+
+### `(load-bitmap path)`
+
+**Descripción:** Carga y decodifica un bitmap a partir del directorio de recursos.
+
+**Entradas:**
+
+- path: Ruta al bitmap, relativa a la raíz de recursos, sin extensión.
+
+**Salida:** De tener éxito, una instancia de `bitmap%`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(load-bitmap "cards/5D")
+#| bitmap de un 5 de rombos |#
+```
+
+### `(preload-bitmaps gauge)`
+
+**Descripción:** Precarga en memoria y decodifica los bitmaps que la aplicación requerirá, con tal de evitar pausas durante la ejecución mientras estos se cargan.
+
+**Entradas:**
+
+- gauge (opcional): Barra de progreso a incrementar mientras se procesan bitmaps.
+
+**Salida:** `(void)`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(load-bitmaps)  ; Durará algunos segundos
+```
+
+### `(load-progress gauge)`
+
+**Descripción:** Incrementa una barra de progreso de carga.
+
+**Entradas:**
+
+- gauge: Barra de progreso, o `#f`; en el último caso no se realiza acción.
+
+**Salida:** `(void)`.
+
+**Ejemplos de uso:**
+
+```scheme
+>(load-progress gauge)
+  ; Visualmente, la barra de progreso avanza en una unidad
+```
+
 
 ## 1.3. Estructuras de datos desarrolladas
 
