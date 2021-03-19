@@ -160,3 +160,19 @@
   - Alt+S: Plantarse
   - Alt+R: Reiniciar
   - Alt+Q: Salir
+- Se agrega un recurso de música de fondo con tema de casino. El otro compañero
+  de equipo sugirió tomar como referencia el siguiente recurso:
+  <https://www.youtube.com/watch?v=GKtlRchHpx8>. Para obtener un recurso
+  utilizable, se realizó la siguiente secuencia de comandos:
+
+  ```bash
+  $ youtube-dl -x -o 'casino.%(ext)s' 'https://www.youtube.com/watch?v=GKtlRchHpx8'
+  $ ffmpeg -i casino.opus -vn -t 172 casino.wav
+  ```
+
+  El autor de esta bitácora ya se encontraba en conocimiento de lo anterior,
+  por lo cual no se recurrió a referencias bibliográficas.  `-t 172`
+  corresponde a los primeros 2:52 segundos de audio. El formato `.wav` se
+  escoge ya que es el único soportado por la función `(play-sound)` de
+  `racket/gui` de manera fiable en todas las plataformas de interés.  El
+  archivo `casino.wav` se agrega a `assets/`.
