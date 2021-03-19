@@ -54,7 +54,7 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 ## 15 de marzo:
 
-- Se trabajó mayoritariamente la documentación mientras el otro compañero refina ciertos elementos del juego y la lógica
+- Se trabajó mayoritariamente la documentación mientras el otro compañero refina ciertos elementos del juego y la lógica.
 - Se realizó una reunión para coordinar la organización para esta semana final de desarrollo del proyecto. Se discutieron posibles mejoras al programa y se conversó sobre el desempeño como grupo de trabajo. 
 
 
@@ -62,4 +62,18 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 
 - Se agragó contenido vario a la documentación.
 - Se confeccionaron los diagramas de la solución general y al algoritmo quicksort.
-- Se confeccionó el manual de usuario.
+- Se confeccionó el Manual de usuario.
+- Se realizaron pruebas de control de calidad para asegurar un buen funcionamiento del programa y su cumplimiento con la especificación dada.
+
+## 17 de marzo
+
+- Se confeccionaron algunos diagramas más (next-turn y try-changing-aces).
+- Se expandió la documentación para agregar algunas conclusiones y recomendaciones.
+- Se agregaron datos varios al manual de usuario.
+- Se realizaron algunas medidas de desempeño para tomar datos de uso de memoria RAM para anotar dichos parámetros en el manual de usuario.
+- Se discutió con el compañero sobre el cambio de una condicional que permitía que un 21 de usuario ganara a un 21 del croupier siempre y cuando tuviese menos cartas. La lógica se estableció que debía cambiarse para solo permitir eso en los casos en los que hay confirmado un blackjack, y no para cualquier situación en que el jugador tenga solo dos cartas.
+
+## 18 de marzo
+
+- Se agregó la guía de compilado al manual de usuario.
+- Se agregaron algunas referencia faltantes a la documentación.

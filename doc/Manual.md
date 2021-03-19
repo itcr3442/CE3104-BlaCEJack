@@ -133,6 +133,20 @@ Esta ventana final da la posibilidad de reiniciar el juego. Usar la opción "Qui
 
 ## Atajos del teclado
 
+Para disposición del jugador se habilitaron algunos atajos del teclado:
+
+* Alt+T: Tomar carta
+* Alt+S: Plantarse
+* Alt+R: Restart
+* Alt+Q: Quit
+
+Estos atajos permiten facilitar las multipartidas pues se puede utilizar para para evitar que todos los jugadores deban usar los mismos controles. 
+
+Con la ayuda de un microcontrolador con capacidades USB-HID podrían hacerse controles individuales que "inyecten" esta secuencia de teclas. Si el usuario quiere experimentar con esta posibilidad, se le recomienda utilizar algunos de los MCU's de la siguiente lista:
+
+* Arduino Pro Micro
+* STM32 Bluepill
+* Teensy (cualquier versión es funcional, aunque se puede preferir una revisión más reciente)
 
 
 

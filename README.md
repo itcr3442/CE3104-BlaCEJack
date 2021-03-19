@@ -1129,13 +1129,19 @@ Obtenido de: https://docs.racket-lang.org/draw/
 Flatt M., Findler R., Clements J. (s.f). _raco: Racket Command Line Tools_.
 Obtenido de: https://docs.racket-lang.org/raco/
 
+ Andersen. L. (2016). _Subproccesses remain alive after Racket program halts_. 
+ Obtenido de: https://stackoverflow.com/questions/39358725/subproccesses-remain-alive-after-racket-program-halts/39358912#39358912
+
 
 ## Recursos gráficos
 
-Imágenes de cartas obtenidas de:
+Escape One. (2014, 30 de noviembre). _Las Vegas Casino Music Video: For Night Game of Poker, Blackjack, Roulette Wheel & Slots_
+[video]. YouTube. https://youtu.be/GKtlRchHpx8
+
+American Contract Bridge League. (s.f.). _52 Playing Cards_[Imágenes]. Obtenido de:
 https://acbl.mybigcommerce.com/52-playing-cards/
 
-Sonidos de cartas obtenidas de:
+Orange Free Sounds. (2018). _Card Flip Sound Effect_[Audio]. Obtenido de:
 https://orangefreesounds.com/card-flip-sound-effect/
 
 
