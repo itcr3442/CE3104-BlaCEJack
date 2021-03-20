@@ -38,7 +38,7 @@ linestretch: 1.5
 
 # 2.2. Ambientes en los que se comprobó funcionamiento:
 
-- Windows 10
+- Windows 10 (Interfaz debe ser utilizada sin imagen de fondo)
 - Arch Linux
 - Manjaro Linux 
 
@@ -73,6 +73,7 @@ Si se desea empezar el juego desde consola powershell en Windows:
 >$blackcejack>cd src
 >$blackcejack$\src>racket
 ```
+
 ```scheme
 >(enter! "ui.rkt")
 >(bCEj X)
@@ -92,8 +93,6 @@ En Linux el proceso difiere poco:
 >(bCEj X)
 ```
 
-
-
 Alternativamente se puede cargar el archivo ui.rkt en un programa como DrRacket o VSCode y cargar el archivo al REPL, eso sí, en dichos casos sigue siendo necesario ejecutar el comando de inicio de juego:
 
 ```scheme
@@ -111,7 +110,7 @@ Un ejecutable puede compilarse de los archivos fuente. Puede solicitar el mismo 
 
 Mientras se cargan los recursos del programa, se muestra una pantalla con imágenes conjuntos de carta que varían al azar con cada inicio de juego.
 
-![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/assets/splash/honor_spades.png)
+![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/assets/splash/honor_spades.png){ width=250px }
 
 Una vez cargado el juego se muestra la interfaz de juego:
 
@@ -157,25 +156,24 @@ Con la ayuda de un microcontrolador con capacidades USB-HID podrían hacerse con
 * STM32 Bluepill
 * Teensy (cualquier versión es funcional, aunque se puede preferir una revisión más reciente)
 
-
-
 # Anexo: Guía de compilación de ejecutable
 
 ## Windows
 
 Para generar un ejecutable en windows es necesario tener disponible `make` en el sistema. Si bien hay varias maneras de conseguir `make`, en esta guía solo se cubrirá el uso de chocolatey. Se asume que el usuario ya tiene disponible la herramienta de git en sus sistema, de lo contrario, favor descargar git en el siguiente link antes de continuar: <https://git-scm.com/downloads>
 
-1. Abrir una consola de PowerShell con permisos de administrador
-2. Seguir los pasos indicados en <https://chocolatey.org/install>
-3. Al finalizar la instalación de chocolatey, debe cerrar la consola creada anteriormente y abrir una nueva (otra vez con permisos de administrador).
-4. Ejecutar:
+1. Editar el makefile en la línea 8 y cambiarla por: `raco distribute dist build/blacejack.exe`.
+2. Abrir una consola de PowerShell con permisos de administrador.
+3. Seguir los pasos indicados en <https://chocolatey.org/install>
+4. Al finalizar la instalación de chocolatey, debe cerrar la consola creada anteriormente y abrir una nueva (otra vez con permisos de administrador).
+5. Ejecutar:
 
 ```Powershell
 >choco install make
 ```
 
-5. Diríjase a una carpeta de su preferencia, haga `shift+click derecho` y seleccione "abrir ventana de powershell aquí".
-6. Ejecute los siguientes comandos en la consola de Powershell:
+6. Diríjase a una carpeta de su preferencia, haga `shift+click derecho` y seleccione "abrir ventana de powershell aquí".
+7. Ejecute los siguientes comandos en la consola de Powershell:
 
 ```Console
 >git clone https://github.com/itcr3442/CE3104-BlaCEJack.git
@@ -190,7 +188,6 @@ Para generar un ejecutable en windows es necesario tener disponible `make` en el
 ```
 
 El ejecutable se debería encontrar listo para su uso dentro de la carpeta "build" en el directorio del repositorio clonado.  
-
 
 ## Linux
 
