@@ -1625,30 +1625,261 @@ No se encontraron problemas que no se hayan resolvido.
 
 1. **Greedy croupier**: 
    
-   * *Descripción*: Cuando el croupier obtenía un puntaje que sumaba 17 o más con sus primeras dos cartas se marcaba a sí mismo como plantado. Este comportamiento era esperado, pero una consecuencia no prevista era que uno de los condicionales de la función que asignaba turnos `next-turn` requería un croupier activo, o de lo contrario empezaba la rutina final en la que el croupier toma cartas. El problema que surgía en esta situación es que la función `game-finished?` chequea si hay jugadores activos **y**  si el croupier ya perdió. Como la función de asignar turnos fallaba, efectivamente quedaban jugadores activos, y el croupier seguía tomando cartas ya que su condicional para seguir tomando cartas era el valor de retorno de `game-finished?`, el cual en este caso seguiría siendo `#t` hasta un tiempo indefinido.
+   * *Descripción*: Cuando el croupier obtenía un puntaje que sumaba 17 o más
+	 con sus primeras dos cartas se marcaba a sí mismo como plantado. Este
+	 comportamiento era esperado, pero una consecuencia no prevista era que uno
+	 de los condicionales de la función que asignaba turnos `next-turn`
+	 requería un croupier activo, o de lo contrario empezaba la rutina final en
+	 la que el croupier toma cartas. El problema que surgía en esta situación
+	 es que la función `game-finished?` chequea si hay jugadores activos **y**
+	 si el croupier ya perdió. Como la función de asignar turnos fallaba,
+	 efectivamente quedaban jugadores activos, y el croupier seguía tomando
+	 cartas ya que su condicional para seguir tomando cartas era el valor de
+	 retorno de `game-finished?`, el cual en este caso seguiría siendo `#t`
+	 hasta un tiempo indefinido.
    
-   * *Intentos de solución sin éxito*: Inicialmente se creyó que el problema tenía que ver con una función que confirmaba si el crupier debía detenerse o asumir un estado de "lost", se modificaron algunos valores de las funciones momentáneamente. Si bien no la causa, esta era una de las funciones involucradas en el bug, por lo cual este intento terminó siendo la base para encontrar el verdadero problema.
+   * *Intentos de solución*: Inicialmente se creyó que el problema tenía que
+	 ver con una función que confirmaba si el crupier debía detenerse o asumir
+	 un estado de "lost", se modificaron algunos valores de las funciones
+	 momentáneamente. Si bien no la causa, esta era una de las funciones
+	 involucradas en el bug, por lo cual este intento terminó siendo la base
+	 para encontrar el verdadero problema.
    
-   * *Solución*: Se cambió el condicional de la función que decidía próximo turno para que en vez de verificar el estado del croupier, verificara la presencia de jugadores activos. Ambos condicionales son relativamente equivalentes, solo que el segundo evita el problema de que un crupier sea marcado como inactivo en el primer turno.
+   * *Solución*: Se cambió el condicional de la función que decidía próximo
+	 turno para que en vez de verificar el estado del croupier, verificara la
+	 presencia de jugadores activos. Ambos condicionales son relativamente
+	 equivalentes, solo que el segundo evita el problema de que un crupier sea
+	 marcado como inactivo en el primer turno.
+
+   * *Conclusiones*
+	 - Es importante verificar casos esquina en cualquier aplicación.
+
+   * *Recomendaciones*
+	 - Probar casos esquina, sobre todo en contextos donde hay aleatoriedad o
+	   no hay determinismo, para encontrar posibles errores.
+
+   * *Bibliografía*
+     - Especificación del proyecto; no se consulta bibliografía externa.
 
 2. **Situación de nunca blackjack**:
    
-   * *Descripción*: El problema consistía en que los jugadores, al tomar un as y una carta de valor 10, en vez de plantarse con un puntaje de 21, cambiaban de manera automática un as de valor 11 por uno de valor 1. Igual habían comportamientos similares en caso de alcanzar el 21. Este problema se debía a una equivocación en el valor escogido para comparar contra el puntaje del jugador. La función `try-changing-aces` intercambiaba un as del jugador inclusive en las situaciones en las que tenía un 21 y no le convenía en absoluto. Esto era porque la condicional permitía un cambio de as si al cambiar un as el puntaje era estrictamente menor a 21.
+   * *Descripción*: El problema consistía en que los jugadores, al tomar un as
+	 y una carta de valor 10, en vez de plantarse con un puntaje de 21,
+	 cambiaban de manera automática un as de valor 11 por uno de valor 1. Igual
+	 habían comportamientos similares en caso de alcanzar el 21. Este problema
+	 se debía a una equivocación en el valor escogido para comparar contra el
+	 puntaje del jugador. La función `try-changing-aces` intercambiaba un as
+	 del jugador inclusive en las situaciones en las que tenía un 21 y no le
+	 convenía en absoluto. Esto era porque la condicional permitía un cambio de
+	 as si al cambiar un as el puntaje era estrictamente menor a 21.
    
-   * *Intentos de solución*: Inicialmente se exploró el problema. No hubo intentos de solución fallidos per se, pero si una rutina de pruebas que permitió identificar el origen del problema, lo que al final llevó a la solución efectiva del mismo.
+   * *Intentos de solución*: Inicialmente se exploró el problema. No hubo
+	 intentos de solución fallidos per se, pero si una rutina de pruebas que
+	 permitió identificar el origen del problema, lo que al final llevó a la
+	 solución efectiva del mismo.
   
-   * *Solución*: Se logró solucionar el problema cambiando el valor contra ekl que se comparaba el puntaje del jugador, pasándolo de 21 a 22. Además se mejoró el código para evitar que las cartas del jugador se vieran desordenadas luego de tratar de cambiar un as.
+   * *Solución*: Se logró solucionar el problema cambiando el valor contra ekl
+	 que se comparaba el puntaje del jugador, pasándolo de 21 a 22. Además se
+	 mejoró el código para evitar que las cartas del jugador se vieran
+	 desordenadas luego de tratar de cambiar un as.
+
+   * *Conclusiones*
+	 - No se probó con suficiente profundidad la función `try-changing-aces`.
+
+   * *Recomendaciones*
+     No se reportan.
+
+   * *Bibliografía*
+     - Especificación del proyecto; no se consulta bibliografía externa.
 
 3. **Nunca se descubre la primera carta del croupier**
 
-   * Descripción: Cuando el croupier llega a una puntuación de 17 o más con
-	 solamente las dos cartas iniciales.
+   * *Descripción*: Cuando el croupier llega a una puntuación de 17 o más con
+	 solamente las dos cartas iniciales. En esta situación, no se descubre la
+	 primera carta del croupier y el juego finaliza en este estado.
 
-   * Solución: Se movió la condición gráfica de cubrimiento y descubrimiento a
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: Se movió la condición gráfica de cubrimiento y descubrimiento a
 	 su propia función. Al inicio de la etapa final del juego, se refresca el
 	 área del croupier con la lista de cartas indicadas por esta función, en
 	 vez de depender de que más cartas sean insertadas para invocar el
 	 refrescado.
+
+   * *Conclusiones*
+	 - Verificar la implementación contra el diseño permitió encontrar fallos
+	   en casos esquina infrecuentes.
+
+   * *Recomendaciones*
+	 - Probar todos los casos esquina de lógica para asegurar que cumpla con el
+	   diseño en todos los aspectos.
+
+   * *Bibliografía*
+     - Especificación del proyecto; no se consulta bibliografía externa.
+
+4. **Nunca se detiene la música de fondo**
+
+   * *Descripción*: Al cerrar la aplicación, si es que la misma fue ejecutada
+	 desde REPL, la música de fondo sobrevive a la aplicación y continua hasta
+	 acabar la iteración de bucle actual.
+
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: Según comenta sobre el manejo de subprocesos en Racket una de
+	 las desarrolladoras del lenguaje (ver bibliografía), es necesario hacer
+	 uso de los llamados "custodians": administradores de recursos que
+	 destruyen y liberan apropiadamente los mismos bajo condiciones de
+	 finalización. Así, se estableció un hilo aparte que reproduce
+	 sincrónicamente la música, y es manejado junto al respecto subproceso por
+	 un custodian. Este custodian es luego explícitamente apagado al cerrarse
+	 todas las ventanas de la aplicación.
+
+   * *Conclusiones*:
+	 - El soporte para reproducir audio que incluye `racket/gui` está pensado
+	   para casos muy simples, con sonidos muy cortos.
+
+	 - Como solamente la dicha función existe para aspectos de audio en
+	   `racket/gui`, es incorrecto en términos de diseño que se exponga la
+	   misma públicamente de manera incompleta.
+
+   * *Recomendaciones*
+	 - No utilizar la función de `(play-sound)` de `racket/gui` para sonidos
+	   más largos que efectos de alrededor de un segundo o menos.
+
+	 - Preferir en el diseño de aplicaciones basadas en Racket la utilización
+	   de bibliotecas externas a `racket/gui` para aspectos de audio.
+
+   * *Bibliografía*
+     - <https://docs.racket-lang.org/gui/Windowing_Functions.html?q=play%2Dsound#%28def._%28%28lib._mred%2Fmain..rkt%29._play-sound%29%29>
+	 - <https://stackoverflow.com/a/39358912>
+	 - <https://docs.racket-lang.org/reference/subprocess.html#%28def._%28%28quote._~23~25kernel%29._current-subprocess-custodian-mode%29%29>
+
+5. **Se cuentan blackjacks con más de dos cartas**
+
+   * *Descripción*: La tabla de posiciones reporta una condición de pérdida
+	 cuando un jugador obtiene 21 con más cartas que el croupier, pero teniendo
+	 el croupier un 21 con más de dos cartas. Esto incumple con la especificación,
+	 ya que un blackjack se consigue con solamente dos cartas.
+
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: Se altera la condición de blackjack para que solo ocurra
+	 cuando hay exactamente dos cartas por parte de quien lo tendría, no se
+	 entra en la condición con más de dos cartas. El ejemplo de la descripción
+	 ahora produce un empate.
+
+   * *Conclusiones*
+     - Un blackjack se consigue con exactamente dos cartas, nunca con más.
+
+   * *Recomendaciones*
+     No se reportan.
+
+   * *Bibliografía*
+     - Especificación del proyecto; no se consulta bibliografía externa.
+
+6. **Animación lenta**
+
+   * *Descripción*: La animación del mazo es notoriamente lenta y detiene otras
+	 operaciones de la interfaz.
+
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: Tras profiling, se encuentra que esto es debido a
+	 ineficiencias inherentes en `racket/gui`. La implementación original de la
+	 animación hacía cambios más rápido de lo que esta biblioteca al parecer
+	 soporta. Además, dibujaba cada una de las muchas cartas que podían estar
+	 en el mazo en cada redibujo. La solución fue crear una imagen estática a
+	 partir de la cantidad máxima posible de cartas en el mazo. Esta imagen se
+	 dibuja parcialmente, reduciendo la porción dibujada cada vez que se saca
+	 una carta, y encima de esto se dibuja el bitmap de carta oculta. Así, solo
+	 ocurren dos dibujos de bitmap en lo que antes hubiesen sido 52. Esto
+	 soluciona el problema de rendimiento.
+
+   * *Conclusiones*
+	 - No se debe realizar mucho dinamismo gráfico con `racket/gui`.
+
+   * *Recomendaciones*
+	 - No realizar animaciones con `racket/gui`.
+	 - En caso de realizar animaciones con `racket/gui`, hacerlas lo más
+	   básicas posibles.
+	 - Hacer profiling cuando se desean solucionar problemas de rendimiento.
+
+   * *Bibliografía*
+     - Especificación del proyecto; no se consulta bibliografía externa.
+
+7. **Tabla de posiciones sin tablas**
+
+   * *Descripción*: El diseño propuesto, así como la especificación, requieren
+	 de una tabla de posiciones según puntaje al finalizar la partida. Sin
+	 embargo, `racket/gui` no ofrece ningún elemento gráfico que por sí mismo
+	 sea capaz de organizar información de manera cuadriculada.
+
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: A pesar de no ser la solución ideal, se escogió utilizar un
+	 canvas y dibujar a mano las celdas que dan la impresión de una tabla. Se
+	 calculan los anchos de los textos a dibujar con tal de poder calcular
+	 anchos de columna utilizando máximos de estos valores. La tabla resultante
+	 es funcional pero no estéticamente agradable.
+
+   * *Conclusiones*
+
+	 - `racket/gui` carece de soporte básico para tablas y acomodado en
+	   cuadrícula de elementos.
+
+	 - Las tablas son objetos más complicados que solo alineaciones de
+	   elementos en cuadrícula.
+
+   * *Recomendaciones*
+	 - Recurrir a bibliotecas externas para implementar tablas en aplicaciones
+	   basadas en `racket/gui`.
+
+	 - No escribir implementaciones imperfectas de tablas y cuadrículas a mano.
+
+   * *Bibliografía*
+     - <https://docs.racket-lang.org/draw/dc___.html?q=dc%25>
+
+8. **Imagen de fondo con contenedores y controles**
+
+   * *Descripción*: Como parte del diseño propuesto, se incluye la
+	 implementación de un fondo para la ventana principal de juego.  Sin
+	 embargo, por la forma jerárquica en que se estructuró esta ventana según
+	 el mismo diseño, utilizando contenedores y controles en vez de dibujar
+	 manualmente en un canvas, surgió como impedimento una limitación de
+	 `racket/gui`. Específicamente, no existe forma portable y fiable de
+	 cambiar el fondo dibujado por un `frame%`, un `panel%` o un `pane%`. No
+	 existe acceso alguno al `dc%` interno de estos elementos. Los paneles
+	 utilizados solamente son capaces de organizar hijos sea vertical u
+	 horizontalmente, por lo cual no es posible colocar una imagen detrás de
+	 otros hijos.
+
+   * *Intentos de solución*: No hubo intentos sin éxito.
+
+   * *Solución*: Se encontró una lista de correos (ver bibliografía) que
+	 describe justamente esta solución. En el hilo encontrado no se describe
+	 una solución inmediatamente viable, más que la ya pensada de reemplazar
+	 toda la interfaz con dibujos manuales sobre un `canvas%`. Esto se
+	 consideró mala idea ya que implicaría una cantidad importante de trabajo e
+	 iría en contra del diseño propuesto y ya implementado. Sin embargo, estos
+	 mensajes dan a entender que un `panel%`, a diferencia de sus subclases
+	 `horizontal-panel%` y `vertical-panel%`, no organiza sus elementos de
+	 ninguna manera, y los coloca uno sobre otro. Esto es inesperado, ya que
+	 viola el principio de sustitución de Liskov. Sin embargo, soluciona el
+	 problema, ya que es posible colocar un `canvas%` con el mismo tamaño que
+	 toda la ventana detrás de un contenedor para todo lo demás. En ese
+	 `canvas%` se dibuja el fondo.
+
+   * *Conclusiones*
+	 - `racket/gui` presenta importantes limitaciones de estilado y
+	   flexibilidad en lo que respecta a decoración.
+
+   * *Recomendaciones*
+     - No utilizar `racket/gui` si el diseño de una aplicación
+	   requiere ajustes particulares de estilo y color de los
+	   elementos y ventanas.
+
+   * *Bibliografía*
+	 - <https://users.racket-lang.narkive.com/4hYl2c4R/racket-gui-changing-the-background-col>
 
 ## 1.6. Plan de Actividades
 
