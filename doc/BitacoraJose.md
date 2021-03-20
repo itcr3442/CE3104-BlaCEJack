@@ -79,3 +79,11 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 - Se agregaron algunas referencia faltantes a la documentación.
 - Se agregó la documentación referente a los atajos de teclado.
 - Se agregó la descripción de las funciones de interfaz gráfica a la documentación.
+
+# 19 de marzo
+
+- Se corrigieron algunos errores en la documentación.
+- Se hicieron arreglos estéticos a la documentación, como el ordenamiento de la sección de funciones por orden alfabético.
+- Se agregaron algunas funciones a la lista de funciones implementadas.
+- Se hicieron correciones menores en el diagrama de solución general.
+- 

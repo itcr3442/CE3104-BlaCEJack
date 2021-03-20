@@ -219,20 +219,20 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
     >(ask-player-names 3 start-game)
 ```
 
-### `(bCEj player-count)`
+### `(bCEj player-names)`
 
-**Descripción:** Entrypoint de la aplicación, siendo player-count` es la cantidad de jugadores. La descripción de esta función y su prototipo se incluye en la especificación, por lo cual no debe modificarse.
+**Descripción:** Entrypoint de la aplicación. La descripción de esta función y su prototipo se incluye en la especificación, por lo cual no debe modificarse.
 
 **Entradas:**
 
-- player-count: Número de jugadores, entero entre 1 y 3, ambos inclusive.
+- player-names: Lista de jugadores, de entre 1 y 3 cadenas, ambos inclusive.
 
 **Salida:** `(void)`
 
 **Ejemplos de uso:**
 
 ```Scheme
-    >(bCEj 3)  ; Aparece la interfaz de usuario
+    (bCEj '("Foo" "Bar" "Baz"))  ; Aparece la interfaz de usuario
 ```
 
 ### `(card-bitmap card)`
@@ -529,10 +529,31 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 ```Scheme
     >(end-of-game ... (λ (restart?) ...))
 ```
+### `(fitting-asymmetric-scale canvas bitmap)`
+
+**Descripción:** Determina la escala correcta para que un bitmap coincida completamente dentro de un canvas.
+
+**Entradas:**
+
+- canvas: Lienzo donde se dibujará el bitmap.
+- bitmap: El bitmap que debe escalarse.
+
+**Salidas:**
+
+- Escala horizontal.
+- Escala vertical.
+
+**Ejemplos de uso:**
+
+```Scheme
+    >(fitting-asymmetric-scale canvas (asset-bitmap '(5 pikes)))
+    0.353
+    0.232
+```
 
 ### `(fitting-scale canvas bitmap)`
 
-**Descripción:** Determina la escala correcta para que un bitmap coincida en altura con un canvas donde será dibujado.
+**Descripción:** Determina la escala simétrica correcta para que un bitmap coincida en altura con un canvas donde será dibujado.
 
 **Entradas:**
 
@@ -544,7 +565,7 @@ Al igual que otras implementaciones de blackjack como videojuego, el programa he
 **Ejemplos de uso:**
 
 ```Scheme
-    >(fitting-scale canvas (card-bitmap '(5 pikes)))
+    >(fitting-scale canvas (asset-bitmap '(5 pikes)))
     0.232
 ```
 
@@ -1663,7 +1684,7 @@ Seguidamente, se incluyen las capturas del plan:
 Guzman, J. E. (2006). Introducción a la programación con Scheme. Cartago:
 Editorial Tecnológica de Costa Rica.
 
-Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_$\text{[videojuego]}$. Disponible en:
+Arkadium. (2016). _Free Online Blackjack Game | Play Blackjack Online for Free_ [videojuego]. Disponible en:
 <https://www.arkadium.com/games/blackjack/>
 
 Flatt M., Findler R., Clements J. (s.f). _The Racket Graphical Interface Toolkit_.
@@ -1678,18 +1699,21 @@ Obtenido de: <https://docs.racket-lang.org/reference/eval-model.html?q=thread#%2
 Flatt M., Findler R., Clements J. (s.f). _raco: Racket Command Line Tools_.
 Obtenido de: <https://docs.racket-lang.org/raco/>
 
- Andersen. L. (2016). _Subproccesses remain alive after Racket program halts_.
- Obtenido de: <https://stackoverflow.com/questions/39358725/subproccesses-remain-alive-after-racket-program-halts/39358912#39358912>
+Andersen. L. (2016). _Subproccesses remain alive after Racket program halts_.
+Obtenido de: <https://stackoverflow.com/questions/39358725/subproccesses-remain-alive-after-racket-program-halts/39358912#39358912>
+
+Nelson, D. (2014). _racket/gui: changing the background color_ [serie de correos].
+Obtenido de: <https://users.racket-lang.narkive.com/4hYl2c4R/racket-gui-changing-the-background-color>
 
 ## Recursos gráficos
 
 Escape One. (2014, 30 de noviembre). _Las Vegas Casino Music Video: For Night Game of Poker, Blackjack, Roulette Wheel & Slots_
-$\text{[video]}$. YouTube. <https://youtu.be/GKtlRchHpx8>
+ [video]. YouTube. <https://youtu.be/GKtlRchHpx8>
 
-American Contract Bridge League. (s.f.). _52 Playing Cards_$\text{[imágenes]}$. Obtenido de:
+American Contract Bridge League. (s.f.). _52 Playing Cards_ [imágenes]. Obtenido de:
 <https://acbl.mybigcommerce.com/52-playing-cards/>
 
-Orange Free Sounds. (2018). _Card Flip Sound Effect_$\text{[audio]}$. Obtenido de:
+Orange Free Sounds. (2018). _Card Flip Sound Effect_ [audio]. Obtenido de:
 <https://orangefreesounds.com/card-flip-sound-effect/>
 
 
