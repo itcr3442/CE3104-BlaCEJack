@@ -100,11 +100,11 @@
 
 - Se arregla un bug que ocurría cuando el croupier se plantaba con solo las dos
   cartas iniciales, causando que no se mostrara la primera carta al final.
-- Se agrega una referencia bibliográfica para Introducción a la Programción con
+- Se agrega una referencia bibliográfica para Introducción a la Programación con
   Scheme de Guzmán (2006).
 - Se reemplazan las ocurrencias de "hang" por "stand", ya que es el verbo
   correcto.
-- Se elimina l función `(high-ace card)`, la cual fue parte del diseño original
+- Se elimina la función `(high-ace card)`, la cual fue parte del diseño original
   pero ya no tiene un uso actual o esperado.
 - Se documentan algunos bugs antes descritos en esta bitácora (ver README.md).
 - Se agrega una referencia bibliográfica para `racket/draw`.
@@ -219,3 +219,5 @@
   finalmente superpuesto a este un `vertical-pane%` que cumple el mismo rol
   para los demás elementos gráficos que antes tenía la ventana misma.
 - Se implementa la solución anterior y se comprueba que funciona.
+- Se agregan verificaciones de entrada en funciones públicas de `ui.rkt`.
+- Se cambia la imagen de fondo por razones estéticas.
