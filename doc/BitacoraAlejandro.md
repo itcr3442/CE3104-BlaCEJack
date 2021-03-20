@@ -221,3 +221,5 @@
 - Se implementa la solución anterior y se comprueba que funciona.
 - Se agregan verificaciones de entrada en funciones públicas de `ui.rkt`.
 - Se cambia la imagen de fondo por razones estéticas.
+- Se agregan problemas solucionados a la documentación (ver esta misma bitácora
+  para detalles).
