@@ -1901,7 +1901,7 @@ Seguidamente, se incluyen las capturas del plan:
 - Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores.
 - Los problemas experimentados demuestran que es fundamental listar por adelantado todas las posibles excepciones a reglas generales de un programa (los llamados _corner cases_). Si bien con los problemas descritos la dificultad de resolución no fue mayor, no se podría afirmar que en todo caso que se dé una situación similar la dificultad de resolución sería la misma.
 - Se comprueba la utilidad de los mecanismos de manejo de funciones de alto orden provistos por Racket, puesto que poder recibir funciones como argumento de una función permite desarrollar algortimos sin necesidad de definir varios detalles de casos específicos, es decir, propicia la reutilizacipon de código y evita el problema de verse forzado en hacer implementaciones varias de un mismo algoritmo por diferencias menores entre los datos siendo procesados.
-
+- `racket/gui` es una biblioteca gráfica con limitaciones importantes.
 
 ## 1.8. Recomendaciones generales
 
@@ -1909,6 +1909,7 @@ Seguidamente, se incluyen las capturas del plan:
 - Racket es un lenguaje algo ineficiente con el uso de memoria. De ser esta una limitante para una implementación, se recomienda evitar el uso de este lenguaje en estos casos.
 - Para evitar un uso de memoria desmedido al renderizar elementos gráficos es deseable recurrir a efectos visuales que den la apariencia de ser más complejos de lo que de verdad son. En el caso del proyecto presentado, se utilizó un efecto visual para evitar tener que renderizar el mazo en su completitud, de manera que solo es necesario utilizar esos recursos cuando se toma una carta.
 - Para trabajos de programación que integran a varios colaboradores se recomienda propiciar una buena comunicación y coordinación, no solo respecto a horarios y fechas de trabajo, pero también respecto a las tareas técnicas desarrolladas por cada miembro, esto porque es particularmente útil cuando surgen problemas en las secciones del proyecto en las cuales hay interacción entre las lógicas desarrolladas por los distintos colaboradores.
+- No se recomienda del todo `racket/gui` para cualquier aplicación no trivial.
 
 ## 1.9. Bibliografía consultada en todo el proyecto
 
