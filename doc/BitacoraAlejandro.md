@@ -223,3 +223,5 @@
 - Se cambia la imagen de fondo por razones estéticas.
 - Se agregan problemas solucionados a la documentación (ver esta misma bitácora
   para detalles).
+- Se arregla un remedio para artefactos gráficos en Windows relacionados al
+  fondo de pantalla.

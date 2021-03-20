@@ -289,17 +289,18 @@ Ejemplos de uso:
 
      [toplevel (new pane% [parent window])]
      [background
-       (new canvas%
-            [parent toplevel]
-            [style '(transparent)]
-            [paint-callback
-              (λ (canvas dc)
-                 (let*-values
-                   ([(bitmap) (asset-bitmap 'background)]
-                    [(x-scale y-scale) (fitting-asymmetric-scale canvas bitmap)])
+       (when [not (eq? 'windows (system-type 'os))]
+         (new canvas%
+              [parent toplevel]
+              [style '(transparent)]
+              [paint-callback
+                (λ (canvas dc)
+                   (let*-values
+                     ([(bitmap) (asset-bitmap 'background)]
+                      [(x-scale y-scale) (fitting-asymmetric-scale canvas bitmap)])
 
-                   (send dc set-scale x-scale y-scale)
-                   (send dc draw-bitmap bitmap 0 0)))])]
+                     (send dc set-scale x-scale y-scale)
+                     (send dc draw-bitmap bitmap 0 0)))]))]
 
      [content (new vertical-pane% [parent toplevel])]
      [top-panel (new horizontal-panel% [parent content])]
