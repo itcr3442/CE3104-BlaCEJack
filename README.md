@@ -1617,7 +1617,7 @@ Un ejemplo de un estado inicial de juego con 3 jugadores se vería de la siguien
 
 ## 1.4 Problemas no solucionados
 
-No se encontraron problemas que no se hayan resolvido.
+No se encontraron problemas que no se hayan resuelto.
 
 ## 1.5. Problemas encontrados y solucionados
 
@@ -1678,7 +1678,7 @@ No se encontraron problemas que no se hayan resolvido.
 	 permitió identificar el origen del problema, lo que al final llevó a la
 	 solución efectiva del mismo.
   
-   * *Solución*: Se logró solucionar el problema cambiando el valor contra ekl
+   * *Solución*: Se logró solucionar el problema cambiando el valor contra el
 	 que se comparaba el puntaje del jugador, pasándolo de 21 a 22. Además se
 	 mejoró el código para evitar que las cartas del jugador se vieran
 	 desordenadas luego de tratar de cambiar un as.
@@ -1687,7 +1687,7 @@ No se encontraron problemas que no se hayan resolvido.
 	 - No se probó con suficiente profundidad la función `try-changing-aces`.
 
    * *Recomendaciones*
-     No se reportan.
+     - Estandarizar pruebas para módulos críticos como el mencionado en el problema.
 
    * *Bibliografía*
      - Especificación del proyecto; no se consulta bibliografía externa.
@@ -1895,7 +1895,7 @@ Seguidamente, se incluyen las capturas del plan:
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/actividades3.PNG)
 
-## 1.7. Conclusiones
+## 1.7. Conclusiones generales
 
 - Se implementó de manera exitosa un programa de funcionalidad compleja en un lenguaje funcional, de esta manera se demostró que la capacidad de implementar un programa es independiente del paradigma de un lenguaje de programación, lo que puede variar es la dificultad, pero no la posibilidad.
 - Durante el proceso de correción de problemas se observó que la herramienta más útil para este proceso es el trabajo en equipo y una buena coordinación entre los colaboradores.
@@ -1903,11 +1903,11 @@ Seguidamente, se incluyen las capturas del plan:
 - Se comprueba la utilidad de los mecanismos de manejo de funciones de alto orden provistos por Racket, puesto que poder recibir funciones como argumento de una función permite desarrollar algortimos sin necesidad de definir varios detalles de casos específicos, es decir, propicia la reutilizacipon de código y evita el problema de verse forzado en hacer implementaciones varias de un mismo algoritmo por diferencias menores entre los datos siendo procesados.
 
 
-## 1.8. Recomendaciones
+## 1.8. Recomendaciones generales
 
 - Si bien como ejercicio propio de programación puede ser útil, el desarrollo de aplicaciones de interfaz gráfica en el lenguaje Racket es algo deficiente en comparación a lenguajes más dominantes.
 - Racket es un lenguaje algo ineficiente con el uso de memoria. De ser esta una limitante para una implementación, se recomienda evitar el uso de este lenguaje en estos casos.
-- Para evitar un uso de memoria desmedido al renderizar elementos gráficos es deseable recurrir a efectos visuales que den la apariencia de ser más complejos de lo que de verdad son.
+- Para evitar un uso de memoria desmedido al renderizar elementos gráficos es deseable recurrir a efectos visuales que den la apariencia de ser más complejos de lo que de verdad son. En el caso del proyecto presentado, se utilizó un efecto visual para evitar tener que renderizar el mazo en su completitud, de manera que solo es necesario utilizar esos recursos cuando se toma una carta.
 - Para trabajos de programación que integran a varios colaboradores se recomienda propiciar una buena comunicación y coordinación, no solo respecto a horarios y fechas de trabajo, pero también respecto a las tareas técnicas desarrolladas por cada miembro, esto porque es particularmente útil cuando surgen problemas en las secciones del proyecto en las cuales hay interacción entre las lógicas desarrolladas por los distintos colaboradores.
 
 ## 1.9. Bibliografía consultada en todo el proyecto
