@@ -86,4 +86,5 @@ La función trataría de evitar un desborde buscando todos los aces en posesión
 - Se hicieron arreglos estéticos a la documentación, como el ordenamiento de la sección de funciones por orden alfabético.
 - Se agregaron algunas funciones a la lista de funciones implementadas.
 - Se hicieron correciones menores en el diagrama de solución general.
-- 
+- Se actualizaron algunas imágenes del manual de usuario.
+- Se realizaron pruebas varias de calidad del programa para resolver algunos problemas con los detalles gráficos finales. 

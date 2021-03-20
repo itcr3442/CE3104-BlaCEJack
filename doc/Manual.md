@@ -54,20 +54,22 @@ linestretch: 1.5
 - Las cartas de valores numéricos suman su valor al puntaje.
 - Un 21 producto de un blackjack gana sobre un 21 obtenido con suma de cartas comunes.
 - Si un jugador se planta no puede tomar carta hasta terminar el juego. 
+- Si el croupier se sobrepasa, solo pierde pierde si el otro jugador no se ha sobrepasado. Si un jugador se sobrepasó antes del turno del croupier, automáticamente se encuentra en un estado de derrota. 
 
 # 2.4. Inicio de Juego:
 
 
 ## Método 1: REPL
 
-Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cuál indica la cantidad de jugadores que se desean tener en la partida.
+Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cual indica la cantidad de jugadores que se desean tener en la partida.
 
 Si se desea empezar el juego desde consola powershell en Windows:
 
 ```PowerShell
->set blackcejack=[carpeta del proyecto]
->%blackcejack%>cd src
->%blackcejack%\src>racket
+>$blackcejack="carpeta del proyecto"
+>cd $blackcejack
+>$blackcejack>cd src
+>$blackcejack$\src>racket
 ```
 ```scheme
 >(enter! "ui.rkt")
@@ -77,6 +79,7 @@ Si se desea empezar el juego desde consola powershell en Windows:
 En Linux el proceso difiere poco:
 ```Console
 >export blackcejack=[carpeta del proyecto]
+>cd $blackcejack$
 >$blackcejack$>cd src
 >$blackcejack$/src>racket
 ```
@@ -116,13 +119,13 @@ Los elementos de la misma se pueden dividir entre tres secciones. La primera sec
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/croupier.png)
 
-En esa sección se muestra el mazo y el estado del croupier, el cuál inicia con una carta boca abajo y solo le da la vuelta hasta que haya llegado el turno del croupier.
+En esa sección se muestra el mazo y el estado del croupier, el cual inicia con una carta boca abajo y solo le da la vuelta hasta que haya llegado el turno del croupier.
 
 Seguidamente está el tablero de información para el jugador:
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/cards.png)
 
-En esta sección el o los jugadores pueden visualizar cuales cartas tienen en mano y cuál es su puntaje. Cuando un jugador se planta o se sobrepasa de 21, su nombre y puntaje son deshabilitados para mostrar que estos jugadores ya no se encuentran activos. 
+En esta sección el o los jugadores pueden visualizar cuales cartas tienen en mano y cual es su puntaje. Cuando un jugador se planta o se sobrepasa de 21, su nombre y puntaje son deshabilitados para mostrar que estos jugadores ya no se encuentran activos. 
 
 Por último, está la sección de control de usuario.
 En esta sección se muestra al jugador activo, y dos botones que le permiten decidir cual será su siguiente acción:
