@@ -32,7 +32,8 @@ linestretch: 1.5
 # 2.1. Requisistos de sistema:
 
 - Instalación de intérprete de racket 8.0 en el sistema.
-- 1 GB de Memoria RAM libre.
+- 1 GB de Memoria RAM libre para ejecución en el REPL.
+- 100 MB de Memoria RAM libre en caso de usar el ejecutable.
 - 7,46 MB de espacio libre en disco duro.
 
 # 2.2. Ambientes en los que se comprobó funcionamiento:
@@ -48,20 +49,21 @@ linestretch: 1.5
 - Si un jugador obtiene una puntuación que supera la del croupier sin pasarse de un valor sumado de 21, gana.
 - Si un jugador se sobrepasa de un puntaje de 21 pierde.
 - El croupier en su turno solicitará cartas hasta llegar a una puntuación de 17 o más.
-- Si un jugador y el croupier obtienen el mismo puntaje, se considera empate
+- Si un jugador y el croupier obtienen el mismo puntaje, se considera empate.
 - Las cartas de As tienen un valor por defecto de 11, y su valor cambia convenientemente cuando el jugador se sobrepasa del 21.
 - Las cartas de figuras suman 10 puntos cada una.
 - Las cartas de valores numéricos suman su valor al puntaje.
+- Un As y una carta de valor 10 conforman un blackjack, si el jugador decide plantarse con esta mano, obtiene el mayor puntaje posible. Un blackjack no significa gane inmediato, puesto que es posible un empate con el croupier si él también consiguió un blackjack. 
 - Un 21 producto de un blackjack gana sobre un 21 obtenido con suma de cartas comunes.
 - Si un jugador se planta no puede tomar carta hasta terminar el juego. 
-- Si el croupier se sobrepasa, solo pierde pierde si el otro jugador no se ha sobrepasado. Si un jugador se sobrepasó antes del turno del croupier, automáticamente se encuentra en un estado de derrota. 
+- Si el croupier se sobrepasa, solo pierde si el otro jugador no se ha sobrepasado. Si un jugador se sobrepasó antes del turno del croupier, automáticamente se encuentra en un estado de derrota. 
 
 # 2.4. Inicio de Juego:
 
 
 ## Método 1: REPL
 
-Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cual indica la cantidad de jugadores que se desean tener en la partida.
+Para las instrucciones de inicio, entiéndase X como una variable ingresada por el usuario, la cual indica la lista de jugadores que se desean tener en la partida. La lista que se debe ingresar es de forma: `'("usuario 1", "usuario 2", "usuario 3")`.
 
 Si se desea empezar el juego desde consola powershell en Windows:
 
@@ -77,12 +79,14 @@ Si se desea empezar el juego desde consola powershell en Windows:
 ```
 
 En Linux el proceso difiere poco:
+
 ```Console
 >export blackcejack=[carpeta del proyecto]
->cd $blackcejack$
->$blackcejack$>cd src
->$blackcejack$/src>racket
+>cd $blackcejack
+>$blackcejack>cd src
+>$blackcejack/src>racket
 ```
+
 ```scheme
 >(enter! "ui.rkt")
 >(bCEj X)
@@ -95,8 +99,6 @@ Alternativamente se puede cargar el archivo ui.rkt en un programa como DrRacket 
 ```scheme
 >(bCEj X)
 ```
-
-Ejecutado el comando, se mostrará una ventana inicial para ingresar los nombres de los jugadores a estar en la partida:
 
 ![](https://raw.githubusercontent.com/itcr3442/CE3104-BlaCEJack/master/doc/startdialog.PNG)
 
@@ -226,7 +228,7 @@ Una vez que tenga make en su sistema, busque la carpeta en la que quiere clonar 
 ```
 
 ```Console
->make -p build
+>make
 ```
 
 
